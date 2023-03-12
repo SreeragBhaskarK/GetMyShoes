@@ -1,0 +1,69 @@
+<% if (locals.noLayout) { %>
+    <%- body %>
+
+        <% }else{ %>
+
+            <!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>GetMyShoes</title>
+                <% if (locals.noShow) { %>
+
+                    <% }else{ %>
+                        <% if (locals.admin) { %>
+                            <%- include('../partials/admin/admin_Head') %>
+                                <% }else{ %>
+                                    <!-- head -->
+                                    <%- include('../partials/users/user_Head') %>
+                                        <!-- /head -->
+                                        <% } %>
+                                            <% } %>
+
+
+            </head>
+
+            <body id="top">
+                <% if (locals.noShow) { %>
+
+                    <% }else{ %>
+                        <% if (locals.admin) { %>
+                            <%- include('../partials/admin/admin_Header') %>
+                                <% }else{ %>
+                                    <%- include('../partials/users/user_Header') %>
+                                        <% } %>
+                                            <% } %>
+
+
+                                                <%- body %>
+                                                    <% if (locals.noShow) { %>
+
+                                                        <% }else{ %>
+                                                            <% if (locals.admin) { %>
+                                                                <%- include('../partials/admin/admin_Footer') %>
+                                                                    <%- include('../partials/admin/admin_Script') %>
+                                                                        <% }else{ %>
+                                                                            <!-- footer -->
+                                                                            <%- include('../partials/users/user_Footer')
+                                                                                %>
+                                                                                <!-- /footer -->
+
+
+
+                                                                                <!-- script  -->
+                                                                                <%- include('../partials/users/user_Script')
+                                                                                    %>
+                                                                                    <!-- /script -->
+                                                                                    <% } %>
+                                                                                        <% } %>
+
+
+            </body>
+
+            </html>
+
+
+            <% } %>
