@@ -6,7 +6,7 @@ var logger = require('morgan');
 /* ejs view engine layout  */
 var expressLayouts = require('express-ejs-layouts');
 /* mongodb */
-require('./config/connection')
+require('./server/config/connection')
 var bodyParser = express.json
 var cor = require("cors")
 

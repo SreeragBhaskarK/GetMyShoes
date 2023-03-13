@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var userHelper = require('../helpers/user-helpers')
+var userHelper = require('../server/helpers/user-helpers')
 
 router.get('/', (req, res) => {
     
@@ -17,7 +17,11 @@ router.post('/login',(req,res)=>{
 })
 
 router.get('/users',(req,res)=>{
-    res.render('admin/users',{admin:true,activeUser:'active'})
+   
+        let userData = {name:'sreerag',email:'sdf',age:'dk',gender:'jdfkd',country:'dkf',city:'dk'}
+ 
+    
+    res.render('admin/users',{admin:true,activeUser:'active',userData})
 })
 
 module.exports = router;
