@@ -265,3 +265,52 @@
 		$('#example').DataTable();
 	});
 </script>
+<script>
+	const myModal = document.getElementById('myModal')
+	const myInput = document.getElementById('myInput')
+
+	myModal.addEventListener('shown.bs.modal', () => {
+		myInput.focus()
+	})
+</script>
+
+
+<script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
+
+<!-- Initialize Quill editor -->
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		var editor = new Quill("#quill-editor", {
+			modules: {
+				toolbar: "#quill-toolbar"
+			},
+			placeholder: "Type something",
+			theme: "snow"
+		});
+		var bubbleEditor = new Quill("#quill-bubble-editor", {
+			placeholder: "Compose an epic...",
+			modules: {
+				toolbar: "#quill-bubble-toolbar"
+			},
+			theme: "bubble"
+		});
+	});
+</script>
+<script>
+	console.log(editView,"kdf");
+	function edit_product() {
+		window.onload = function () {
+			document.getElementById('editbtn').click()
+		}
+
+	}
+
+</script>
+
+
+<script>
+    function viewImage(event) {
+        document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0])
+
+    }
+</script>

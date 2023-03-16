@@ -9,6 +9,9 @@ var expressLayouts = require('express-ejs-layouts');
 require('./server/config/connection')
 var bodyParser = express.json
 var cor = require("cors")
+const nocache = require("nocache");
+const sessions = require('express-session');
+var fileUpload = require('express-fileupload')
 
 
 var adminRouter = require('./routes/admin');
@@ -25,7 +28,7 @@ app.set('layout', 'layouts/layout');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 /* ejs layout  */
@@ -37,6 +40,15 @@ app.use(expressLayouts);
     console.log("Database Connected to port 27017")
 
 }) */
+app.use(fileUpload())
+app.use(nocache());
+const oneDay = 1000 * 60 * 60 * 24;
+app.use(sessions({
+  secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+  saveUninitialized:true,
+  cookie: { maxAge: oneDay },
+  resave: false
+}));
 app.use(cor())
 app.use(bodyParser())
 app.use('/admin', adminRouter);

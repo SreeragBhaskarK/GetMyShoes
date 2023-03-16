@@ -1,53 +1,130 @@
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <h1 class="h3 mb-3">Users</h1>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <table id="example" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>Counrty</th>
+                                <th>City</th>
+                                <th>User Status</th>
+                                <th>Actions</th>
+                                <!-- <th>B</th> -->
+                            </tr>
+                        </thead>
 
 
-    <main class="content">
-        <div class="container-fluid p-0">
 
-            <h1 class="h3 mb-3">Users</h1>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                     
-                        <table id="example" class="table table-striped" style="width:100%">
-                            <thead>
+                        <tbody>
+                            <% ( userData || []).forEach(userData=> { %>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Age</th>
-                                    <th>Gender</th>
-                                    <th>Counrty</th>
-                                    <th>City</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                          
-                           
-                             
-                            
+                                    <td>
+                                        <%= userData.name %>
+                                    </td>
+                                    <td>
+                                        <%= userData.email %>
+                                    </td>
+                                    <td>
+                                        <%= userData.age %>
+                                    </td>
+                                    <td>
+                                        <%= userData.gender %>
+                                    </td>
+                                    <td>
+                                        <%= userData.counrty %>
+                                    </td>
+                                    <td>
+                                        <%= userData.city %>
+                                    </td>
+                                    <% if (userData.status==='process' ) { %>
+                                        <td><input type="button" class="btn btn btn-warning"
+                                                value="<%= userData.status %>" disabled></input></td>
+                                        <% }else if(userData.status==='active' ){ %>
+                                            <td><input type="button" class="btn btn-success"
+                                                    value="<%= userData.status %>" disabled></input>
+                                            </td>
+                                            <% }else if (userData.status==='block' ){ %>
+                                                <td><input type="button" class="btn btn-danger"
+                                                        value="<%= userData.status %>" disabled></input>
+                                                </td>
+                                                <% } %>
 
-                           
-                          
-                            <tbody>
-                                <tr>
-                                    <td><%= userData.name %></td>
-                                    <td><%= userData.email %></td>
-                                    <td><%= userData.age %></td>
-                                    <td><%= userData.gender %></td>
-                                    <td><%= userData.country %></td>
-                                    <td><%= userData.city %></td>
-                                    <td><button type="button" class="btn btn-success "disabled>Active  </button></td>
+                                                    <% if (userData.status=='process' ) { %>
+                                                        <td><a href="/admin/delete_user/<%= userData._id%>"><button
+                                                                    type="button" class="btn btn-danger"
+                                                                    onclick="return confirm('Are you want to Cancel <%= userData.name %> ?')">Cancel</button></a>
+                                                        </td>
+                                                        <td></td>
+                                                        <% }else{ %>
+                                                            <td>
+
+                                                                <a href="/admin/delete_user/<%= userData._id%>"><button
+                                                                        type="button" class="btn btn-danger"
+                                                                        onclick="return confirm('Are you want to delete <%= userData.name %> ?')">Delete</button></a>
+
+                                                                        <% if (userData.status=='active' ) { %>
+                                                                            <a href="/admin/status_user/<%= userData._id%>"><button
+                                                                                    type="button" class="btn btn-primary"
+                                                                                    onclick="return confirm('Are you want to block <%= userData.name %> ?')">Block</button></a>
+                                                                            <% }else{ %>
+                                                                                <a
+                                                                                    href="/admin/status_user_unblock/<%= userData._id%>"><button
+                                                                                        type="button" class="btn btn-success"
+                                                                                        onclick="return confirm('Are you want to unblock <%= userData.name %> ?')">Unblock</button></a>
+                                                                                <% } %>
+        
+        
+        
+                                                                                    <% } %>
+                                                            </td>
+                                                            
+                                                                <!--      <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"  aria-expanded="false">
+                                              Dropdown button
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-dark">
+                                              <li><a class="dropdown-item" href="#">Action</a></li>
+                                              <li><a class="dropdown-item" href="#">Another action</a></li>
+                                              <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                            </ul>
+                                          </div> -->
+                                                                <!-- 
+                                           <select class="form-select" aria-label="Default select example"
+                                                name="product_category" required>
+                                                <option value="none" selected disabled hidden>Select
+                                                    an Option
+                                                </option>
+                                                <option value="Women">Women</option>
+                                                <option value="Men">Men</option>
+                                                <option value="Sports">Sports</option>
+                                            </select> -->
+                                                            
                                 </tr>
-                    
-                                
-                            </tbody>
-                           
-                        </table> 
-                    </div>
+                                <script>
+                                    let statusBtn = document.getElementById("statusBtn")
+                                    let statusBtnValue = statusBtn.value
+                                    if (statusBtnValue === 'active') {
+                                        statusBtn.className = "btn btn-success"
+                                    } else if (statusBtnValue == 'process') {
+                                        statusBtn.className = "btn btn-success"
+                                    }
+                                </script>
+                                <% }) %>
+                        </tbody>
+
+                    </table>
                 </div>
             </div>
-
         </div>
-    </main>
 
-    
+    </div>
+</main>

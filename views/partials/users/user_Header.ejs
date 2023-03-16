@@ -2,12 +2,12 @@
     - #HEADER
   -->
 
-  <header class="header" data-header>
+<header class="header" data-header>
     <div class="container">
 
         <div class="overlay" data-overlay></div>
 
-        <a href="#" class="logo">
+        <a href="/" class="logo">
             <img src="/images/logo.png" width="160" height="50" alt="Footcap logo">
         </a>
 
@@ -21,14 +21,14 @@
                 <ion-icon name="close-outline"></ion-icon>
             </button>
 
-            <a href="#" class="logo">
+            <a href="/" class="logo">
                 <img src="/images/logo.png" width="190" height="50" alt="Footcap logo">
             </a>
 
             <ul class="navbar-list">
 
                 <li class="navbar-item">
-                    <a href="#" class="navbar-link">Home</a>
+                    <a href="/" class="navbar-link">Home</a>
                 </li>
 
                 <li class="navbar-item">
@@ -36,7 +36,7 @@
                 </li>
 
                 <li class="navbar-item">
-                    <a href="#" class="navbar-link">Products</a>
+                    <a href="/products" class="navbar-link">Products</a>
                 </li>
 
                 <li class="navbar-item">
@@ -63,13 +63,54 @@
                     </button>
                 </li>
 
-                <li>
-                    <a href="/login" class="nav-action-btn">
+
+                <!--     <a href="/login" class="nav-action-btn">
                         <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
 
                         <span class="nav-action-text">Login / Register</span>
-                    </a>
+                        
+                    </a> -->
+
+                <li class="nav-item dropdown">
+
+
+
+                    <% if (locals.person) { %>
+
+                        <a class="nav-link  d-none d-sm-inline-block nav-action-btn" href="#" data-bs-toggle="dropdown">
+                            <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+                            <span class="nav-action-text">Login / Register</span>
+
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="user"></i>
+                                Profile</a>
+                            <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i>
+                                Analytics</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="settings"></i>
+                                Settings & Privacy</a>
+                            <a class="dropdown-item" href="#"><i class="align-middle me-1"
+                                    data-feather="help-circle"></i>
+                                Help Center</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Log out</a>
+
+                        </div>
+                        <% }else{ %>
+
+                            <a class="nav-link   nav-action-btn" href="/login"
+                                >
+                                <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+                                <span class="nav-action-text">Login / Register</span>
+
+                            </a>
+                            <% } %>
+
                 </li>
+
+
 
                 <li>
                     <button class="nav-action-btn">

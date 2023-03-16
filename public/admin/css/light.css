@@ -30629,3 +30629,10 @@ body[data-theme=colored] .simplebar-scrollbar:before {
     width: 40px; 
     height: 40px;
 }
+
+.pencil{
+    margin-left: auto;
+}
+.pencil-div{
+    display: flex;
+}
