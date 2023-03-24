@@ -11,7 +11,8 @@ var bodyParser = express.json
 var cor = require("cors")
 const nocache = require("nocache");
 const sessions = require('express-session');
-var fileUpload = require('express-fileupload')
+
+
 
 
 var adminRouter = require('./routes/admin');
@@ -40,7 +41,7 @@ app.use(expressLayouts);
     console.log("Database Connected to port 27017")
 
 }) */
-app.use(fileUpload())
+
 app.use(nocache());
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({

@@ -1,0 +1,12 @@
+.product_details_imagestest img{
+    position:absolute;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    transform: scale(var(--zoom,1));
+    transform-origin: var(--x) var(--y);
+    transition: transform 0.3s ease;
+}
+.product_details_imagestest:hover{
+    --zoom: 3
+}

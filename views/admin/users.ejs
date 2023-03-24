@@ -63,31 +63,32 @@
                                                                     type="button" class="btn btn-danger"
                                                                     onclick="return confirm('Are you want to Cancel <%= userData.name %> ?')">Cancel</button></a>
                                                         </td>
-                                                        <td></td>
+                                                       
                                                         <% }else{ %>
-                                                            <td>
+                                                            <td style="
+                                                                display: flex;">
 
-                                                                <a href="/admin/delete_user/<%= userData._id%>"><button
+                                                                <a class="me-3" href="/admin/delete_user/<%= userData._id%>"><button
                                                                         type="button" class="btn btn-danger"
                                                                         onclick="return confirm('Are you want to delete <%= userData.name %> ?')">Delete</button></a>
 
-                                                                        <% if (userData.status=='active' ) { %>
-                                                                            <a href="/admin/status_user/<%= userData._id%>"><button
-                                                                                    type="button" class="btn btn-primary"
-                                                                                    onclick="return confirm('Are you want to block <%= userData.name %> ?')">Block</button></a>
-                                                                            <% }else{ %>
-                                                                                <a
-                                                                                    href="/admin/status_user_unblock/<%= userData._id%>"><button
-                                                                                        type="button" class="btn btn-success"
-                                                                                        onclick="return confirm('Are you want to unblock <%= userData.name %> ?')">Unblock</button></a>
-                                                                                <% } %>
-        
-        
-        
-                                                                                    <% } %>
+                                                                <% if (userData.status=='active' ) { %>
+                                                                    <a href="/admin/status_user/<%= userData._id%>"><button
+                                                                            type="button" class="btn btn-primary"
+                                                                            onclick="return confirm('Are you want to block <%= userData.name %> ?')">Block</button></a>
+                                                                    <% }else{ %>
+                                                                        <a
+                                                                            href="/admin/status_user_unblock/<%= userData._id%>"><button
+                                                                                type="button" class="btn btn-success"
+                                                                                onclick="return confirm('Are you want to unblock <%= userData.name %> ?')">Unblock</button></a>
+                                                                        <% } %>
+
+
                                                             </td>
-                                                            
-                                                                <!--      <div class="dropdown">
+                                                            <% } %>
+
+
+                                                            <!--      <div class="dropdown">
                                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"  aria-expanded="false">
                                               Dropdown button
                                             </button>
@@ -97,7 +98,7 @@
                                               <li><a class="dropdown-item" href="#">Something else here</a></li>
                                             </ul>
                                           </div> -->
-                                                                <!-- 
+                                                            <!-- 
                                            <select class="form-select" aria-label="Default select example"
                                                 name="product_category" required>
                                                 <option value="none" selected disabled hidden>Select
@@ -107,7 +108,7 @@
                                                 <option value="Men">Men</option>
                                                 <option value="Sports">Sports</option>
                                             </select> -->
-                                                            
+
                                 </tr>
                                 <script>
                                     let statusBtn = document.getElementById("statusBtn")

@@ -6,7 +6,7 @@ var userHelper = require('../server/helpers/user-helpers');
 const userVerification = require('../server/models/otp');
 const auth = require('../server/middleware/auth');
 const user = require('../server/models/user');
-
+let email
 let otpemail
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -62,6 +62,7 @@ router.post('/login', (req, res) => {
       req.session.user = true
       res.redirect('/')
     } else {
+     
       res.status(400).send(response.message)
     }
   })
@@ -85,9 +86,10 @@ router.post('/signUp', (req, res) => {
     if (response.port === 200) {
       /* res.status(200).json(response.result) */
       /*  res.redirect('/verification') */
-
-      otpemail = response.email
-      res.redirect("/verify")
+      console.log(response.token);
+      req.session.otpemail = response.email
+      req.session.userToken = response.token
+      res.redirect("/verify?token="+ response.token)
 
     } else {
       res.status(400).send(response.message)
@@ -102,12 +104,10 @@ router.get('/private_data', auth, (req, res) => {
     }`)
 })
 
-router.get('/verify', (req, res) => {
-  if (req.session.user) {
-    res.redirect('/')
-  } else {
+router.get('/verify',auth ,(req, res) => {
+ 
     res.render("users/verified", { noShow: true, noLayout: true })
-  }
+ 
 })
 
 router.post('/verify', (req, res) => {
@@ -133,14 +133,15 @@ router.post('/verify', (req, res) => {
   req.body.otp.forEach(i => {
     otp += i
   });
-  let email = otpemail
-  console.log(email, "ldfkdj");
+  let email =  req.session.otpemail
+  console.log(email,'hhhhhhhhhhhhhh');
+
   userHelper.doVerifyEmail({ otp, email }).then(response => {
     console.log(response)
     if (response.port === 200) {
       /* res.status(200).json(response.result) */
-      req.session.user = true
-      res.redirect('/')
+   /*    req.session.user = true */
+      res.redirect('/set_password?token='+response.token)
     } else {
       res.status(400).send(response.message)
     }
@@ -151,7 +152,7 @@ router.post('/verify', (req, res) => {
 
 router.get('/products', (req, res) => {
   userHelper.doViewProducts().then(productData => {
-    console.log(productData);
+    console.log(productData,"//////////////////viewproduct///////////////////////");
     res.render('users/products', { productData })
   })
 })
@@ -167,6 +168,53 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
+router.get('/product/:id',(req,res)=>{
+  userHelper.doProductDetails(req.params.id).then((products)=>{
+console.log(products[0].product_name,"////////////////////products/////////////");
+    res.render("users/product_details",{products})
+  })
+})
 
+router.get('/settings',(req,res)=>{
+  res.render('users/settings',{noLayout:true})
+})
 
+router.get('/reset_password',(req,res)=>{
+  res.render('users/reset_password',{noLayout:true})
+})
+
+router.post('/reset_password',(req,res)=>{
+
+  userHelper.sendOtpEmail(req.body).then((response)=>{
+    if(response.port===200){
+      req.session.otpemail=response.email
+      req.session.resettoken =response.token
+      res.redirect('/verify?token='+response.token)
+    }else{
+      res.status(400).send(response.message)
+    }
+
+  })
+})
+
+router.get('/set_password',(req,res)=>{
+  res.render('users/set_password',{noLayout:true})
+  console.log(req.body,"uuuuuuuuuuuuuu");
+})
+
+router.post('/set_password',(req,res)=>{
+  let email = req.session.otpemail
+  userHelper.updataPassword(email,req.body).then((response)=>{
+    if(response.port==200){
+
+      res.redirect('/')
+    }else{
+      res.redirect('/set_password?token='+req.session.resettoken)
+    }
+  })
+})
+
+router.get('/shop',(req,res)=>{
+  res.render('users/shop')
+})
 module.exports = router;

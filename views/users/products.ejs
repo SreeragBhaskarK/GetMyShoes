@@ -39,7 +39,7 @@
                     <div class="product-card" tabindex="0">
 
                         <figure class="card-banner">
-                            <img src="/images/products_image/<%=product._id%>.jpg" width="312" height="350"
+                            <img src="/images/products_image/<%=product.product_image[0]%>" width="312" height="350"
                                 loading="lazy" alt="Running Sneaker Shoes" class="image-contain">
 
                             <% if (product.product_badge) { %>
@@ -97,7 +97,7 @@
 
                             <h3 class="h3 card-title">
                                 <!--  <a href="#">Running Sneaker Shoes</a> -->
-                                <a href="#">
+                                <a href="/product/<%=product._id%>">
                                     <%= product.product_name %>
                                 </a>
                             </h3>

@@ -1,4 +1,4 @@
-<form action="/admin/products" method="post">
+<form action="/admin/updataProduct/<%=editView._id %>" method="post">
     <!-- Modal -->
     <div class="modal fade" id="productAdd" tabindex="-1" aria-labelledby="productAddLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
@@ -26,12 +26,14 @@
                                                     <div class="card-body">
                                                         <h5 class="card-title mb-0">Product Title</h5>
                                                         <input type="text" name="product_name"
-                                                            placeholder="Enter product title" required>
+                                                            placeholder="Enter product title"
+                                                            value="<%=editView.product_name%>" required>
                                                     </div>
                                                     <div class="card-body">
                                                         <h5 class="card-title mb-0">Description</h5>
+                                                        <textarea id="story" name="product_description" placeholder="type Description..." rows="5" cols="33"><%=editView.product_description%></textarea>
                                                         <!-- ouill -->
-
+<!-- 
                                                         <div class="clearfix">
                                                             <div id="quill-toolbar">
                                                                 <span class="ql-formats">
@@ -82,27 +84,98 @@
                                                             </div>
                                                         </div>
 
-
+ -->
                                                     </div>
 
                                                     <div class="card-body">
                                                         <h5 class="card-title mb-0">Product Category</h5>
-                                                        <select class="form-select" aria-label="Default select example"
-                                                            name="product_category" required>
-                                                            <option value="none" selected disabled hidden>Select
-                                                                an Option
-                                                            </option>
-                                                            <option value="Women">Women</option>
-                                                            <option value="Men">Men</option>
-                                                            <option value="Sports">Sports</option>
-                                                        </select>
+                                                        <section class="ftco-section">
+                                                            <div class="container">
+                                                              
+                                                                <div class="row justify-content-center">
+                                                                    <div class="col-md-8 col-lg-5 d-flex justify-content-center align-items-center">
+                                                                        <div class="d-flex text-left align-items-center w-100">
+                                                                            <strong class="sl">Select Category:</strong>
+                                                                      
+                                                                             
+                                                               
+                                                                        <select id="multiple-checkboxes" name="product_category" multiple="multiple">
+                                                                            <% (categoryView || []).forEach(i => { %>
+                                                                        <option  value="<%=i._id %>"><%=i.category %></option>
+                                                                        <% }) %>  
+                                                                        categroyName
+
+                                                                        <%# (categroyName || []).forEach(j => { %>
+                                                                       <!--      <option selected value="<%#j._id %>"><%#j.category %></option> -->
+                                                                            <%# }) %>  
+
+                                                                        </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
                                                     </div>
+                                                 
+
+                                                    <div class="card-body">
+                                                        <h5 class="card-title mb-0">Product Image</h5>
+                                                        <div>
+        
+                                                
+                                                            <img id="imgView" src="/images/products_image/<%=editView.product_image[0]%>" class="pt-3 pb-3" alt=""
+                                                                style="width: 100px; height:auto;">
+                                                            <input type="file" class="form-control" name="product_image"
+                                                                onchange="viewImage(event,0)"><br>
+                                                        </div>
+                                                        <div>
+            
+                                                            <img id="imgView1" src="/images/products_image/<%=editView.product_image[1]%>" class="pt-3 pb-3" alt=""
+                                                                style="width: 100px; height:auto;">
+                                                            <input type="file" class="form-control" name="product_image"
+                                                                onchange="viewImage(event,1)"><br>
+                                                        </div>
+                                                        <div>
+            
+                                                            <img id="imgView2" src="/images/products_image/<%=editView.product_image[2]%>" class="pt-3 pb-3" alt=""
+                                                                style="width: 100px; height:auto;">
+                                                            <input type="file" class="form-control" name="product_image"
+                                                                onchange="viewImage(event,2)"><br>
+                                                        </div>
+                                                        <div>
+            
+                                                            <img id="imgView3" src="/images/products_image/<%=editView.product_image[3]%>" class="pt-3 pb-3" alt=""
+                                                                style="width: 100px; height:auto;">
+                                                            <input type="file" class="form-control" name="product_image"
+                                                                onchange="viewImage(event,3)"><br>
+                                                        </div>
+                                                    </div>
+            
                                                 </div>
                                             </div>
                                             <div class="col-4">
                                                 <div class="card">
                                                     <div class="card-header">
                                                         <h5 class="card-title mb-0">Pricing</h5>
+                                                        <input type="number" value="<%=editView.product_price%>" name="product_price" placeholder="product price" required> 
+                                                    </div>
+                                                    <div class="card-body">
+                                                    </div>
+                                                </div>
+
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title mb-0">Old Pricing</h5>
+                                                        <input type="number" name="product_old_price" value="<%=editView.product_old_price%>" placeholder="product old price ">
+                                                    </div>
+                                                    <div class="card-body">
+                                                    </div>
+                                                </div>
+            
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h5 class="card-title mb-0">Badge</h5>
+                                                        <input type="text" name="product_badge" value="<%=editView.product_badge%>" placeholder="product badge">
                                                     </div>
                                                     <div class="card-body">
                                                     </div>

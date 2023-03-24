@@ -3,7 +3,10 @@ var express = require('express');
 var router = express.Router();
 var adminHelper = require('../server/helpers/admin-helpers');
 const admin = require('../server/models/admin');
+const upload = require('../server/middleware/multer')
+
 let editView
+let editCategory
 
 
 router.get('/', (req, res) => {
@@ -43,8 +46,8 @@ router.post('/login', (req, res) => {
 router.get('/users', (req, res) => {
     if (req.session.admin) {
         adminHelper.doViewUsers().then(userData => {
-           
-            console.log(userData.status,"kdjfk");
+
+            console.log(userData.status, "kdjfk");
             res.render('admin/users', { admin: true, activeUser: 'active', userData })
         })
 
@@ -74,16 +77,24 @@ router.get('/layout', (req, res) => {
 })
 
 router.get('/products', (req, res) => {
+
     if (req.session.admin) {
 
-        adminHelper.doViewProducts().then(productData => {
-            console.log(productData);
+        adminHelper.doViewProducts().then((response) => {
+          
+            productData =response.productsView
+            categoryView =response.category
+            
             if (editView) {
-                console.log("kdfjd");
-                res.render('admin/products', { admin: true, activeProducts: 'active', productData, editView })
-                editView = false
+                adminHelper.doCategoryIdChangeinName(editView.product_category).then((categroyName)=>{
+                    console.log(categroyName,"/////////////////categroyName///////////////////")
+                    res.render('admin/products', { admin: true, activeProducts: 'active', productData, editView,categoryView,categroyName })
+                    editView = false
+                })
+            
             } else {
-                res.render('admin/products', { admin: true, activeProducts: 'active', productData })
+                console.log(categoryView,"kdddddddd")
+                res.render('admin/products', { admin: true, activeProducts: 'active', productData})
             }
         })
     } else {
@@ -91,25 +102,28 @@ router.get('/products', (req, res) => {
     }
 })
 
-router.post('/products', (req, res) => {
-    console.log(req.body);
-    adminHelper.doAddProduct(req.body).then(response => {
-       console.log(response,"kdfkdjkfj");
-        if (response.port === 200) {
-            if (req.files) {
-                console.log(response.data,"djfkjdkf");
-                let image = req.files.product_image
-                image.mv("./public/images/products_image/" + response.data + '.jpg', (err) => {
-    
-                    if (!err) {
-                        res.redirect('/admin/products')
-                    }
-                })
-            }else{
 
-                res.redirect('/admin/products')
-            }
+
+router.post('/products', upload.array('product_image', 4), (req, res) => {
+   
+    adminHelper.doAddProduct(req.body, req.files).then(response => {
+        console.log(response, "kdfkdjkfj");
+        if (response.port === 200) {
+            /*     if (req.files) {
+                    console.log(response.insertedId, "djfkjdkf");
+                    let image = req.files.product_image
+                    image.mv("./public/images/products_image/" + response.data + '.jpg', (err) => {
+    
+                        if (!err) {
+                            res.redirect('/admin/products')
+                        }
+                    })
+                } else {
+    
+                    res.redirect('/admin/products')
+                } */
             /* res.status(200).json(response.result) */
+            res.redirect('/admin/products')
         } else {
             res.status(400).send(response.message)
         }
@@ -141,40 +155,110 @@ router.get('/edit-product/:id', (req, res) => {
     })
 })
 
+router.post('/updataProduct/:id', (req, res) => {
+
+    let proId = req.params.id
+    adminHelper.doUpdateProduct(proId, req.body).then(response => {
+        /* if (req.files) {
+            let image = req.files.Image
+            image.mv("./public/product-images/" + id + '.jpg')
+
+        } */
+        res.redirect('/admin/products')
+    })
+})
+
 router.get('/delete_user/:id', (req, res) => {
     let proId = req.params.id
     console.log(proId);
     adminHelper.doUserDelete(proId).then(response => {
-      res.redirect('/admin/users')
+        req.session.user = false
+        res.redirect('/admin/users')
+
     })
     /*  productHelper.deleteProduct(proId).then((response) => {
        res.redirect('/admin')
      }) */
-  
-  })
-  router.get('/status_user/:id', (req, res) => {
+
+})
+router.get('/status_user/:id', (req, res) => {
     let proId = req.params.id
     console.log(proId);
     adminHelper.doUserStatus(proId).then(response => {
-        status=response.status
-      res.redirect('/admin/users')
+
+        req.session.user = false
+        res.redirect('/admin/users')
     })
     /*  productHelper.deleteProduct(proId).then((response) => {
        res.redirect('/admin')
      }) */
-  
-  })
 
-  router.get('/status_user_unblock/:id', (req, res) => {
+})
+
+router.get('/status_user_unblock/:id', (req, res) => {
     let proId = req.params.id
     console.log(proId);
     adminHelper.doUserUnblock(proId).then(response => {
-     
-      res.redirect('/admin/users')
+        req.session.user = false
+        res.redirect('/admin/users')
     })
     /*  productHelper.deleteProduct(proId).then((response) => {
        res.redirect('/admin')
      }) */
-  
-  })
+
+})
+
+router.get('/category', (req, res) => {
+    adminHelper.doViewCategory().then((response) => {
+        let categorys = response.category
+        if(editCategory){
+           let edCategory = editCategory
+            res.render('admin/category', { admin: true, categorys,edCategory})
+            editCategory = null
+        }else{
+            res.render('admin/category', { admin: true, categorys })
+
+        }
+        res.render('admin/category', { admin: true, categorys })
+    })
+})
+
+router.post('/category', (req, res) => {
+    console.log(req.body, "body");
+    adminHelper.doCategory(req.body).then(() => {
+            res.redirect('/admin/category')
+    })
+})
+
+router.get('/delete-category/:id', (req, res) => {
+    let proId = req.params.id
+    console.log(proId, "kdfk////////////////////////////////////");
+    adminHelper.doCategoryDelete(proId).then(response => {
+        res.redirect('/admin/category')
+    })
+    /*  productHelper.deleteProduct(proId).then((response) => {
+       res.redirect('/admin')
+     }) */
+
+})
+
+router.get('/edit-category/:id', (req, res) => {
+    let proId = req.params.id
+    adminHelper.doCategoryEdit(proId).then(response => {
+        editCategory = response
+        console.log(editCategory.category,"kdfjkd")
+        res.redirect('/admin/category')
+    })
+})
+
+router.post('/category_update/:id',(req,res)=>{
+    let proId = req.params.id
+    adminHelper.doCategoryUpdate(proId,req.body).then(response => {
+    
+        res.redirect('/admin/category')
+    })
+})
+
+
+
 module.exports = router;
