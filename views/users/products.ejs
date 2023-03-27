@@ -63,7 +63,8 @@
                                                 <ion-icon name="heart-outline"></ion-icon>
                                             </button>
 
-                                            <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
+                                            <div class="card-action-tooltip" id="card-label-2">Add to Whishlist
+                                            </div>
                                         </li>
 
                                         <li class="card-action-item">
@@ -88,10 +89,15 @@
                         <div class="card-content">
 
                             <div class="card-cat">
-                                <a href="#" class="card-cat-link">
-                                    <%= product.product_category %>
-                                </a>
-                                <!--   <a href="#" class="card-cat-link">Men</a> /
+                                <% (product.product_categoryName || []).forEach(i=> { %>
+
+
+                                    <a href="#" class="card-cat-link">
+                                        <%= i.category %>
+
+                                    </a>
+                                    <% }) %>
+                                        <!--   <a href="#" class="card-cat-link">Men</a> /
                             <a href="#" class="card-cat-link">Women</a> -->
                             </div>
 

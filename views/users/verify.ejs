@@ -19,14 +19,16 @@
       <i class="bx bxs-check-shield"></i>
     </header>
     <h4>Enter OTP Code</h4>
-    <form action="/verify" method="post">
+    <form action="/verify" method="post" onsubmit="return validateForm()">
       <div class="input-field">
-        <input name="otp" type="number" />
-        <input name="otp" type="number" disabled />
-        <input name="otp" type="number" disabled />
-        <input name="otp" type="number" disabled />
+        <input name="otp" class="pin" type="number"  />
+        <input name="otp" class="pin" type="number"  disabled />
+        <input name="otp" class="pin" type="number"  disabled />
+        <input name="otp" class="pin" type="number"  disabled />
+        <input name="otp" class="pin" type="number"  disabled />
       </div>
-      <button>Verify OTP</button>
+      <input style="display: none;" name="phone_number" type="text" value="<%=locals.number%>">
+      <button type="submit">Verify OTP</button>
     </form>
   </div>
   <script>
@@ -70,7 +72,7 @@
         }
         //if the fourth input( which index number is 3) is not empty and has not disable attribute then
         //add active class if not then remove the active class.
-        if (!inputs[3].disabled && inputs[3].value !== "") {
+        if (!inputs[4].disabled && inputs[4].value !== "") {
           button.classList.add("active");
           return;
         }
@@ -81,6 +83,19 @@
     //focus the first input which index is 0 on window load
     window.addEventListener("load", () => inputs[0].focus());
   </script>
+
+<script>
+  function validateForm() {
+    const phoneNumber = document.getElementsByClassName[0,1,2,3]("pin").value;
+    const phonePattern = /^\d{1}$/;
+    if (!phonePattern.test(phoneNumber)) {
+      document.getElementById("error_message").style.display = "block"
+      /* alert("Please enter a valid 10-digit phone number"); */
+      return false;
+    }
+    return true;
+  }
+</script>
 </body>
 
 </html>

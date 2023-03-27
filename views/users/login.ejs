@@ -34,48 +34,53 @@
 
 
 
-				<form class="login100-form validate-form" method="post" action="/login">
+				<form class="login100-form validate-form" method="post" action="/login"
+					onsubmit="return validateForm()">
 					<span class="login100-form-title">
 						Member Login
 					</span>
 
-					<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-						<input class="input100" type="text" name="email" placeholder="Email">
+					<div style="display: flex;" class="wrap-input100 validate-input"
+						data-validate="valid 10-digit phone number required: 91xxxxxxxx">
+						<input type="tel" value="+91" disabled size="1">
+						<input class="input100" id="phone" type="tel" name="phone_number" placeholder="xxxxxxxxxx">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
-							<i class="fa fa-envelope" aria-hidden="true"></i>
+							<i class="fa fa-phone" aria-hidden="true"></i>
 						</span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate="Password is required">
-						<input class="input100" type="password" name="password" placeholder="Password">
-						<span class="focus-input100"></span>
-						<span class="symbol-input100">
-							<i class="fa fa-lock" aria-hidden="true"></i>
-						</span>
-					</div>
+					<% if (locals.message) { %>
+						<div id="message" class="text-center  p-t-12">
+							<span class="txt1 text-danger">
+								<%=locals.message%>
+							</span>
 
-					<div class="container-login100-form-btn">
-						<button class="login100-form-btn">
-							Login
-						</button>
-					</div>
+						</div>
+						<% } %>
 
-					<div class="text-center p-t-12">
-						<span class="txt1">
-							Forgot
-						</span>
-						<a class="txt2" href="#">
-							Username / Password?
-						</a>
-					</div>
+							<div style="display:none;" id="error_message" class="text-center  p-t-12">
+								<span class="txt1 text-danger">
+									Please enter a valid 10-digit phone number
+								</span>
 
-					<div class="text-center p-t-136">
-						<a class="txt2" href="/signup">
-							Create your Account
-							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
-						</a>
-					</div>
+							</div>
+
+
+							<div class="container-login100-form-btn">
+								<button type="submit" class="login100-form-btn">
+									Login
+								</button>
+							</div>
+
+						
+
+							<div class="text-center p-t-136">
+								<a class="txt2" href="/signup">
+									Create your Account
+									<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+								</a>
+							</div>
 				</form>
 			</div>
 		</div>
@@ -100,6 +105,26 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="/login/js/main.js"></script>
+
+	<script>
+		function validateForm() {
+			const phoneNumber = document.getElementById("phone").value;
+			const phonePattern = /^\d{10}$/;
+			if (!phonePattern.test(phoneNumber)) {
+				document.getElementById("error_message").style.display = "block"
+				/* alert("Please enter a valid 10-digit phone number"); */
+				return false;
+			}
+			return true;
+		}
+	</script>
+
+	<script>
+		let messageElement = document.getElementById('message')
+		setTimeout(function () {
+			messageElement.style.display = "none";
+		}, 5000);
+	</script>
 
 </body>
 

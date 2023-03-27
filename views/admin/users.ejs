@@ -14,7 +14,7 @@
                                 <th>Email</th>
                                 <th>Age</th>
                                 <th>Gender</th>
-                                <th>Counrty</th>
+                                <th>Phone</th>
                                 <th>City</th>
                                 <th>User Status</th>
                                 <th>Actions</th>
@@ -31,7 +31,17 @@
                                         <%= userData.name %>
                                     </td>
                                     <td>
-                                        <%= userData.email %>
+                                        <%= (userData.email) %>
+                                            <% if(userData.email) { %>
+
+                                                <% if (userData.email_status==="active" ) { %>
+                                                    <input type="button" class="btn btn-success"
+                                                        value="actvie" disabled></input>
+                                                    <% }else if(userData.email_status==="inactive" ){ %>
+                                                        <input type="button" class="btn btn-danger"
+                                                            value="inactive" disabled></input>
+                                                        <% } %>
+                                                            <% } %>
                                     </td>
                                     <td>
                                         <%= userData.age %>
@@ -40,7 +50,7 @@
                                         <%= userData.gender %>
                                     </td>
                                     <td>
-                                        <%= userData.counrty %>
+                                        +<%= userData.phone %>
                                     </td>
                                     <td>
                                         <%= userData.city %>
@@ -63,12 +73,13 @@
                                                                     type="button" class="btn btn-danger"
                                                                     onclick="return confirm('Are you want to Cancel <%= userData.name %> ?')">Cancel</button></a>
                                                         </td>
-                                                       
+
                                                         <% }else{ %>
                                                             <td style="
                                                                 display: flex;">
 
-                                                                <a class="me-3" href="/admin/delete_user/<%= userData._id%>"><button
+                                                                <a class="me-3"
+                                                                    href="/admin/delete_user/<%= userData._id%>"><button
                                                                         type="button" class="btn btn-danger"
                                                                         onclick="return confirm('Are you want to delete <%= userData.name %> ?')">Delete</button></a>
 
@@ -88,7 +99,7 @@
                                                             <% } %>
 
 
-                                                            <!--      <div class="dropdown">
+                                                                <!--      <div class="dropdown">
                                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"  aria-expanded="false">
                                               Dropdown button
                                             </button>
@@ -98,7 +109,7 @@
                                               <li><a class="dropdown-item" href="#">Something else here</a></li>
                                             </ul>
                                           </div> -->
-                                                            <!-- 
+                                                                <!-- 
                                            <select class="form-select" aria-label="Default select example"
                                                 name="product_category" required>
                                                 <option value="none" selected disabled hidden>Select

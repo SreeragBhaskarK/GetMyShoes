@@ -35,8 +35,13 @@
                                             <%= productData.product_name %>
                                         </td>
                                         <td>
-                                            
-                                            <%= productData.product_category %>
+                                            <% (productData.category_name || []).forEach(i=> { %>
+
+
+
+                                                <%= i.category %>
+
+                                                    <% }) %>
                                         </td>
                                         <td>
                                             <%= productData.product_options %>
@@ -57,7 +62,7 @@
                                                 href="/admin/edit-product/<%= productData._id%>"><button type="button"
                                                     class="btn btn-primary me-2">Edit</button></a>
 
-                                              <a href="/admin/delete-product/<%= productData._id%>"><button type="button"
+                                            <a href="/admin/delete-product/<%= productData._id%>"><button type="button"
                                                     class="btn btn-danger"
                                                     onclick="return confirm('Are you want to delete <%= productData.product_name %> ?')">Delete</button></a>
                                         </td>

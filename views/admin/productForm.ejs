@@ -2,7 +2,9 @@
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
+<!-- Mobiscroll JS and CSS Includes -->
+<link rel="stylesheet" href="/admin/css/mobiscroll.javascript.min.css">
+<script src="/admin/js/mobiscroll.javascript.min.js"></script>
 
 <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
 <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css" />
@@ -35,7 +37,8 @@
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title mb-0">Description</h5>
-                                            <textarea id="story" name="product_description" placeholder="type Description..." rows="5" cols="33"></textarea>
+                                            <textarea id="story" name="product_description"
+                                                placeholder="type Description..." rows="5" cols="33"></textarea>
 
                                             <!-- ouill -->
 
@@ -97,20 +100,32 @@
                                             <section class="ftco-section">
                                                 <div class="container">
 
-                                                    <div class="row justify-content-center">
+                                                    <div class="row ">
                                                         <div
                                                             class="col-md-8 col-lg-5 d-flex justify-content-center align-items-center">
                                                             <div class="d-flex text-left align-items-center w-100">
-                                                                <strong class="sl">Select Category:</strong>
+                                                                <!--            <strong class="sl">Select Category:</strong> -->
 
-                                                                <select id="multiple-checkboxes" name="product_category"
-                                                                    multiple="multiple">
+
+                                                                <label>
+                                                                    Select Category:
+                                                                    <input mbsc-input id="demo-multiple-select-input"
+                                                                        placeholder="Please select..."
+                                                                        data-dropdown="true" data-input-style="outline"
+                                                                        data-label-style="stacked" data-tags="true" />
+                                                                </label>
+                                                                <select id="demo-multiple-select"
+                                                                    name="product_category" multiple>
+
                                                                     <% (categoryView || []).forEach(i=> { %>
                                                                         <option value="<%=i._id %>">
                                                                             <%=i.category %>
                                                                         </option>
                                                                         <% }) %>
                                                                 </select>
+
+
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -226,8 +241,22 @@
         }
     }
 </script> -->
-<script src="/admin/multi/js/jquery.min.js"></script>
+<!-- <script src="/admin/multi/js/jquery.min.js"></script>
 <script src="/admin/multi/js/popper.js"></script>
 <script src="/admin/multi/js/bootstrap.min.js"></script>
 <script src="/admin/multi/js/bootstrap-multiselect.js"></script>
-<script src="/admin/multi/js/main.js"></script>
+<script src="/admin/multi/js/main.js"></script> -->
+
+
+<script>
+
+    mobiscroll.setOptions({
+        locale: mobiscroll.localeEn,                                         // Specify language like: locale: mobiscroll.localePl or omit setting to use default
+        theme: 'ios',                                                        // Specify theme like: theme: 'ios' or omit setting to use default
+        themeVariant: 'light'                                                // More info about themeVariant: https://docs.mobiscroll.com/5-22-3/javascript/select#opt-themeVariant
+    });
+
+    mobiscroll.select('#demo-multiple-select', {
+        inputElement: document.getElementById('demo-multiple-select-input')  // More info about inputElement: https://docs.mobiscroll.com/5-22-3/javascript/select#opt-inputElement
+    });
+</script>

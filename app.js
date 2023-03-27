@@ -15,8 +15,9 @@ const sessions = require('express-session');
 
 
 
-var adminRouter = require('./routes/admin');
-var usersRouter = require('./routes/users');
+var adminRouter = require('./routes/adminRouters');
+var usersRouter = require('./routes/usersRouters');
+var productsRouter = require('./routes/productRouters');
 
 var app = express();
 
@@ -54,6 +55,8 @@ app.use(cor())
 app.use(bodyParser())
 app.use('/admin', adminRouter);
 app.use('/', usersRouter);
+app.use('/', productsRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -77,7 +77,7 @@
 
                     <% if (locals.person) { %>
 
-                        <a class="nav-link  d-none d-sm-inline-block nav-action-btn" href="#" data-bs-toggle="dropdown">
+                      <!--   <a class="nav-link  d-none d-sm-inline-block nav-action-btn" href="#" data-bs-toggle="dropdown">
                             <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
                             <span class="nav-action-text">Login / Register</span>
 
@@ -95,7 +95,14 @@
                                     data-feather="help-circle"></i>
                                 Help Center</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/logout">Log out</a>
+                            <a class="dropdown-item" href="/logout">Log out</a> -->
+
+                            <a class="nav-link   nav-action-btn" href="/settings"
+                                >
+                                <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
+                                <span class="nav-action-text">Login / Register</span>
+
+                            </a>
 
                         </div>
                         <% }else{ %>

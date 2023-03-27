@@ -104,7 +104,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="account" role="tabpanel">
 
-                            <div class="card">
+                            <!--      <div class="card">
                                 <div class="card-header">
 
                                     <h5 class="card-title mb-0">Public info</h5>
@@ -143,33 +143,38 @@
                                     </form>
 
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="card">
                                 <div class="card-header">
 
-                                    <h5 class="card-title mb-0">Private info</h5>
+                                    <h5 class="card-title mb-0">Personal Information</h5>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form id="perInfo">
                                         <div class="row">
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputFirstName">First name</label>
-                                                <input type="text" class="form-control" id="inputFirstName"
-                                                    placeholder="First name">
+                                                <input type="text" id="name inputFirstName" class="form-control"
+                                                    name="firstName" value="<%=locals.users?.first_name%>" required placeholder="First name">
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputLastName">Last name</label>
-                                                <input type="text" class="form-control" id="inputLastName"
-                                                    placeholder="Last name">
+                                                <input type="text" value="<%=locals.users?.last_name%>" required class="form-control" name="lastName"
+                                                    id="inputLastName" placeholder="Last name">
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="inputEmail4">Email</label>
-                                            <input type="email" class="form-control" id="inputEmail4"
+                                            <input type="email" value="<%=locals.users?.email%>" name="email" class="form-control" id="inputEmail4"
                                                 placeholder="Email">
                                         </div>
                                         <div class="mb-3">
+                                            <label class="form-label" for="inputEmail4">Phone</label>
+                                            <input type="tel" disabled class="form-control" value=" <%=locals.users?.phone%>" name="phone" id="inputEmail4"
+                                                placeholder="Phone">
+                                        </div>
+                                        <!-- <div class="mb-3">
                                             <label class="form-label" for="inputAddress">Address</label>
                                             <input type="text" class="form-control" id="inputAddress"
                                                 placeholder="1234 Main St">
@@ -178,8 +183,8 @@
                                             <label class="form-label" for="inputAddress2">Address 2</label>
                                             <input type="text" class="form-control" id="inputAddress2"
                                                 placeholder="Apartment, studio, or floor">
-                                        </div>
-                                        <div class="row">
+                                        </div> -->
+                                        <!--     <div class="row">
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputCity">City</label>
                                                 <input type="text" class="form-control" id="inputCity">
@@ -195,8 +200,8 @@
                                                 <label class="form-label" for="inputZip">Zip</label>
                                                 <input type="text" class="form-control" id="inputZip">
                                             </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div> -->
+                                        <button type="submit" id="submit" class="btn btn-primary">Save changes</button>
                                     </form>
 
                                 </div>
@@ -208,20 +213,23 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Password</h5>
 
-                                    <form method="post" action="/settings_password">
+                                    <form action="/settings_password">
                                         <div class="mb-3">
                                             <label class="form-label" for="inputPasswordCurrent">Current
                                                 password</label>
-                                            <input type="password" name="current_password" class="form-control" id="inputPasswordCurrent" required>
+                                            <input type="password" name="current_password" class="form-control"
+                                                id="inputPasswordCurrent" required>
                                             <small><a href="/reset_password">Forgot your password?</a></small>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="inputPasswordNew">New password</label>
-                                            <input type="password" name="new_password" class="form-control" id="inputPasswordNew" required>
+                                            <input type="password" name="new_password" class="form-control"
+                                                id="inputPasswordNew" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="inputPasswordNew2">Confirm password</label>
-                                            <input type="password" name="confirm_password" class="form-control" id="inputPasswordNew2" required>
+                                            <input type="password" name="confirm_password" class="form-control"
+                                                id="inputPasswordNew2" required>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Save changes</button>
                                     </form>
@@ -237,9 +245,37 @@
     </main>
 
 
+    <script>
+        const form = document.querySelector('#perInfo');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const firstName = formData.get('firstName');
+            const lastName = formData.get('lastName');
+            const email = formData.get('email');
+            const phone = formData.get('phone');
+
+            try {
+                const response = await fetch('/profile_info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ firstName, lastName, email,phone }),
+                });
+                const data = await response.text();
+                console.log(data);
+                // Display success message to user
+            } catch (error) {
+                console.error(error);
+                // Display error message to user
+            }
+        }); 
+    </script>
 
 
-    <script src="admin/js/app.js"></script>
+
+    <script src="/admin/js/app.js"></script>
 
 
 </body>
