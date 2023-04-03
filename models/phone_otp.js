@@ -8,9 +8,14 @@ const  phoneOTPSchema= new Schema({
         unique:true},
 
     otp:String,
-    createdAt:Date,
-    expiresAt:Date
-})
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        expires: 120 // expires after 2 minutes
+      }
+
+},{ timestamps: true })
+phoneOTPSchema.index({ createdAt: 1 }, { expireAfterSeconds: 120 });
 
 const phoneOTP = mongoose.model(collection.PHONE_NUMBER_OTP,phoneOTPSchema)
 

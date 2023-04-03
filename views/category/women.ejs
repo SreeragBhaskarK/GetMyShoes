@@ -6,27 +6,19 @@
         <ul class="filter-list">
 
             <li>
-                <button class="filter-btn  active">All</button>
+                <a href="/products"><button class="filter-btn ">All</button></a>
             </li>
 
             <li>
-                <button class="filter-btn">Nike</button>
+                <a href="/men"><button class="filter-btn ">Men</button></a>
             </li>
 
             <li>
-                <button class="filter-btn">Adidas</button>
+                <a href="/women"><button class="filter-btn active">Women</button></a>
             </li>
 
             <li>
-                <button class="filter-btn">Puma</button>
-            </li>
-
-            <li>
-                <button class="filter-btn">Bata</button>
-            </li>
-
-            <li>
-                <button class="filter-btn">Apex</button>
+                <a href="/sports"><button class="filter-btn">Sports</button></a>
             </li>
 
         </ul>
@@ -37,55 +29,55 @@
 
                 <li class="product-item">
                     <div class="product-card" tabindex="0">
+                        <a href="/product/<%=product._id%>">
+                            <figure class="card-banner">
+                                <img src="/images/products_image/<%=product.product_image[0]%>" width="312" height="350"
+                                    loading="lazy" alt="Running Sneaker Shoes" class="image-contain">
 
-                        <figure class="card-banner">
-                            <img src="/images/products_image/<%=product.product_image[0]%>" width="312" height="350"
-                                loading="lazy" alt="Running Sneaker Shoes" class="image-contain">
+                                <% if (product.product_badge) { %>
 
-                            <% if (product.product_badge) { %>
+                                    <div class="card-badge">
+                                        <%=product.product_badge%>
+                                    </div>
+                                    <% } %>
+                                        <ul class="card-action-list">
 
-                                <div class="card-badge">
-                                    <%=product.product_badge%>
-                                </div>
-                                <% } %>
-                                    <ul class="card-action-list">
+                                            <li class="card-action-item">
+                                                <button class="card-action-btn" aria-labelledby="card-label-1">
+                                                    <ion-icon name="cart-outline"></ion-icon>
+                                                </button>
 
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-1">
-                                                <ion-icon name="cart-outline"></ion-icon>
-                                            </button>
+                                                <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
+                                            </li>
 
-                                            <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                        </li>
+                                            <li class="card-action-item">
+                                                <button class="card-action-btn" aria-labelledby="card-label-2">
+                                                    <ion-icon name="heart-outline"></ion-icon>
+                                                </button>
 
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-2">
-                                                <ion-icon name="heart-outline"></ion-icon>
-                                            </button>
+                                                <div class="card-action-tooltip" id="card-label-2">Add to Whishlist
+                                                </div>
+                                            </li>
 
-                                            <div class="card-action-tooltip" id="card-label-2">Add to Whishlist
-                                            </div>
-                                        </li>
+                                            <li class="card-action-item">
+                                                <button class="card-action-btn" aria-labelledby="card-label-3">
+                                                    <ion-icon name="eye-outline"></ion-icon>
+                                                </button>
 
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-3">
-                                                <ion-icon name="eye-outline"></ion-icon>
-                                            </button>
+                                                <div class="card-action-tooltip" id="card-label-3">Quick View</div>
+                                            </li>
 
-                                            <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                        </li>
+                                            <li class="card-action-item">
+                                                <button class="card-action-btn" aria-labelledby="card-label-4">
+                                                    <ion-icon name="repeat-outline"></ion-icon>
+                                                </button>
 
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-4">
-                                                <ion-icon name="repeat-outline"></ion-icon>
-                                            </button>
+                                                <div class="card-action-tooltip" id="card-label-4">Compare</div>
+                                            </li>
 
-                                            <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                        </li>
-
-                                    </ul>
-                        </figure>
-
+                                        </ul>
+                            </figure>
+                        </a>
                         <div class="card-content">
 
                             <div class="card-cat">
@@ -94,7 +86,7 @@
 
                                     <a href="#" class="card-cat-link">
                                         <%= i.category %>
-
+                                            women
                                     </a>
                                     <% }) %>
                                         <!--   <a href="#" class="card-cat-link">Men</a> /

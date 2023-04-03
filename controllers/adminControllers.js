@@ -1,6 +1,7 @@
 const category = require('../models/category');
 var adminHelper = require('../server/helpers/admin-helpers');
 var productHelper = require('../server/helpers/product-helper');
+let {imageUpdate}= require('../server/middleware/multer')
 let editView
 let editCategory
 exports.adminView = (req, res) => {
@@ -9,7 +10,6 @@ exports.adminView = (req, res) => {
 
 }
 exports.loginView = (req, res) => {
-
 
     res.render('admin/login', { noShow: true, noLayout: true })
 
@@ -20,7 +20,8 @@ exports.loginData = (req, res) => {
 
         if (response.port === 200) {
             /* res.status(200).json(response.result) */
-            req.session.admin = true
+            req.session.adminLoggedIn = true
+            
             res.redirect('/admin')
         } else {
             res.redirect('/admin/login')
@@ -40,7 +41,7 @@ exports.userView = (req, res) => {
 
 }
 exports.logoutView = (req, res) => {
-    req.session.admin = false
+    req.session.adminLoggedIn = false
     res.redirect('/admin/login')
 }
 
@@ -104,9 +105,10 @@ exports.editProductView = (req, res) => {
         res.redirect('/admin/products')
     })
 }
-exports.updataProductData = (req, res) => {
+exports.updataProductData = async (req, res) => {
+    console.log(req.files);
     let proId = req.params.id
-    console.log(req.file,req.fies,"nooooooooooooooooooo");
+   
     productHelper.doUpdateProduct(proId, req.body).then(response => {
         /* if (req.files) {
             let image = req.files.Image

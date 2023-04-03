@@ -16,7 +16,6 @@
     "express-ejs-layouts": "^2.5.1",
     "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
-    "fast-two-sms": "^3.0.0",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.1.0",

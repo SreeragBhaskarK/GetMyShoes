@@ -3,8 +3,10 @@ var userHelper = require('../server/helpers/user-helpers');
 var authHelper = require('../server/helpers/authHelper');
 const generateToken = require("../server/util/createToken");
 const user = require('../models/user');
+const cartHelper = require('../server/helpers/cart-helper');
 
 exports.userView = (req, res) => {
+    res.locals.person = req.session.userLoggedIn
     res.render('users/index')
 }
 exports.logInView = (req, res) => {
@@ -14,18 +16,32 @@ exports.logInView = (req, res) => {
 }
 
 exports.logInData = (req, res) => {
-    authHelper.doPhoneNumberLogin(req.body).then(response => {
-        console.log(response, "testing");
-        if (response.result === 0) {
-            let message = "don't have an account sign up"
-            res.redirect('/login?message=' + message)
-        } else if (response.result === -1) {
-            let message = "this account is blocked"
-            res.redirect('/login?message=' + message)
-        } else {
-            res.redirect('/verify?number=' + response.result)
-        }
-    })
+    if (req.body.email) {
+
+        authHelper.doLogIn(req.body).then(response => {
+            if (response.result) {
+                req.session.user = response.userView
+                req.session.userLoggedIn = true
+                res.redirect('/')
+            }else{
+                res.redirect('/login')
+            }
+        })
+    } else {
+        authHelper.doPhoneNumberLogin(req.body).then(response => {
+            console.log(response, "testing");
+            if (response.result === 0) {
+                let message = "don't have an account sign up"
+                res.redirect('/login?message=' + message)
+            } else if (response.result === -1) {
+                let message = "this account is blocked"
+                res.redirect('/login?message=' + message)
+            } else if (response.result === 1) {
+                res.redirect('/verify?number=' + response.phone_number)
+            }
+        })
+    }
+
 
 }
 
@@ -54,12 +70,14 @@ exports.signUpData = (req, res) => {
 
 exports.verifyView = (req, res) => {
     let number = req.query.number
+    console.log(number, req.query.login, "heloooooo");
     res.render("users/verify", { noShow: true, number, noLayout: true })
 
 }
 exports.verifyData = (req, res) => {
+    console.log(req.body, "uuuuuuuuuuuuuu");
     authHelper.doVerifyOtp(req.body).then(response => {
-
+        console.log(response);
         if (response.validOTP) {
 
             req.session.user = response
@@ -67,7 +85,7 @@ exports.verifyData = (req, res) => {
             req.session.userLoggedIn = true
             res.redirect('/')
         } else {
-            res.redirect('/verify?number=' + response.phone_number)
+            res.redirect('/verify?number=' + response.phone)
         }
     })
 
@@ -76,16 +94,16 @@ exports.verifyData = (req, res) => {
 
 exports.logoutView = (req, res) => {
 
-    req.session.user = false
+    req.session.userLoggedIn = false
     res.redirect('/')
 }
 
 /* settings */
-exports.settingsView = async(req, res) => {
+exports.settingsView = async (req, res) => {
     let phoneNumber = req.session.user?.phone
-    let users = await user.findOne({phone:phoneNumber})
-    console.log(users,'//////////');
-    res.render('users/settings', { noLayout: true ,users})
+    let users = await user.findOne({ phone: phoneNumber })
+    console.log(users, '//////////');
+    res.render('users/settings', { noLayout: true, users })
 
 }
 exports.resetPasswordView = (req, res) => {
@@ -96,60 +114,71 @@ exports.resetPasswordData = (req, res) => {
 
     userHelper.sendOtpEmail(req.body).then((response) => {
         if (response.port === 200) {
-          req.session.otpemail = response.email
-          req.session.resettoken = response.token
-          res.redirect('/verify?token=' + response.token)
+            req.session.otpemail = response.email
+            req.session.resettoken = response.token
+            res.redirect('/verify?token=' + response.token)
         } else {
-          res.status(400).send(response.message)
+            res.status(400).send(response.message)
         }
-    
-      })
+
+    })
 }
 exports.setPasswordView = (req, res) => {
     res.render('users/set_password', { noLayout: true })
 }
 exports.setPasswordData = (req, res) => {
     let email = req.session.otpemail
-  userHelper.updataPassword(email, req.body).then((response) => {
-    if (response.port == 200) {
+    userHelper.updataPassword(email, req.body).then((response) => {
+        if (response.port == 200) {
 
-      res.redirect('/')
-    } else {
-      res.redirect('/set_password?token=' + req.session.resettoken)
-    }
-  })
-}
-
-exports.profileInfoData=(req,res)=>{
-
-    let phone=req.session.user.phone
-    userHelper.doProfile(req.body,phone).then(response=>{
-        req.session.user=response
+            res.redirect('/')
+        } else {
+            res.redirect('/set_password?token=' + req.session.resettoken)
+        }
     })
 }
 
-exports.menCategoryView = (req,res)=>{
-    userHelper.getMenProduct().then(responses=>{
-      
+exports.profileInfoData = (req, res) => {
+
+    let phone = req.session.user.phone
+    console.log(req.body, '//////////////ssssss/');
+    userHelper.doProfile(req.body, phone).then(response => {
+        req.session.user = response
+    })
+}
+exports.profileInfoAdrsData = (req, res) => {
+
+    let phone = req.session.user.phone
+    console.log(req.body, '///////////////daaaaaaaaaaaaaaa');
+    userHelper.doProfileAddress(req.body, phone).then(response => {
+        req.session.user = response
+    })
+}
+
+exports.menCategoryView = (req, res) => {
+    userHelper.getMenProduct().then(responses => {
+
         let menProduct = responses
-        res.render('category/men',{menProduct})
+        console.log(menProduct);
+        res.render('category/men', { menProduct })
     })
-  
+
 }
 
-exports.womenCategoryView = (req,res)=>{
-    userHelper.getWomenProduct().then(responese=>{
+exports.womenCategoryView = (req, res) => {
+    userHelper.getWomenProduct().then(responese => {
         let womenProduct = responese
-        res.render('category/women',{womenProduct})
+        res.render('category/women', { womenProduct })
     })
-  
+
 }
 
-exports.sportsCategoryView = (req,res)=>{
-    userHelper.getSportsProduct().then(responese=>{
+exports.sportsCategoryView = (req, res) => {
+    userHelper.getSportsProduct().then(responese => {
         let sportsProduct = responese
-        res.render('category/sports',{sportsProduct})
+        res.render('category/sports', { sportsProduct })
     })
-  
+
 }
+
 

@@ -1,0 +1,118 @@
+<link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+<link rel="stylesheet" href="/users/product_details/css/font-awesome.min.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/elegant-icons.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/jquery-ui.min.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/magnific-popup.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/owl.carousel.min.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/slicknav.min.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/style.css" type="text/css">
+<section class="shop-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shop__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                         
+                            
+                              
+                            
+                          <% products.forEach(product => { %>
+                           
+                      
+                            <tr>
+                                <td class="cart__product__item">
+                                    <img style="width: 90px;" src="/images/products_image/<%=product.products.product_image[0]%>" alt="">
+                                    <div class="cart__product__item__title">
+                                        <h6><%=product.products.product_name %></h6>
+                                        <div class="rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="cart__price"  >₹ <%=product.products.product_price %></td>
+                                <td class="cart__quantity">
+                                    <div class="pro-qty"data-product-price="<%=product.products.product_price %>"  data-cart-id="<%=product._id%>" data-product-id="<%=product.products._id%>">
+                                        <input  type="text" value="<%=product.quantity%>" >
+                                    </div>
+                                </td>
+                                
+                                <td class="cart__total" id="cart__total_<%=product.products._id%>" >₹ <%=product.total%> </td>
+                                <td class="cart__close"><span onclick="deltPro('<%=product.products._id%>','<%=product._id%>')" class="icon_close"></span></td>
+                            </tr> 
+                            <% }) %>
+            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="cart__btn">
+                    <a href="/shop">Continue Shopping</a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="cart__btn update__btn">
+                    <a href="#"><span class="icon_loading"></span> Update cart</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="discount__content">
+                    <h6>Discount codes</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Enter your coupon code">
+                        <button type="submit" class="site-btn">Apply</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4 offset-lg-2">
+                <div class="cart__total__procced">
+                    <h6>Cart total</h6>
+                    <ul>
+                        <li>Subtotal <span>₹ <%=subTotal %></span></li>
+                        <li>Total <span id="totalPrice" aria-placeholder="">₹ <%=totalPrice[0]?.total %></span></li>
+                    </ul>
+                    <a href="/checkout" class="primary-btn">Proceed to checkout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+   function deltPro(proId,cartId){
+        console.log(proId,cartId);
+        $.ajax({
+            url:'/delete-cart-product',
+            type:'delete',
+            data:{
+                proId:proId,
+                cartId:cartId
+            },
+            success:(Response=>{
+                location.reload()
+            })
+        })
+    }
+</script>
+
+
+

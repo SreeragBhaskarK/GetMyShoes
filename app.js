@@ -18,6 +18,7 @@ const sessions = require('express-session');
 var adminRouter = require('./routes/adminRouters');
 var usersRouter = require('./routes/usersRouters');
 var productsRouter = require('./routes/productRouters');
+var cartRouter = require('./routes/cartRouters');
 
 var app = express();
 
@@ -30,7 +31,7 @@ app.set('layout', 'layouts/layout');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 /* ejs layout  */
@@ -43,11 +44,13 @@ app.use(expressLayouts);
 
 }) */
 
+
+
 app.use(nocache());
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(sessions({
   secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-  saveUninitialized:true,
+  saveUninitialized: true,
   cookie: { maxAge: oneDay },
   resave: false
 }));
@@ -56,15 +59,16 @@ app.use(bodyParser())
 app.use('/admin', adminRouter);
 app.use('/', usersRouter);
 app.use('/', productsRouter);
+app.use('/', cartRouter);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

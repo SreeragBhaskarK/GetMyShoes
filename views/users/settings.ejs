@@ -33,14 +33,14 @@
         }
     </style>
     <!-- END SETTINGS -->
-    <script async="" src="gtag/js.js?id=UA-120946860-10"></script>
+    <!--     <script async="" src="gtag/js.js?id=UA-120946860-10"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'UA-120946860-10', { 'anonymize_ip': true });
-    </script>
+    </script> -->
 </head>
 <!--
   HOW TO USE: 
@@ -73,6 +73,10 @@
                             <a class="list-group-item list-group-item-action active" data-bs-toggle="list"
                                 href="#account" role="tab">
                                 Account
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#address"
+                                role="tab">
+                                Address
                             </a>
                             <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password"
                                 role="tab">
@@ -156,22 +160,32 @@
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputFirstName">First name</label>
                                                 <input type="text" id="name inputFirstName" class="form-control"
-                                                    name="firstName" value="<%=locals.users?.first_name%>" required placeholder="First name">
+                                                    name="firstName" value="<%=locals.users?.first_name%>" required
+                                                    placeholder="First name">
                                             </div>
                                             <div class="mb-3 col-md-6">
                                                 <label class="form-label" for="inputLastName">Last name</label>
-                                                <input type="text" value="<%=locals.users?.last_name%>" required class="form-control" name="lastName"
-                                                    id="inputLastName" placeholder="Last name">
+                                                <input type="text" value="<%=locals.users?.last_name%>" required
+                                                    class="form-control" name="lastName" id="inputLastName"
+                                                    placeholder="Last name">
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="inputEmail4">Email</label>
-                                            <input type="email" value="<%=locals.users?.email%>" name="email" class="form-control" id="inputEmail4"
-                                                placeholder="Email">
+                                            <input type="email" value="<%=locals.users?.email%>" name="email"
+                                                class="form-control" id="inputEmail4" placeholder="Email">
+                                            <% if (locals.users?.email_status==="active" ) { %>
+                                                <input type="button" style="float: right;" class="btn btn-success"
+                                                    value="actvie" disabled></input>
+                                                <% }else if(locals.users?.email_status==="inactive" ){ %>
+                                                    <input type="button" style="float: right;" class="btn btn-danger"
+                                                        value="inactive" disabled></input>
+                                                    <% } %>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="inputEmail4">Phone</label>
-                                            <input type="tel" disabled class="form-control" value=" <%=locals.users?.phone%>" name="phone" id="inputEmail4"
+                                            <input type="tel" disabled class="form-control"
+                                                value=" <%=locals.users?.phone%>" name="phone" id="inputEmail4"
                                                 placeholder="Phone">
                                         </div>
                                         <!-- <div class="mb-3">
@@ -207,7 +221,113 @@
                                 </div>
                             </div>
 
+
                         </div>
+                        <div class="tab-pane fade " id="address" role="tabpanel">
+                            <div class="card">
+                                <div class="card-header">
+
+                                    <h5 class="card-title mb-0">Address Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="perInfoAdrs">
+
+                                        <div class="mb-3 ">
+                                            <label class="form-label" for="inputFirstName">Address Line 1</label>
+                                            <input type="text" class="form-control" name="address_line_1"
+                                                value="" required
+                                                placeholder="">
+
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="inputLastName">Address Line 2</label>
+                                                <input type="text" value=""
+                                                    required class="form-control" name="address_line_2">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label" for="inputEmail4">City</label>
+                                                <input type="text" value="" required
+                                                    name="city" class="form-control">
+
+
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="inputEmail4">State</label>
+                                                <input type="tel" class="form-control" required
+                                                    value=" " name="state">
+                                            </div>
+
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="inputLastName">Zip/Postal Code</label>
+                                                <input type="text" value="" required
+                                                    class="form-control" name="zip">
+                                            </div>
+
+                                            <button type="submit" id="submit" class="btn btn-primary">Add
+                                                Address</button>
+                                    </form>
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-header" style="display: flex;">
+                                        <h5>Address</h5>
+                                        <button class="btn btn-primary" style="margin-left: auto;">Edit</button>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="perInfoAdrs">
+
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="inputFirstName">Address Line 1</label>
+                                                <input type="text" class="form-control" name="address_line_1"
+                                                    value="" required
+                                                    placeholder="">
+
+                                                <div class="mb-3 ">
+                                                    <label class="form-label" for="inputLastName">Address Line 2</label>
+                                                    <input type="text"
+                                                        value="" required
+                                                        class="form-control" name="address_line_2">
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="inputEmail4">City</label>
+                                                    <input type="text" value=""
+                                                        required name="city" class="form-control">
+
+
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="inputEmail4">State</label>
+                                                    <input type="tel" class="form-control" required
+                                                        value=" " name="state">
+                                                </div>
+
+                                                <div class="mb-3 ">
+                                                    <label class="form-label" for="inputLastName">Zip/Postal
+                                                        Code</label>
+                                                    <input type="text" value=""
+                                                        required class="form-control" name="zip">
+                                                </div>
+
+                                                <button type="submit" id="submit" class="btn btn-primary">Save
+                                                    changes</button>
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                      
+
                         <div class="tab-pane fade" id="password" role="tabpanel">
                             <div class="card">
                                 <div class="card-body">
@@ -254,6 +374,7 @@
             const formData = new FormData(form);
             const firstName = formData.get('firstName');
             const lastName = formData.get('lastName');
+
             const email = formData.get('email');
             const phone = formData.get('phone');
 
@@ -261,7 +382,7 @@
                 const response = await fetch('/profile_info', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ firstName, lastName, email,phone }),
+                    body: JSON.stringify({ firstName, lastName, email, phone }),
                 });
                 const data = await response.text();
                 console.log(data);
@@ -273,6 +394,76 @@
         }); 
     </script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $('#perInfoAdrs').submit(function (event) {
+            event.preventDefault();
+
+            const formData = {
+                addressLine1: $('input[name=address_line_1]').val(),
+                addressLine2: $('input[name=address_line_2]').val(),
+                city: $('input[name=city]').val(),
+                state: $('input[name=state]').val(),
+                zip: $('input[name=zip]').val()
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/profile_info_adrs',
+                data: formData,
+                success: function (data) {
+                    console.log('Success:', data);
+                },
+                error: function (err) {
+                    console.log('Error:', err);
+                }
+            });
+        });
+
+    </script>
+    <!-- <script>
+
+     
+        const formadres = document.querySelector('#perInfoAdrs');
+
+        form.addEventListener('submit1', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(formadres);
+            const addressLine1 = formData.get('address_line_1');
+            const addressLine2 = formData.get('address_line_2');
+            const city = formData.get('city');
+            const state = formData.get('state');
+            const zip = formData.get('zip');
+
+            try {
+                const response = await fetch('/profile_info_adrs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ addressLine1, addressLine2, city, state, zip }),
+                });
+                const data = await response.text();
+                console.log(data);
+                // Display success message to user
+            } catch (error) {
+                console.error(error);
+                // Display error message to user
+            }
+        }); 
+    </script> -->
+    <!--     <script>
+        const tabs = document.querySelectorAll('.list-group-item');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove the active class from all tabs
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                // Add the active class to the clicked tab
+                tab.classList.add('active');
+            });
+        });
+    </script> -->
 
 
     <script src="/admin/js/app.js"></script>

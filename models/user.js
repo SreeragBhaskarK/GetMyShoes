@@ -5,21 +5,16 @@ const collection = require('../server/config/collections')
 const userSchema = new Schema({
 
     name: String,
-    first_name: {
-        type: String,
-        required: true
-    }
+    first_name: String
     ,
-    last_name: {
-        type: String,
-        required: true
 
-    },
+    last_name: String
+
+    ,
 
     email: {
         unique: true,
-        type: String,
-        required: true
+        type: String
     },
     email_status: String,
     phone: {
@@ -33,6 +28,7 @@ const userSchema = new Schema({
     status: String,
     password: String,
     token: String,
+    address: Array,
     verified: {
         type: Boolean,
         default: false

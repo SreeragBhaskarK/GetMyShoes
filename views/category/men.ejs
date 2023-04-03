@@ -6,27 +6,19 @@
         <ul class="filter-list">
 
             <li>
-                <button class="filter-btn  active">All</button>
+                <a href="/products"><button class="filter-btn ">All</button></a>
             </li>
 
             <li>
-                <button class="filter-btn">Nike</button>
+                <a href="/men"><button class="filter-btn active">Men</button></a>
             </li>
 
             <li>
-                <button class="filter-btn">Adidas</button>
+                <a href="/women"><button class="filter-btn">Women</button></a>
             </li>
 
             <li>
-                <button class="filter-btn">Puma</button>
-            </li>
-
-            <li>
-                <button class="filter-btn">Bata</button>
-            </li>
-
-            <li>
-                <button class="filter-btn">Apex</button>
+                <a href="/sports"><button class="filter-btn">Sports</button></a>
             </li>
 
         </ul>
@@ -38,7 +30,7 @@
                 <li class="product-item">
                     <div class="product-card" tabindex="0">
 
-                        <figure class="card-banner">
+                        <a href="/product/<%=product._id%>"><figure class="card-banner" >
                             <img src="/images/products_image/<%=product.product_image[0]%>" width="312" height="350"
                                 loading="lazy" alt="Running Sneaker Shoes" class="image-contain">
 
@@ -85,19 +77,19 @@
 
                                     </ul>
                         </figure>
-
+                    </a>
                         <div class="card-content">
 
                             <div class="card-cat">
                                 <% (product.product_categoryName || []).forEach(i=> { %>
 
 
-                                    <a href="#" class="card-cat-link">
+                                    <a href="#" class="card-cat-link">men
                                         <%= i.category %>
-
+                                        
                                     </a>
                                     <% }) %>
-                                        <!--   <a href="#" class="card-cat-link">Men</a> /
+                                          <!-- <a href="#" class="card-cat-link">Men</a> /
                             <a href="#" class="card-cat-link">Women</a> -->
                             </div>
 
