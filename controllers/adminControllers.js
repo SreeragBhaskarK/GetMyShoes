@@ -33,7 +33,7 @@ exports.userView = (req, res) => {
 
     adminHelper.doViewUsers().then(userData => {
 
-        console.log(userData.status, "kdjfk");
+        console.log(userData, "kdjfk");
         res.render('admin/users', { admin: true, activeUser: 'active', userData })
     })
 
@@ -184,6 +184,27 @@ exports.updateCategoryView = (req, res) => {
     adminHelper.doCategoryUpdate(proId, req.body).then(response => {
 
         res.redirect('/admin/category')
+    })
+}
+exports.unListView = (req, res) => {
+  
+    adminHelper.doUnlist().then(response => {
+        let unListProduct =response
+        console.log(unListProduct);
+        res.render('admin/unlist',{admin: true,unListProduct})
+    })
+}
+exports.restoreProductView = (req, res) => {
+  let id = req.params.id
+    adminHelper.doRestoreProduct(id).then(response => {
+        res.redirect('/admin/unlist')
+    })
+}
+exports.unlistDeleteProductView = (req, res) => {
+    let id = req.params.id
+    adminHelper.doDeleteProduct(id).then(response => {
+       
+        res.redirect('/admin/unlist')
     })
 }
 

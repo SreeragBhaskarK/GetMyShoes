@@ -4,14 +4,21 @@ var authHelper = require('../server/helpers/authHelper');
 const generateToken = require("../server/util/createToken");
 const user = require('../models/user');
 const cartHelper = require('../server/helpers/cart-helper');
+const { hashData } = require('../server/util/hashData');
 
 exports.userView = (req, res) => {
-    res.locals.person = req.session.userLoggedIn
+
+
     res.render('users/index')
 }
 exports.logInView = (req, res) => {
     let message = req.query.message
     res.render('users/login', { noShow: true, noLayout: true, message })
+
+}
+exports.logInEmailView = (req, res) => {
+    let message = req.query.message
+    res.render('users/email_login', { noShow: true, noLayout: true, message })
 
 }
 
@@ -23,8 +30,8 @@ exports.logInData = (req, res) => {
                 req.session.user = response.userView
                 req.session.userLoggedIn = true
                 res.redirect('/')
-            }else{
-                res.redirect('/login')
+            } else {
+                res.redirect('/loginemail?message=' + response.message)
             }
         })
     } else {
@@ -92,6 +99,7 @@ exports.verifyData = (req, res) => {
 }
 
 
+
 exports.logoutView = (req, res) => {
 
     req.session.userLoggedIn = false
@@ -102,23 +110,36 @@ exports.logoutView = (req, res) => {
 exports.settingsView = async (req, res) => {
     let phoneNumber = req.session.user?.phone
     let users = await user.findOne({ phone: phoneNumber })
+    req.session.user = users
     console.log(users, '//////////');
-    res.render('users/settings', { noLayout: true, users })
+    await cartHelper.getOrders().then(orders => {
+        console.log(orders, 'neeeeeeeeeee');
+        res.render('users/settings', { noLayout: true, users, orders })
+    })
+
 
 }
 exports.resetPasswordView = (req, res) => {
-    res.render('users/reset_password', { noLayout: true })
+    let message = req.query.message
+    res.render('users/reset_password', { noLayout: true, message })
 
 }
 exports.resetPasswordData = (req, res) => {
-
-    userHelper.sendOtpEmail(req.body).then((response) => {
-        if (response.port === 200) {
+    let email = req.body.email
+    authHelper.sendOtpEmail(req.body).then((response) => {
+        /* if (response.port === 200) {
             req.session.otpemail = response.email
             req.session.resettoken = response.token
             res.redirect('/verify?token=' + response.token)
         } else {
             res.status(400).send(response.message)
+        } */
+        if (response) {
+
+            res.redirect('/verifyemail?email=' + email)
+        } else {
+            let message = 'email in not found '
+            res.redirect('/reset_password?message=' + message)
         }
 
     })
@@ -127,14 +148,11 @@ exports.setPasswordView = (req, res) => {
     res.render('users/set_password', { noLayout: true })
 }
 exports.setPasswordData = (req, res) => {
-    let email = req.session.otpemail
+    let email = req.session.loginForgot
     userHelper.updataPassword(email, req.body).then((response) => {
-        if (response.port == 200) {
 
-            res.redirect('/')
-        } else {
-            res.redirect('/set_password?token=' + req.session.resettoken)
-        }
+        res.redirect('/settings')
+
     })
 }
 
@@ -149,9 +167,10 @@ exports.profileInfoData = (req, res) => {
 exports.profileInfoAdrsData = (req, res) => {
 
     let phone = req.session.user.phone
-    console.log(req.body, '///////////////daaaaaaaaaaaaaaa');
+    console.log(req.body, req.session.user, '///////////////daaaaaaaaaaaaaaa');
     userHelper.doProfileAddress(req.body, phone).then(response => {
-        req.session.user = response
+        res.send({ status: true })
+
     })
 }
 
@@ -180,5 +199,65 @@ exports.sportsCategoryView = (req, res) => {
     })
 
 }
+exports.emailVerificationView = (req, res) => {
+
+    let userId = req.session.user._id
+    let email = req.body.email
+    authHelper.emailVerification(email, userId).then(responese => {
+
+        res.json({ redirectUrl: '/verifyemail?email=' + email });
+    })
+
+}
+
+exports.verifyEmailView = (req, res) => {
+    let email = req.query.email
+    console.log(email, "heloooooo");
+    res.render("users/verify_email", { noShow: true, email, noLayout: true })
+
+}
+
+exports.verifyEmailData = (req, res) => {
+    console.log(req.body, "uuuuuuuuuuuuuu");
+    authHelper.doEmailVerifyOtp(req.body).then(response => {
+        console.log(response);
+        if (response.result) {
+            req.session.loginForgot = response.email
+            res.redirect('/set_password?token=' + response.token)
+        } else {
+            res.redirect('/verifyemail?email=' + response.email)
+        }
+    })
+
+}
+exports.changePasswordData = (req, res) => {
+    console.log(req.body, "uuuuuuuuuuuuuu");
+    let old_pass = req.session.user.password
+    let userId = req.session.user._id
+    authHelper.doChangePassword(req.body, old_pass, userId).then(response => {
+        if (response.result) {
+            req.session.user = response.users
+            console.log(req.session.user, 'checkkkkkkkkkkk');
+            res.send(response.result)
+        } else {
+            res.send(response.result)
+        }
+
+    })
+
+}
+exports.cartCount = async (req, res, next) => {
+    const user = req.session?.user;
+    console.log(user, '////////////session');
+    if (user) {
+        res.locals.person = req.session.userLoggedIn
+        res.locals.cartCount = await cartHelper.getCartCount(user._id)
+        next()
+    } else {
+        next()
+    }
+
+}
+
 
 

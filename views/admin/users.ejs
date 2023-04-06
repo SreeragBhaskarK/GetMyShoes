@@ -34,12 +34,12 @@
                                         <%= (userData.email) %>
                                             <% if(userData.email) { %>
 
-                                                <% if (userData.email_status==="active" ) { %>
+                                                <% if (userData.email_status==="Verified" ) { %>
                                                     <input type="button" class="btn btn-success"
-                                                        value="actvie" disabled></input>
-                                                    <% }else if(userData.email_status==="inactive" ){ %>
+                                                        value="Verified" disabled></input>
+                                                    <% }else if(userData.email_status==="notVerified" ){ %>
                                                         <input type="button" class="btn btn-danger"
-                                                            value="inactive" disabled></input>
+                                                            value="notVerified" disabled></input>
                                                         <% } %>
                                                             <% } %>
                                     </td>

@@ -132,22 +132,23 @@
                             </label>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="col-lg-9 col-md-9">
                 <div class="row">
                     <% (locals.productData || [] ).forEach(product=> { %>
-                    <div class="col-lg-4 col-md-6">
-                        
+                        <div class="col-lg-4 col-md-6">
+
 
                             <li class="product-item">
                                 <div class="product-card" tabindex="0">
 
                                     <figure class="card-banner">
-                                        <a href="/product/<%=product._id%>"><img src="/images/products_image/<%=product.product_image[0]%>" width="312"
-                                            height="350" loading="lazy" alt="Running Sneaker Shoes"
-                                            class="image-contain"></a>
+                                        <a href="/product/<%=product._id%>"><img
+                                                src="/images/products_image/<%=product.product_image[0]%>" width="312"
+                                                height="350" loading="lazy" alt="Running Sneaker Shoes"
+                                                class="image-contain"></a>
 
                                         <% if (product.product_badge) { %>
 
@@ -158,7 +159,8 @@
                                                 <ul class="card-action-list">
 
                                                     <li class="card-action-item">
-                                                       <button onclick="cartCount('<%=product._id%>')" class="card-action-btn" aria-labelledby="card-label-1">
+                                                        <button onclick="cartCount('<%=product._id%>')"
+                                                            class="card-action-btn" aria-labelledby="card-label-1">
                                                             <ion-icon name="cart-outline"></ion-icon>
                                                         </button>
 
@@ -226,19 +228,19 @@
 
                                 </div>
                             </li>
-                           
-                        
-                    </div>
-                    <% }) %>
 
-                    <div class="col-lg-12 text-center">
-                        <div class="pagination__option">
-                            <a href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#"><i class="fa fa-angle-right"></i></a>
+
                         </div>
-                    </div>
+                        <% }) %>
+
+                            <div class="col-lg-12 text-center">
+                                <div class="pagination__option">
+                                    <a href="#">1</a>
+                                    <a href="#">2</a>
+                                    <a href="#">3</a>
+                                    <a href="#"><i class="fa fa-angle-right"></i></a>
+                                </div>
+                            </div>
                 </div>
             </div>
         </div>
@@ -266,7 +268,7 @@
             data: { category: category },
             success: function (response) {
                 console.log(response);
-               location.reload()
+                location.reload()
             },
             error: function (xhr, status, error) {
                 console.error(error);
@@ -274,32 +276,32 @@
         });
     }
 
-/* 
-    function updateProductList() {
-        // Clear the current list of products
-        $('#product-list').empty();
-
-        // Add the updated list of products to the page
-          const productHTML = `
-          <# (productData || [] ).forEach(product=> { %>
-          `;
-          $('#product-list').append(productHTML);
-       
-      }
- */
+    /* 
+        function updateProductList() {
+            // Clear the current list of products
+            $('#product-list').empty();
+    
+            // Add the updated list of products to the page
+              const productHTML = `
+              <# (productData || [] ).forEach(product=> { %>
+              `;
+              $('#product-list').append(productHTML);
+           
+          }
+     */
 
 
 </script>
 
 <script>
-    function cartCount(id){
+    function cartCount(id) {
         console.log(id);
         $.ajax({
-            type:'get',
-            url:'/add-toCart/'+id,
-            success:(response)=>{
-                if(response.status){
-
+            type: 'get',
+            url: '/add-toCart/' + id,
+            success: (cartCounts) => {
+                if (cartCounts) {
+                    document.getElementById('cartCount').innerHTML = cartCounts
                 }
             }
         })

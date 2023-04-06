@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const { verifyAdmin } = require("../server/middleware/session_user")
-const {upload,imageUpdate} = require('../server/middleware/multer')
+const upload = require('../server/middleware/multer')
 const { adminView, loginView, loginData, userView, logoutView, layoutView,productsView,productsData,deleteProductView ,editProductView
-,updataProductData,deleteUserView,userStatusView,userStatusUnblockView,categoryView,categoryData,deleteCateagoryView,updateCategoryView,editCategoryView} = require('../controllers/adminControllers')
+,updataProductData,deleteUserView,userStatusView,userStatusUnblockView,categoryView,categoryData,deleteCateagoryView,updateCategoryView,
+editCategoryView,unListView,restoreProductView,unlistDeleteProductView} = require('../controllers/adminControllers')
 
 
 
@@ -27,6 +28,7 @@ router.get('/products',verifyAdmin, productsView)
 router.post('/products', upload.array('product_image', 4), productsData)
 
 router.get('/delete-product/:id',verifyAdmin, deleteProductView)
+
 router.get('/edit-product/:id',verifyAdmin, editProductView)
 router.post('/updataProduct/:id', updataProductData)
 
@@ -45,6 +47,10 @@ router.get('/edit-category/:id',verifyAdmin, editCategoryView)
 
 router.post('/category_update/:id', updateCategoryView)
 
+router.get('/unlist',verifyAdmin, unListView)
+
+router.get('/restore-product/:id',verifyAdmin, restoreProductView)
+router.get('/unlistdelete-product/:id',verifyAdmin, unlistDeleteProductView)
 
 
 

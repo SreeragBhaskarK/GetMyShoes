@@ -14,14 +14,13 @@ const sessions = require('express-session');
 
 
 
-
 var adminRouter = require('./routes/adminRouters');
 var usersRouter = require('./routes/usersRouters');
 var productsRouter = require('./routes/productRouters');
 var cartRouter = require('./routes/cartRouters');
+var orderRouter = require('./routes/ordersRounters');
 
 var app = express();
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -60,6 +59,7 @@ app.use('/admin', adminRouter);
 app.use('/', usersRouter);
 app.use('/', productsRouter);
 app.use('/', cartRouter);
+app.use('/', orderRouter);
 
 
 // catch 404 and forward to error handler

@@ -16,7 +16,10 @@ const userSchema = new Schema({
         unique: true,
         type: String
     },
-    email_status: String,
+    email_status: {
+        type:String,
+        default:'notVerified',
+    },
     phone: {
         type: Number,
         unique: true
@@ -28,7 +31,17 @@ const userSchema = new Schema({
     status: String,
     password: String,
     token: String,
-    address: Array,
+    address: [{
+        name:String,
+        phone:Number,
+        pincode:Number,
+        locality:String,
+        address:String,
+        city:String,
+        landmark:String,
+        alternate_phone:Number,
+        address_type:String
+    }],
     verified: {
         type: Boolean,
         default: false

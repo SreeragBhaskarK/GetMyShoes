@@ -1,102 +1,107 @@
 <% (locals.allProduct || [] ).forEach(product=> { %>
-<div class="col-lg-3 col-md-4 col-sm-6">
+    <div class="col-lg-3 col-md-4 col-sm-6">
 
-    <li class="product-item">
-        <div class="product-card" tabindex="0">
+        <li class="product-item">
+            <div class="product-card" tabindex="0">
 
-            <figure class="card-banner">
-                <a href="/product/<%=product._id%>"><img src="/images/products_image/<%=product.product_image[0]%>" width="312" height="350"
-                    loading="lazy" alt="Running Sneaker Shoes" class="image-contain"></a>
+                <figure class="card-banner">
+                    <a href="/product/<%=product._id%>"><img src="/images/products_image/<%=product.product_image[0]%>"
+                            width="312" height="350" loading="lazy" alt="Running Sneaker Shoes"
+                            class="image-contain"></a>
 
-                <% if (product.product_badge) { %>
+                    <% if (product.product_badge) { %>
 
-                <div class="card-badge">
-                    <%=product.product_badge%>
-                </div>
-                <% } %>
-                <ul class="card-action-list">
-
-                    <li class="card-action-item">
-                       <button  onclick="cartCount('<%=product._id%>')" class="card-action-btn" aria-labelledby="card-label-1">
-                            <ion-icon name="cart-outline"></ion-icon>
-                        </button>
-
-                        <div class="card-action-tooltip"  id="card-label-1">Add to Cart</div>
-                    </li>
-
-                    <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                            <ion-icon name="heart-outline"></ion-icon>
-                        </button>
-
-                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist
+                        <div class="card-badge">
+                            <%=product.product_badge%>
                         </div>
-                    </li>
+                        <% } %>
+                            <ul class="card-action-list">
 
-                    <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </button>
+                                <li class="card-action-item">
+                                    <button onclick="cartCount('<%=product._id%>')" class="card-action-btn"
+                                        aria-labelledby="card-label-1">
+                                        <ion-icon name="cart-outline"></ion-icon>
+                                    </button>
 
-                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                    </li>
+                                    <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
+                                </li>
 
-                    <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                            <ion-icon name="repeat-outline"></ion-icon>
-                        </button>
+                                <li class="card-action-item">
+                                    <button class="card-action-btn" aria-labelledby="card-label-2">
+                                        <ion-icon name="heart-outline"></ion-icon>
+                                    </button>
 
-                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                    </li>
+                                    <div class="card-action-tooltip" id="card-label-2">Add to Whishlist
+                                    </div>
+                                </li>
 
-                </ul>
-            </figure>
+                                <li class="card-action-item">
+                                    <button class="card-action-btn" aria-labelledby="card-label-3">
+                                        <ion-icon name="eye-outline"></ion-icon>
+                                    </button>
 
-            <div class="card-content">
+                                    <div class="card-action-tooltip" id="card-label-3">Quick View</div>
+                                </li>
 
-                <div class="card-cat">
-                    <% (product.product_categoryName || []).forEach(i=> { %>
+                                <li class="card-action-item">
+                                    <button class="card-action-btn" aria-labelledby="card-label-4">
+                                        <ion-icon name="repeat-outline"></ion-icon>
+                                    </button>
+
+                                    <div class="card-action-tooltip" id="card-label-4">Compare</div>
+                                </li>
+
+                            </ul>
+                </figure>
+
+                <div class="card-content">
+
+                    <div class="card-cat">
+                        <% (product.product_categoryName || []).forEach(i=> { %>
 
 
-                    <a href="/<%= i.category %>" class="card-cat-link">men
-                        <%= i.category %>
-                        
-                    </a>
-                    <% }) %>
-                    <!-- <a href="#" class="card-cat-link">Men</a> /
+                            <a href="/<%= i.category %>" class="card-cat-link">men
+                                <%= i.category %>
+
+                            </a>
+                            <% }) %>
+                                <!-- <a href="#" class="card-cat-link">Men</a> /
                     <a href="#" class="card-cat-link">Women</a> -->
+                    </div>
+
+                    <h3 class="h3 card-title">
+                        <!--  <a href="#">Running Sneaker Shoes</a> -->
+                        <a href="/product/<%=product._id%>">
+                            <%= product.product_name %>
+                        </a>
+                    </h3>
+
+                    <data class="card-price" value="14799">₹<%=product.product_price %><del>
+                                <%=product.product_old_price %>
+                            </del></data>
+
                 </div>
-
-                <h3 class="h3 card-title">
-                    <!--  <a href="#">Running Sneaker Shoes</a> -->
-                    <a href="/product/<%=product._id%>">
-                        <%= product.product_name %>
-                    </a>
-                </h3>
-
-                <data class="card-price" value="14799">₹<%=product.product_price %><del>
-                    <%=product.product_old_price %>
-                </del></data>
 
             </div>
+        </li>
 
-        </div>
-    </li>
+    </div>
+    <% }) %>
 
-</div>
-<% }) %>
+        <script>
+            function cartCount(id) {
+                console.log(id);
+                $.ajax({
+                    type: 'get',
+                    url: '/add-toCart/' + id,
+                    success: (cartCount) => {
+                        console.log(cartCount);
+                        if (cartCount) {
+                            document.getElementById('cartCount').innerHTML = cartCount
+                        }
 
-<script>
-    function cartCount(id){
-        console.log(id);
-        $.ajax({
-            type:'get',
-            url:'/add-toCart/'+id,
-            success:(response)=>{
-                if(response.status){
 
-                }
+                    }
+                })
             }
-        })
-    }
-</script>
+        </script>

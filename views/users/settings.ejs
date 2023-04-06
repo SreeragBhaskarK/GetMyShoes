@@ -78,9 +78,13 @@
                                 role="tab">
                                 Address
                             </a>
-                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password"
+                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#passwords"
                                 role="tab">
                                 Password
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#order"
+                                role="tab">
+                                Orders
                             </a>
                             <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
                                 Privacy and safety
@@ -174,13 +178,19 @@
                                             <label class="form-label" for="inputEmail4">Email</label>
                                             <input type="email" value="<%=locals.users?.email%>" name="email"
                                                 class="form-control" id="inputEmail4" placeholder="Email">
-                                            <% if (locals.users?.email_status==="active" ) { %>
-                                                <input type="button" style="float: right;" class="btn btn-success"
-                                                    value="actvie" disabled></input>
-                                                <% }else if(locals.users?.email_status==="inactive" ){ %>
-                                                    <input type="button" style="float: right;" class="btn btn-danger"
-                                                        value="inactive" disabled></input>
-                                                    <% } %>
+                                            <% if (locals.users?.email) { %>
+
+
+                                                <% if (locals.users?.email_status==="Verified" ) { %>
+                                                    <input type="button" style="float: right;" class="btn btn-success"
+                                                        value="Verified" disabled></input>
+                                                    <% }else if(locals.users?.email_status==="notVerified" ){ %>
+                                                        <input type="button"
+                                                            onclick="verifyEmail('<%=locals.users?.email%>')"
+                                                            style="float: right;" class="btn btn-danger"
+                                                            value="notVerified"></input>
+                                                        <% } %>
+                                                            <% } %>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="inputEmail4">Phone</label>
@@ -233,107 +243,170 @@
                                     <form id="perInfoAdrs">
 
                                         <div class="mb-3 ">
-                                            <label class="form-label" for="inputFirstName">Address Line 1</label>
-                                            <input type="text" class="form-control" name="address_line_1"
-                                                value="" required
-                                                placeholder="">
+                                            <label class="form-label" for="">Name</label>
+                                            <input type="text" class="form-control" name="name" value="" required
+                                                placeholder="Name">
+                                        </div>
+                                        <div class="mb-3 ">
+                                            <label class="form-label" for="">phone</label>
+                                            <input type="tel" class="form-control" name="phone" value="" required
+                                                placeholder="10-digit mobile number">
+                                        </div>
 
-                                            <div class="mb-3 ">
-                                                <label class="form-label" for="inputLastName">Address Line 2</label>
-                                                <input type="text" value=""
-                                                    required class="form-control" name="address_line_2">
-                                            </div>
+                                        <div class="mb-3 ">
+                                            <label class="form-label" for="">pincode</label>
+                                            <input type="text" class="form-control" name="pincode" value="" required
+                                                placeholder="Pincode">
+                                        </div>
 
-                                            <div class="mb-3">
-                                                <label class="form-label" for="inputEmail4">City</label>
-                                                <input type="text" value="" required
-                                                    name="city" class="form-control">
+                                        <div class="mb-3 ">
+                                            <label class="form-label" for="">Locality</label>
+                                            <input type="text" class="form-control" name="locality" value="" required
+                                                placeholder="Locality">
+                                        </div>
+
+                                        <div class="mb-3 ">
+                                            <label class="form-label" for="inputLastName">Address</label>
+                                            <textarea name="address" id="" cols="10" rows="4" tabindex="5" value=""
+                                                required class="form-control"
+                                                placeholder="Address (Area and Street)"></textarea>
+
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label" for="inputEmail4">City</label>
+                                            <input type="text" value="" required name="city" class="form-control"
+                                                placeholder="City/Distric/Town">
 
 
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label" for="inputEmail4">State</label>
-                                                <input type="tel" class="form-control" required
-                                                    value=" " name="state">
-                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="inputEmail4">State</label>
+                                            <select id="state-select" class="form-control" name="state">
+                                                <option value="">--Select State--</option>
+                                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                                                <option value="Assam">Assam</option>
+                                                <option value="Bihar">Bihar</option>
+                                                <option value="Chhattisgarh">Chhattisgarh</option>
+                                                <option value="Goa">Goa</option>
+                                                <option value="Gujarat">Gujarat</option>
+                                                <option value="Haryana">Haryana</option>
+                                                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                                <option value="Jharkhand">Jharkhand</option>
+                                                <option value="Karnataka">Karnataka</option>
+                                                <option value="Kerala">Kerala</option>
+                                                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                                                <option value="Maharashtra">Maharashtra</option>
+                                                <option value="Manipur">Manipur</option>
+                                                <option value="Meghalaya">Meghalaya</option>
+                                                <option value="Mizoram">Mizoram</option>
+                                                <option value="Nagaland">Nagaland</option>
+                                                <option value="Odisha">Odisha</option>
+                                                <option value="Punjab">Punjab</option>
+                                                <option value="Rajasthan">Rajasthan</option>
+                                                <option value="Sikkim">Sikkim</option>
+                                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                                <option value="Telangana">Telangana</option>
+                                                <option value="Tripura">Tripura</option>
+                                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                                <option value="Uttarakhand">Uttarakhand</option>
+                                                <option value="West Bengal">West Bengal</option>
+                                            </select>
 
-                                            <div class="mb-3 ">
-                                                <label class="form-label" for="inputLastName">Zip/Postal Code</label>
-                                                <input type="text" value="" required
-                                                    class="form-control" name="zip">
-                                            </div>
 
-                                            <button type="submit" id="submit" class="btn btn-primary">Add
-                                                Address</button>
+                                        </div>
+
+                                        <div class="mb-3 ">
+                                            <label class="form-label" for="inputLastName">Landmark</label>
+                                            <input type="text" value="" required class="form-control" name="landmark"
+                                                placeholder="Landmark (Optional)">
+                                        </div>
+
+                                        <div class="mb-3 ">
+                                            <label class="form-label" for="inputLastName">Alternate Phone</label>
+                                            <input type="text" value="" required class="form-control"
+                                                name="alternate-phone" placeholder="Alternate Phone (Optional)">
+                                        </div>
+
+                                        <div class="mb-3 ">
+                                            <label class="form-label" for="inputLastName">Address Type</label><br>
+
+                                            <input type="radio" id="home-radio" name="address-type" value="home">
+                                            <label for="home-radio">Home</label>
+                                            <input type="radio" id="work-radio" name="address-type" value="work">
+                                            <label for="work-radio">Work</label>
+                                        </div>
+
+                                        <button type="submit" id="submit" class="btn btn-primary">Add
+                                            Address</button>
                                     </form>
 
                                 </div>
                             </div>
+                            <% (users?.address || []).forEach(address=> { %>
 
+                           
 
-
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
                                 <div class="card">
                                     <div class="card-header" style="display: flex;">
-                                        <h5>Address</h5>
+                                        <h5>
+
+                                            <%=address?.address_type%>
+                                        </h5>
                                         <button class="btn btn-primary" style="margin-left: auto;">Edit</button>
                                     </div>
                                     <div class="card-body">
-                                        <form id="perInfoAdrs">
-
-                                            <div class="mb-3 ">
-                                                <label class="form-label" for="inputFirstName">Address Line 1</label>
-                                                <input type="text" class="form-control" name="address_line_1"
-                                                    value="" required
-                                                    placeholder="">
-
-                                                <div class="mb-3 ">
-                                                    <label class="form-label" for="inputLastName">Address Line 2</label>
-                                                    <input type="text"
-                                                        value="" required
-                                                        class="form-control" name="address_line_2">
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="inputEmail4">City</label>
-                                                    <input type="text" value=""
-                                                        required name="city" class="form-control">
-
-
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="inputEmail4">State</label>
-                                                    <input type="tel" class="form-control" required
-                                                        value=" " name="state">
-                                                </div>
-
-                                                <div class="mb-3 ">
-                                                    <label class="form-label" for="inputLastName">Zip/Postal
-                                                        Code</label>
-                                                    <input type="text" value=""
-                                                        required class="form-control" name="zip">
-                                                </div>
-
-                                                <button type="submit" id="submit" class="btn btn-primary">Save
-                                                    changes</button>
-                                        </form>
-
+                                        <table>
+                                            <tr>
+                                                <th>name</th>
+                                                <th>phone</th>
+                                                <th>address</th>
+                                                <th>locality</th>
+                                                <th>city</th>
+                                                <th>pincode</th>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <td><%=address?.name%></td>
+                                                <td> <%=address?.phone%></td>
+                                                <td> <%=address?.address%></td>
+                                                <td> <%=address?.locality%></td>
+                                                <td> <%=address?.city%></td>
+                                                <td> <%=address?.pincode%></td>
+                                            </tr>
+                                        </table>
+                                        <p><span>
+                                                <%=address?.name%>
+                                            </span><span>
+                                                <%=address?.phone%>
+                                            </span>
+                                        </p>
+                                        <span>
+                                            <%=address?.address%>
+                                        </span>,<span>
+                                            <%=address?.locality%>
+                                        </span>,<span>
+                                            <%=address?.city%>
+                                        </span>,<span>
+                                            <%=address?.pincode%>
+                                        </span>
                                     </div>
+
                                 </div>
-                            </div>
-
-
+                                <% }) %>
                         </div>
-                      
 
-                        <div class="tab-pane fade" id="password" role="tabpanel">
+
+
+
+
+                        <div class="tab-pane fade" id="passwords" role="tabpanel">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Password</h5>
 
-                                    <form action="/settings_password">
+                                    <form id="changePass" onsubmit="return validateForm()">
                                         <div class="mb-3">
                                             <label class="form-label" for="inputPasswordCurrent">Current
                                                 password</label>
@@ -344,12 +417,19 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="inputPasswordNew">New password</label>
                                             <input type="password" name="new_password" class="form-control"
-                                                id="inputPasswordNew" required>
+                                                id="password" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="inputPasswordNew2">Confirm password</label>
                                             <input type="password" name="confirm_password" class="form-control"
-                                                id="inputPasswordNew2" required>
+                                                id="confirmPassword" required>
+                                        </div>
+
+                                        <div style="display:none;" id="error_message" class="text-center  p-t-12">
+                                            <span id="mySpan" class="txt1 text-danger">
+                                                Please enter match password
+                                            </span>
+
                                         </div>
                                         <button type="submit" class="btn btn-primary">Save changes</button>
                                     </form>
@@ -357,6 +437,52 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="tab-pane fade " id="order" role="tabpanel">
+                            <div class="card" style="background: darkgray;">
+                                <div class="card-header">
+
+                                    <h5 class="card-title mb-0">Orders Information</h5>
+                                </div>
+                                <div class="card-body">
+                         
+                                   
+                                        <div class="card">
+                                            <table>
+                                                <tr>
+                                                   
+                                                    <th></th>
+                                                    <th>product name</th>
+                                                    <th>price</th>
+                                                    <th>status</th>
+                                                    
+
+                                                </tr>
+                                              
+                                                <% (locals.orders || []).forEach(order=> { %>
+                                                    
+                                                    <% (order.productInfo || []).forEach(orderPro=> { %>
+                                                      
+                                                <tr style="border: 1px solid black;">
+                                                    <td>  <a href="/order-details/<%= order._id%>/<%= orderPro._id%>"  )"><img style="width: 100px;" src="/images/products_image/<%= orderPro.product_image[0]%>" alt=""></a></td>
+                                                    <td><%= orderPro.product_name %></td>
+                                                    <td><%= orderPro.product_price %></td>
+                                                    <td><%= order.status%></td>
+                                                    
+                                                </tr>
+                                           
+                                                <% }) %> 
+                                           
+                                                <% }) %>
+                                          
+                                            </table>
+                                        </div> 
+                                      
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -400,11 +526,16 @@
             event.preventDefault();
 
             const formData = {
-                addressLine1: $('input[name=address_line_1]').val(),
-                addressLine2: $('input[name=address_line_2]').val(),
+                name: $('input[name=name]').val(),
+                phone: $('input[name=phone]').val(),
+                pincode: $('input[name=pincode]').val(),
+                locality: $('input[name=locality]').val(),
+                address: $('textarea[name=address]').val(),
                 city: $('input[name=city]').val(),
-                state: $('input[name=state]').val(),
-                zip: $('input[name=zip]').val()
+                state: $('select[name=state]').val(),
+                landmark: $('input[name=landmark]').val(),
+                alternate_phone: $('input[name=alternate-phone]').val(),
+                address_type: $('input[name=address-type]:checked').val()
             };
 
             $.ajax({
@@ -421,6 +552,21 @@
         });
 
     </script>
+
+<!--     <script>
+        function orderDetails(orderId,proId){
+            console.log("noooooooooo");
+            $.ajax({
+                type:'post',
+                url:'/order-details',
+               
+                data:({orders:orderId,pro:proId}),
+                success:(response=>{
+
+                })
+            })
+        }
+    </script> -->
     <!-- <script>
 
      
@@ -472,3 +618,70 @@
 </body>
 
 </html>
+<script>
+    function validateForm() {
+        const passwordField = document.getElementById('password');
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        if (passwordField.value !== confirmPasswordField.value) {
+            document.getElementById("error_message").style.display = "block"
+            /* alert("Please enter a valid 10-digit phone number"); */
+            setTimeout(function () {
+                document.getElementById("error_message").style.display = "none";
+            }, 5000);
+            return false;
+
+        }
+        return true;
+    }
+</script>
+
+<script>
+    $('#changePass').submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/change-password',
+            type: 'post',
+            data: $('#changePass').serialize(),
+            success: (Response) => {
+                console.log(Response);
+                if (Response) {
+                    const mySpanElement = document.getElementById('mySpan');
+                    mySpanElement.innerText = 'Successfully!';
+                    mySpanElement.style.color = 'green'
+                    document.getElementById("error_message").style.display = "block"
+                 
+                    setTimeout(function () {
+                        
+                        document.getElementById("error_message").style.display = "none";
+                        const myForm = document.getElementById('changePass').reset()
+
+
+                    }, 5000);
+                } else {
+                    document.getElementById("error_message").style.display = "block"
+                    /* alert("Please enter a valid 10-digit phone number"); */
+                    setTimeout(function () {
+                        document.getElementById("error_message").style.display = "none";
+                        const myForm = document.getElementById('changePass').reset()
+                    }, 5000);
+                }
+            }
+        })
+    })
+</script>
+<script>
+    function verifyEmail(email) {
+        $.ajax({
+            type: 'post',
+            url: '/emailverification',
+            data: { email: email },
+            success: (response => {
+                if (response) {
+                    window.location.href = response.redirectUrl
+
+                }
+            })
+        })
+    }
+
+</script>

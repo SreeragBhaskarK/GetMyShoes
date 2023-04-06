@@ -1,7 +1,7 @@
 <div class="wrapper">
 	<nav id="sidebar" class="sidebar js-sidebar">
 		<div class="sidebar-content js-simplebar">
-			<a class="sidebar-brand" href="index.html">
+			<a class="sidebar-brand" href="/">
 				<span class="align-middle">GetMyShoes</span>
 			</a>
 
@@ -34,6 +34,11 @@
 				<li class="sidebar-item <%= locals.activeCategory  %>">
 					<a class="sidebar-link" href="/admin/category">
 						<i class="align-middle" data-feather="file-plus"></i> <span class="align-middle">Category</span>
+					</a>
+				</li>
+				<li class="sidebar-item <%= locals.activeCategory  %>">
+					<a class="sidebar-link" href="/admin/unlist">
+						<i class="align-middle" data-feather="file-plus"></i> <span class="align-middle">Unlist</span>
 					</a>
 				</li>
 				<!-- 
