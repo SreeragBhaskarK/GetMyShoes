@@ -12,7 +12,7 @@ module.exports = {
           */
 
 
-        client.verify.v2.services('VA652d097cf31d24c51d1ad3d98292e5f2')
+        client.verify.v2.services(process.env.TWILIO_SERVICES_SID)
             .verifications
             .create({ to: "+" + phone_number, channel: 'sms' })
             .then(verification => console.log(verification.sid))
@@ -27,7 +27,7 @@ module.exports = {
 
 
 
-        return client.verify.v2.services('VA652d097cf31d24c51d1ad3d98292e5f2')
+        return client.verify.v2.services(process.env.TWILIO_SERVICES_SID)
             .verificationChecks
             .create({ to: "+" + phone_number, code: otp })
             .then(verification_check => {
