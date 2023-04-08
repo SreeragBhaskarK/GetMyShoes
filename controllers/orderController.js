@@ -11,7 +11,6 @@ exports.orderDetails = (req, res) => {
 let orderId = req.params.id
 let proId = req.params.id1
     orderHelper.doOrderDetails(orderId,proId).then(response => {
-
         let orders = response[0]
         console.log(orders);
         res.render('orders/ordersDetails', { orders, layout: false })

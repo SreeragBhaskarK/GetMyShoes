@@ -219,7 +219,7 @@ module.exports = {
     },
     updataPassword(email, userData) {
         console.log(email, userData);
-        console.log(email,userData,'final//////////////////////');
+        console.log(email, userData, 'final//////////////////////');
         return new Promise(async (resolve, reject) => {
             try {
                 let { password } = userData
@@ -229,7 +229,7 @@ module.exports = {
 
                 const hashedPassword = await hashData(password)
                 console.log(hashedPassword, "nooooooooooo")
-                await user.updateOne({email}, { $set: { password: hashedPassword, email_status: 'Verified' } })
+                await user.updateOne({ email }, { $set: { password: hashedPassword, email_status: 'Verified' } })
                 resolve()
             }
             catch (error) {
@@ -371,10 +371,13 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 let { name, phone, pincode, locality, address, city, state, landmark, alternate_phone, address_type } = userData
+                const str = state
+                const stateName = str.split('[')[0]; // state = "Kerala"
+                const coords = str.substring(str.indexOf('[') + 1, str.indexOf(']')).split(',').map(Number); // coords = [10.8505, 76.2711]
                 if (name && phone && pincode && locality && city && landmark && alternate_phone && address_type) {
 
 
-                    console.log(userData, phoneNumber, "///////////personal info////////////")
+
 
                     await user.updateOne({ phone: phoneNumber }, {
                         $push: {
@@ -386,7 +389,8 @@ module.exports = {
                                     locality: locality,
                                     address: address,
                                     city: city,
-                                    state: state,
+                                    state: stateName,
+                                    coords:coords,
                                     landmark: landmark,
                                     alternate_phone: alternate_phone,
                                     address_type: address_type
@@ -507,6 +511,6 @@ module.exports = {
         }
     },
 
-    
+
 
 }

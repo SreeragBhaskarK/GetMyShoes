@@ -5,7 +5,7 @@ const { userView,logInView,logInData,sigUpView,signUpData,verifyView,verifyData
   ,logoutView,settingsView,resetPasswordView,resetPasswordData
 ,setPasswordView,setPasswordData,profileInfoData,menCategoryView,womenCategoryView,
 sportsCategoryView,profileInfoAdrsData,emailVerificationView,verifyEmailView,verifyEmailData,
-logInEmailView,changePasswordData,cartCount} = require("../controllers/userController")
+logInEmailView,changePasswordData,cartCount,autocomplete,search} = require("../controllers/userController")
 
 const auth= require("../server/middleware/auth")
 

@@ -1,7 +1,30 @@
 <!-- 
     - #HEADER
   -->
+<style>
+    #search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
 
+    #search-results li {
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    #search-results li:hover {
+        background-color: #f2f2f2;
+    }
+</style>
 <header class="header" data-header>
     <div class="container">
 
@@ -56,11 +79,16 @@
             <ul class="nav-action-list">
 
                 <li>
-                    <button class="nav-action-btn">
+                    <!--  <form id="searchForm"> -->
+                    <div class="nav-action-btn">
+                        <input type="search" id="search" class="form-control" autocomplete="off" />
+                        <!--    <a type="submit"> -->
                         <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
-
-                        <span class="nav-action-text">Search</span>
-                    </button>
+                        <span class="nav-action-text ">Search</span>
+                        <!--      </a>   -->
+                    </div>
+                    <ul id="search-results"></ul>
+                    <!--  </form> -->
                 </li>
 
 
@@ -134,14 +162,14 @@
                             <ion-icon name="cart-outline" aria-hidden="true"></ion-icon>
 
                             <data class="nav-action-text" value="26099">Cart: <strong>₹26,099</strong></data>
-                            
-                          
 
 
-                                <data class="nav-action-badge" id="cartCount" value="0" aria-hidden="true">
-                                    <%=locals.cartCount %>
-                                </data>
-                          
+
+
+                            <data class="nav-action-badge" id="cartCount" value="0" aria-hidden="true">
+                                <%=locals.cartCount %>
+                            </data>
+
                         </button></a>
                 </li>
 
@@ -153,5 +181,58 @@
 </header>
 
 <script>
+
+    $(document).ready(function () {
+
+        // Get a reference to the search input field
+        const searchInput = $('#search');
+        const searchIcon = $('.nav-action-btn ion-icon');
+        const searchText = $('.nav-action-btn .nav-action-text');
+
+        // Add a keydown event listener to the search input field
+        searchInput.on('keydown', function (event) {
+            // Check if the Enter key was pressed
+            if (event.key === 'Enter') {
+                // Get a reference to the first search result
+                const firstResult = $('#search-results li:first-child');
+
+                // If a search result was found, click on it
+                if (firstResult) {
+                    firstResult.get(0).click();
+                }
+            }
+        });
+
+        // Add a click event listener to the search icon and span elements
+        searchIcon.add(searchText).on('click', function () {
+            // Get a reference to the first search result
+            const firstResult = $('#search-results li:first-child');
+
+            // If a search result was found, click on it
+            if (firstResult) {
+                firstResult.get(0).click();
+            }
+        });
+
+
+        $('#search').on('keyup', function () {
+            var searchValue = $(this).val();
+            if (searchValue !== '') {
+                $.ajax({
+                    type: 'post',
+                    url: '/search/' + searchValue,
+                    success: function (data) {
+                        $('#search-results').empty();
+                        $.each(data, function (index, value) {
+                            $('#search-results').append(`<a style=" text-decoration: none; color: inherit"
+                             href="/product/${value._id}"><li>` + value.product_name + '</li></a>');
+                        });
+                    }
+                });
+            } else {
+                $('#search-results').empty();
+            }
+        });
+    });
 
 </script>

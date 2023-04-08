@@ -3,6 +3,7 @@ var userHelper = require('../server/helpers/user-helpers');
 var authHelper = require('../server/helpers/authHelper');
 const generateToken = require("../server/util/createToken");
 const user = require('../models/user');
+const product = require('../models/products');
 const cartHelper = require('../server/helpers/cart-helper');
 const { hashData } = require('../server/util/hashData');
 
@@ -167,7 +168,8 @@ exports.profileInfoData = (req, res) => {
 exports.profileInfoAdrsData = (req, res) => {
 
     let phone = req.session.user.phone
-    console.log(req.body, req.session.user, '///////////////daaaaaaaaaaaaaaa');
+    
+    console.log(req.body ,'///////////////daaaaaaaaaaaaaaa');
     userHelper.doProfileAddress(req.body, phone).then(response => {
         res.send({ status: true })
 
@@ -175,27 +177,25 @@ exports.profileInfoAdrsData = (req, res) => {
 }
 
 exports.menCategoryView = (req, res) => {
-    userHelper.getMenProduct().then(responses => {
+    userHelper.getMenProduct().then(productData => {
 
-        let menProduct = responses
-        console.log(menProduct);
-        res.render('category/men', { menProduct })
+
+
+        res.render('category/men', { productData })
     })
 
 }
 
 exports.womenCategoryView = (req, res) => {
-    userHelper.getWomenProduct().then(responese => {
-        let womenProduct = responese
-        res.render('category/women', { womenProduct })
+    userHelper.getWomenProduct().then(productData => {
+        res.render('category/women', { productData })
     })
 
 }
 
 exports.sportsCategoryView = (req, res) => {
-    userHelper.getSportsProduct().then(responese => {
-        let sportsProduct = responese
-        res.render('category/sports', { sportsProduct })
+    userHelper.getSportsProduct().then(productData => {
+        res.render('category/sports', { productData })
     })
 
 }
@@ -258,6 +258,4 @@ exports.cartCount = async (req, res, next) => {
     }
 
 }
-
-
 

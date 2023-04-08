@@ -1,0 +1,90 @@
+<main class="content">
+    <div class="container-fluid p-0">
+        <!-- Button trigger modal -->
+
+
+        <div class="mb-3">
+            <h1 class="h3 d-inline align-middle">Orders</h1>
+        </div>
+
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Product Details</th>
+                    <th>Category</th>
+                    <th>Options</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>SKU</th>
+                    <th>RATE</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+
+
+            <tbody>
+                <%# (productData || []).forEach(productData=> { %>
+                    <tr>
+                        <td>
+                            <%# productData.product_name %>
+                        </td>
+                        <td>
+                            <%# (productData.category_name || []).forEach(i=> { %>
+
+
+
+                                <%# i.category %>
+
+                                    <%# }) %>
+                        </td>
+                        <td>
+                            <%# productData.product_options %>
+                        </td>
+                        <td>
+                            <%# productData.product_price %>
+                        </td>
+                        <td>
+                            <%# productData.product_stock %>
+                        </td>
+                        <td>
+                            <%# productData.product_sku %>
+                        </td>
+                        <td>
+                            <%# productData.product_rate %>
+                        </td>
+                        <td style="display: flex;"><a href="/admin/edit-product/<%# productData._id%>"><button
+                                    type="button" class="btn btn-primary me-2">Edit</button></a>
+
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop<%# productData._id%>">Delete</button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop<%= productData._id%>" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class=" modal-dialog modal-sm modal-dialog-centered">
+                            <div class="modal-content ">
+
+                                <div class="modal-body">
+                                    Are you want to delete <%= productData.product_name %> ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                    <a href="/admin/delete-product/<%# productData._id%>"><button type="button"
+                                            class="btn btn-danger">Delete</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%# }) %>
+
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+</main>

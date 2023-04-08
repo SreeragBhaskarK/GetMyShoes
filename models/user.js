@@ -38,9 +38,11 @@ const userSchema = new Schema({
         locality:String,
         address:String,
         city:String,
+        state:String,
         landmark:String,
         alternate_phone:Number,
-        address_type:String
+        address_type:String,
+        coords:Object
     }],
     verified: {
         type: Boolean,

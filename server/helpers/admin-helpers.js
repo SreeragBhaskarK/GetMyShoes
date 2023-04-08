@@ -2,6 +2,7 @@ const { authenticateAdmin, deleteUser, statusUser, statusUserUnblock, addCategor
 const users = require("../../models/user")
 const category = require("../../models/category")
 const product = require("../../models/products")
+const order = require("../../models/order")
 const { ObjectId } = require("mongodb")
 module.exports = {
 
@@ -145,7 +146,12 @@ module.exports = {
 
                 if (!productId) throw Error("Empty products")
 
-                await deleteCategory(proId)
+
+                console.log(productId[0].parent, '//product id//////////////////')
+                if (!productId[0].parent === true) {
+                    await deleteCategory(proId)
+                }
+
                 resolve()
             }
             catch (error) {
@@ -237,16 +243,18 @@ module.exports = {
                 $match: {
                     delete_status: true
                 }
-            },{
-                $lookup:{
-                    from:'categories',
-                    let :{categorys:'$product_category'},
-                    pipeline:[{$match:{
-                        $expr:{
-                            $in:['$_id','$$categorys']
+            }, {
+                $lookup: {
+                    from: 'categories',
+                    let: { categorys: '$product_category' },
+                    pipeline: [{
+                        $match: {
+                            $expr: {
+                                $in: ['$_id', '$$categorys']
+                            }
                         }
-                    }}],
-                    as:'category_name'
+                    }],
+                    as: 'category_name'
                 }
             }])
 
@@ -256,9 +264,9 @@ module.exports = {
     },
     doRestoreProduct(id) {
         return new Promise(async (resolve, reject) => {
-            let unlistProduct = await product.updateOne({_id:new ObjectId(id)},{
-                $set:{
-                    delete_status:false
+            let unlistProduct = await product.updateOne({ _id: new ObjectId(id) }, {
+                $set: {
+                    delete_status: false
                 }
             })
             resolve()
@@ -267,9 +275,38 @@ module.exports = {
     },
     doDeleteProduct(id) {
         return new Promise(async (resolve, reject) => {
-            let unlistProduct = await product.deleteOne({_id:new ObjectId(id)})
+            let unlistProduct = await product.deleteOne({ _id: new ObjectId(id) })
             resolve()
         })
 
+    },
+    doSalesByState(){
+        return new Promise(async(resolve,reject)=>{
+            let States = await order.aggregate([
+                {
+                    $group: {
+                      _id: {
+                        state: '$deliveryAddress.state',
+                        coords: '$deliveryAddress.coords'
+                      },
+                      count: {
+                        $sum: 1
+                      },
+                      docs: {
+                        $push: '$$ROOT'
+                      }
+                    }
+                  },
+                  {
+                    $project: {
+                      _id: 0,
+                      state: '$_id.state',
+                      coords: '$_id.coords',
+                      order: '$count'
+                    }
+                  }])
+            console.log(States,"nnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeewwwwwwwwwwwwwwwwww");
+            resolve(States)
+        })
     }
 }

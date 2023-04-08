@@ -1,12 +1,18 @@
 const category = require('../models/category');
 var adminHelper = require('../server/helpers/admin-helpers');
 var productHelper = require('../server/helpers/product-helper');
-let {imageUpdate}= require('../server/middleware/multer')
+let { imageUpdate } = require('../server/middleware/multer')
 let editView
 let editCategory
+exports.admin = (req, res,next) => {
+    res.locals.admin=true
+    next()
+}
 exports.adminView = (req, res) => {
+    adminHelper.doSalesByState().then((States) => {
+        res.render('admin/admin_Dashboard', {  activeDashboard: 'active',States })
+    })
 
-    res.render('admin/admin_Dashboard', { admin: true, activeDashboard: 'active' })
 
 }
 exports.loginView = (req, res) => {
@@ -21,7 +27,7 @@ exports.loginData = (req, res) => {
         if (response.port === 200) {
             /* res.status(200).json(response.result) */
             req.session.adminLoggedIn = true
-            
+
             res.redirect('/admin')
         } else {
             res.redirect('/admin/login')
@@ -34,7 +40,7 @@ exports.userView = (req, res) => {
     adminHelper.doViewUsers().then(userData => {
 
         console.log(userData, "kdjfk");
-        res.render('admin/users', { admin: true, activeUser: 'active', userData })
+        res.render('admin/users', {  activeUser: 'active', userData })
     })
 
 
@@ -48,7 +54,7 @@ exports.logoutView = (req, res) => {
 
 exports.layoutView = (req, res) => {
 
-    res.render('admin/layout', { admin: true, activeLayout: 'active' })
+    res.render('admin/layout', {  activeLayout: 'active' })
 
 }
 exports.productsView = (req, res) => {
@@ -60,16 +66,16 @@ exports.productsView = (req, res) => {
         categoryView = response.categorys
 
         if (editView) {
-            
+
             adminHelper.doCategorys(editView).then((categroys) => {
-               
-                res.render('admin/products', { admin: true, activeProducts: 'active', productData, editView, categoryView, categroys })
+
+                res.render('admin/products', { activeProducts: 'active', productData, editView, categoryView, categroys })
                 editView = false
             })
 
         } else {
-            
-            res.render('admin/products', { admin: true, activeProducts: 'active', productData })
+
+            res.render('admin/products', {  activeProducts: 'active', productData })
         }
     })
 
@@ -108,7 +114,7 @@ exports.editProductView = (req, res) => {
 exports.updataProductData = async (req, res) => {
     console.log(req.files);
     let proId = req.params.id
-   
+
     productHelper.doUpdateProduct(proId, req.body).then(response => {
         /* if (req.files) {
             let image = req.files.Image
@@ -149,13 +155,13 @@ exports.categoryView = (req, res) => {
         let categorys = response.categorys
         if (editCategory) {
             let edCategory = editCategory
-            res.render('admin/category', { admin: true, categorys, edCategory })
+            res.render('admin/category', {  categorys, edCategory,activeCategories: 'active' })
             editCategory = null
         } else {
-            res.render('admin/category', { admin: true, categorys })
+            res.render('admin/category', {  categorys,activeCategories: 'active' })
 
         }
-        res.render('admin/category', { admin: true, categorys })
+     
     })
 }
 exports.categoryData = (req, res) => {
@@ -187,15 +193,15 @@ exports.updateCategoryView = (req, res) => {
     })
 }
 exports.unListView = (req, res) => {
-  
+
     adminHelper.doUnlist().then(response => {
-        let unListProduct =response
+        let unListProduct = response
         console.log(unListProduct);
-        res.render('admin/unlist',{admin: true,unListProduct})
+        res.render('admin/unlist', {  unListProduct,activeUnlists: 'active' })
     })
 }
 exports.restoreProductView = (req, res) => {
-  let id = req.params.id
+    let id = req.params.id
     adminHelper.doRestoreProduct(id).then(response => {
         res.redirect('/admin/unlist')
     })
@@ -203,9 +209,16 @@ exports.restoreProductView = (req, res) => {
 exports.unlistDeleteProductView = (req, res) => {
     let id = req.params.id
     adminHelper.doDeleteProduct(id).then(response => {
-       
+
         res.redirect('/admin/unlist')
     })
 }
+exports.orders = (req, res) => {
+   
+
+        res.render('admin/orders',{activeOrders: 'active'})
+ 
+}
+
 
 

@@ -4,7 +4,8 @@ const collection = require('../server/config/collections')
 /* products schema */
 const categorySchema = new Schema({
 
-   category:String
+   category:String,
+   parent:Boolean,
     
 })
    
