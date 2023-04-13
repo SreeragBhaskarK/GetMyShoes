@@ -9,13 +9,11 @@ const productSchema = new Schema({
     product_description: String,
     product_category: [{
         type: ObjectId
-    }]
+    }]  
     ,
     product_price: Number,
     product_old_price: Number,
     product_badge: String,
-    createdAt: Date,
-    expiresAt: Date,
     product_image: Array,
     delete_status: {
         type: Boolean,
@@ -23,7 +21,7 @@ const productSchema = new Schema({
 
     }
 
-})
+},{ timestamps: true })
 
 const product = mongoose.model(collection.PRODUCT_COLLECTION, productSchema)
 

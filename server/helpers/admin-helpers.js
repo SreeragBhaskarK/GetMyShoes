@@ -3,6 +3,7 @@ const users = require("../../models/user")
 const category = require("../../models/category")
 const product = require("../../models/products")
 const order = require("../../models/order")
+const coupon = require("../../models/coupon")
 const { ObjectId } = require("mongodb")
 module.exports = {
 
@@ -11,11 +12,11 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 let { email, password } = userData
-                console.log(userData);
+
                 email = email.trim()
                 password = password.trim()
 
-                console.log(email);
+
                 if (!(email && password)) {
                     throw Error("Empty credentials supplied!")
                 }
@@ -47,7 +48,7 @@ module.exports = {
 
     doUserDelete(proId) {
         return new Promise(async (resolve, reject) => {
-            console.log(proId);
+
             try {
                 let userId = await users.find({ _id: proId })
 
@@ -65,7 +66,7 @@ module.exports = {
     },
     doUserStatus(proId) {
         return new Promise(async (resolve, reject) => {
-            console.log(proId);
+
             try {
                 let userId = await users.find({ _id: proId })
 
@@ -82,7 +83,7 @@ module.exports = {
     }
     , doUserUnblock(proId) {
         return new Promise(async (resolve, reject) => {
-            console.log(proId);
+
             try {
                 let userId = await users.find({ _id: proId })
 
@@ -110,7 +111,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 let { category } = categoryData
-                console.log(category, 'null');
+
                 if (!category) throw Error("Empty category")
 
                 await addCategory(category)
@@ -128,7 +129,7 @@ module.exports = {
             try {
                 let categorys = await category.find()
                 if (!categorys) throw Error("Empty category")
-                console.log(categorys, "noooooooo");
+
                 resolve({ port: 200, categorys })
 
             } catch (error) {
@@ -140,14 +141,14 @@ module.exports = {
 
     }, doCategoryDelete(proId) {
         return new Promise(async (resolve, reject) => {
-            console.log(proId);
+
             try {
                 let productId = await category.find({ _id: proId })
 
                 if (!productId) throw Error("Empty products")
 
 
-                console.log(productId[0].parent, '//product id//////////////////')
+
                 if (!productId[0].parent === true) {
                     await deleteCategory(proId)
                 }
@@ -166,7 +167,7 @@ module.exports = {
                 let categoryId = await category.find({ _id: proId })
 
                 if (!categoryId) throw Error("Empty products")
-                console.log(categoryId, "kdjf");
+
 
                 resolve(categoryId)
             }
@@ -178,7 +179,7 @@ module.exports = {
     },
     doCategoryUpdate(proId, categoryData) {
         return new Promise(async (resolve, reject) => {
-            console.log(proId);
+
             try {
                 let categoryId = await category.find({ _id: proId })
 
@@ -280,33 +281,95 @@ module.exports = {
         })
 
     },
-    doSalesByState(){
-        return new Promise(async(resolve,reject)=>{
+    doSalesByState() {
+        return new Promise(async (resolve, reject) => {
             let States = await order.aggregate([
                 {
                     $group: {
-                      _id: {
-                        state: '$deliveryAddress.state',
-                        coords: '$deliveryAddress.coords'
-                      },
-                      count: {
-                        $sum: 1
-                      },
-                      docs: {
-                        $push: '$$ROOT'
-                      }
+                        _id: {
+                            state: '$deliveryAddress.state',
+                            coords: '$deliveryAddress.coords'
+                        },
+                        count: {
+                            $sum: 1
+                        },
+                        docs: {
+                            $push: '$$ROOT'
+                        }
                     }
-                  },
-                  {
+                },
+                {
                     $project: {
-                      _id: 0,
-                      state: '$_id.state',
-                      coords: '$_id.coords',
-                      order: '$count'
+                        _id: 0,
+                        state: '$_id.state',
+                        coords: '$_id.coords',
+                        order: '$count'
                     }
-                  }])
-            console.log(States,"nnnnnnnnnnnnnnnnnnnneeeeeeeeeeeeeeeeeeeewwwwwwwwwwwwwwwwww");
+                }])
+
             resolve(States)
         })
+    }, getOrder() {
+        return new Promise(async (resolve, reject) => {
+
+            let orderData = await order.aggregate([{
+                $addFields: {
+                    productsData: '$products.products'
+                }
+            }, {
+                $lookup: {
+                    from: 'products',
+                    let: { productIds: '$productsData.item' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $in: ['$_id', '$$productIds']
+                                }
+                            }
+                        }
+                    ],
+                    as: 'productInfo'
+                }
+            }])
+            console.log(orderData, '///////////////////////////////');
+            resolve(orderData)
+        })
+    },
+    generateCoupon(couponData) {
+        return new Promise(async(resolve, reject) => {
+            let { couponName, discount, expiryDate, minPurchase } = couponData
+            let couponCode = await generateCouponCode(expiryDate+couponName)
+            console.log(couponCode);
+            let couponAdd = new coupon({
+                couponName: couponName,
+                discount: discount,
+                expiryDate: expiryDate,
+                minPurchase: minPurchase,
+                code: couponCode
+            })
+            couponAdd.save()
+            resolve()
+
+        })
+    },
+    getCopons() {
+        return new Promise(async(resolve, reject) => {
+           let getCoupons = await coupon.find({})
+            resolve(getCoupons)
+
+        })
     }
+}
+
+function generateCouponCode(data) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'+data;
+    let code = '';
+
+    for (let i = 0; i < 10; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        code += chars[randomIndex];
+    }
+
+    return code;
 }

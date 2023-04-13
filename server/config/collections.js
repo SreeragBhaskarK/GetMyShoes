@@ -7,5 +7,7 @@ module.exports = {
     CATEGORY_COLLECTION: 'category',
     PHONE_NUMBER_OTP: 'phoneotps',
     CART_COLLECTITON: 'carts',
-    ORDER_COLLECTITON: 'orders'
+    ORDER_COLLECTITON: 'orders',
+    WISHLIST_COLLECTITON: 'wishlist',
+    COUPON_COLLECTITON: 'coupon'
 }

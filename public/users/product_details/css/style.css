@@ -1753,7 +1753,16 @@ ol {
 	margin-right: 15px;
 }
 
-.pro-qty {
+.pro-qty  {
+	height: 50px;
+	width: 150px;
+	border: 1px solid #ebebeb;
+	border-radius: 50px;
+	padding: 0 20px;
+	overflow: hidden;
+	display: inline-block;
+}
+.proDet-qty  {
 	height: 50px;
 	width: 150px;
 	border: 1px solid #ebebeb;
@@ -1771,8 +1780,26 @@ ol {
 	width: 12px;
 	line-height: 46px;
 }
+.proDet-qty .qtybtn {
+	font-size: 14px;
+	color: #666666;
+	cursor: pointer;
+	float: left;
+	width: 12px;
+	line-height: 46px;
+}
 
 .pro-qty input {
+	font-size: 14px;
+	color: #666666;
+	font-weight: 500;
+	border: none;
+	float: left;
+	width: 84px;
+	text-align: center;
+	height: 48px;
+}
+.proDet-qty input {
 	font-size: 14px;
 	color: #666666;
 	font-weight: 500;

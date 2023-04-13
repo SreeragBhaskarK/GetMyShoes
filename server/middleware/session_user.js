@@ -23,4 +23,5 @@ const verify= (req,res,next)=>{
         res.redirect('/login')
     }
 }
+
 module.exports = { verifyLogin ,verifyAdmin,verify}

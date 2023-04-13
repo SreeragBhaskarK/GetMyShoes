@@ -13,7 +13,7 @@ const multer = require('multer')
 const { verify } = require("jsonwebtoken")
 
 const verifyUserEmail = async ({ email, otp }) => {
-    console.log('///dfd', email, otp)
+  
     try {
         const validOTP = await verifyOTP({ email, otp })
 

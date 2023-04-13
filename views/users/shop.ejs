@@ -40,7 +40,7 @@
                                 </div> -->
                                 <div class="card">
                                     <div class="card-heading">
-                                        <button onclick="test('all')">All</button>
+                                        <a href="/shop"><button >All</button></a>
                                         <!-- <a id="fetch-data-button" href="/men">Men</a> -->
                                     </div>
 
@@ -169,7 +169,9 @@
                                                     </li>
 
                                                     <li class="card-action-item">
-                                                        <button class="card-action-btn" aria-labelledby="card-label-2">
+                                                        <button class="card-action-btn"
+                                                            onclick="addToWishlist('<%=product._id%>')"
+                                                            aria-labelledby="card-label-2">
                                                             <ion-icon name="heart-outline"></ion-icon>
                                                         </button>
 
@@ -233,12 +235,13 @@
                         </div>
                         <% }) %>
 
-                            <div class="col-lg-12 text-center">
+                            <div class="col-lg-12 text-center mt-5">
                                 <div class="pagination__option">
-                                    <a href="#">1</a>
-                                    <a href="#">2</a>
-                                    <a href="#">3</a>
-                                    <a href="#"><i class="fa fa-angle-right"></i></a>
+                                    <a class=" page-link" href="/shop">1</a>
+                                    <% for (let i=2 ; i<=totalPages;i++) { %>
+                                        <a class="page-link" href="/shop?page=<%= i %>"><%= i %></a>
+                                    <% } %>
+                                  <!--   <a href="#"><i class="fa fa-angle-right"></i></a> -->
                                 </div>
                             </div>
                 </div>
@@ -246,6 +249,29 @@
         </div>
     </div>
 </section>
+<script>
+    // Get the first page link and add the "active" class
+    const paginationContainer = document.getElementById('pagination-container');
+    const pageLinks = paginationContainer.querySelectorAll('.page-link');
+
+    pageLinks.forEach((pageLink) => {
+        pageLink.addEventListener('click', (event) => {
+            // Prevent the link from reloading the page
+            event.preventDefault();
+
+            // Remove the "active" class from the previously active page link
+            const previouslyActivePageLink = paginationContainer.querySelector('.page-link.active');
+            if (previouslyActivePageLink) {
+                previouslyActivePageLink.classList.remove('active');
+            }
+
+            // Add the "active" class to the clicked page link
+            pageLink.classList.add('active');
+
+            // TODO: Update the page content based on the clicked page number
+        });
+    });
+</script>
 <!-- Shop Section End -->
 <!-- Js Plugins -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -276,7 +302,7 @@
         });
     }
 
-    /* 
+    /*
         function updateProductList() {
             // Clear the current list of products
             $('#product-list').empty();
@@ -297,12 +323,30 @@
     function cartCount(id) {
         console.log(id);
         $.ajax({
-            type: 'get',
+            type: 'post',
             url: '/add-toCart/' + id,
             success: (cartCounts) => {
                 if (cartCounts) {
                     document.getElementById('cartCount').innerHTML = cartCounts
                 }
+            }
+        })
+    }
+</script>
+
+
+<script>
+    function addToWishlist(id) {
+        console.log(id);
+        $.ajax({
+            type: 'get',
+            url: '/add-toWishlist/' + id,
+            success: (wishlistCount) => {
+                if (wishlistCount) {
+                    document.getElementById('wishlistCount').innerHTML = wishlistCount
+                }
+
+
             }
         })
     }

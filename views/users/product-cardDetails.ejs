@@ -27,7 +27,7 @@
                                 </li>
 
                                 <li class="card-action-item">
-                                    <button class="card-action-btn" aria-labelledby="card-label-2">
+                                    <button class="card-action-btn" onclick="addToWishlist('<%=product._id%>')" aria-labelledby="card-label-2">
                                         <ion-icon name="heart-outline"></ion-icon>
                                     </button>
 
@@ -92,12 +92,29 @@
             function cartCount(id) {
                 console.log(id);
                 $.ajax({
-                    type: 'get',
+                    type: 'post',
                     url: '/add-toCart/' + id,
                     success: (cartCount) => {
                         console.log(cartCount);
                         if (cartCount) {
                             document.getElementById('cartCount').innerHTML = cartCount
+                        }
+
+
+                    }
+                })
+            }
+        </script>
+
+        <script>
+            function addToWishlist(id) {
+                console.log(id);
+                $.ajax({
+                    type: 'get',
+                    url: '/add-toWishlist/' + id,
+                    success: (wishlistCount) => {
+                        if (wishlistCount) {
+                            document.getElementById('wishlistCount').innerHTML = wishlistCount
                         }
 
 

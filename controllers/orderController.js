@@ -12,8 +12,15 @@ let orderId = req.params.id
 let proId = req.params.id1
     orderHelper.doOrderDetails(orderId,proId).then(response => {
         let orders = response[0]
-        console.log(orders);
+   
         res.render('orders/ordersDetails', { orders, layout: false })
     })
 
+}
+
+exports.orderSuccessfull = (req,res)=>{
+    res.render('orders/order_successfull')
+}
+exports.orderFailed = (req,res)=>{
+    res.render('orders/order_failed')
 }

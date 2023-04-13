@@ -27,12 +27,12 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     <p class="text-muted mb-2"> Order ID <span
-                                            class="fw-bold text-body"><%=orders._id  %></span></p>
-                                    <p class="text-muted mb-0"> Place On <span class="fw-bold text-body">05,April
-                                            2023</span> </p>
+                                            class="fw-bold text-body">#<%=orders._id  %></span></p>
+                                    <p class="text-muted mb-0"> Place On <span class="fw-bold text-body"><% const date=new Date(orders.createdAt); %>
+                                        <%= `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` %></span> </p>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0"> <a href="#">View Details</a> </h6>
+                                    <h6 class="mb-0"> <a href="/product/<%=orders.productInfo._id  %>">View Details</a> </h6>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                                 <div class="flex-fill">
                                     <h5 class="bold"><%=orders.productInfo.product_name  %></h5>
                                     <p class="text-muted"> Qt: 1 item</p>
-                                    <h4 class="mb-3"> <%=orders.productInfo.product_price  %><span class="small text-muted"> via (COD) </span></h4>
+                                    <h4 class="mb-3"> <%=orders.productInfo.product_price  %><span class="small text-muted"> via (<%=orders.paymentMethod  %>) </span></h4>
                                     <p class="text-muted">Tracking Status on: <span class="text-body">11:30pm,
                                             Today</span></p>
                                 </div>
@@ -65,7 +65,11 @@
                                 <div class="border-start h-100"></div>
                                 <h5 class="fw-normal mb-0"><a href="#!">Cancel</a></h5>
                                 <div class="border-start h-100"></div>
+                                <% if (orders.paymentMethod==='ONLINE' && !orders.status==='pending' ) { %>
+                                 
+                                <% }else{ %>
                                 <h5 class="fw-normal mb-0"><a href="#!">Pre-pay</a></h5>
+                                <% } %>
                                 <div class="border-start h-100"></div>
                                 <h5 class="fw-normal mb-0"><a href="#!" class="text-muted"><i
                                             class="fas fa-ellipsis-v"></i></a>

@@ -99,9 +99,7 @@
                         
                     </a> -->
 
-                <li class="nav-item dropdown">
-
-
+                <li class=" dropdown">
 
                     <% if (locals.person) { %>
 
@@ -148,13 +146,19 @@
 
 
                 <li>
-                    <button class="nav-action-btn">
+                    <a href="/wishlist"><button class="nav-action-btn">
                         <ion-icon name="heart-outline" aria-hidden="true"></ion-icon>
 
                         <span class="nav-action-text">Wishlist</span>
 
-                        <data class="nav-action-badge" value="5" aria-hidden="true">5</data>
-                    </button>
+                        <data class="nav-action-badge" id="wishlistCount" value="5" aria-hidden="true">
+                            <% if (locals.wishlistCount) { %>
+                                <%=locals.wishlistCount %>
+                                    <% }else{ %>
+                                        0
+                                        <% } %>
+                        </data>
+                    </button></a>
                 </li>
 
                 <li>
@@ -167,7 +171,12 @@
 
 
                             <data class="nav-action-badge" id="cartCount" value="0" aria-hidden="true">
-                                <%=locals.cartCount %>
+
+                                <% if (locals.cartCount) { %>
+                                    <%=locals.cartCount %>
+                                        <% }else{ %>
+                                            0
+                                            <% } %>
                             </data>
 
                         </button></a>

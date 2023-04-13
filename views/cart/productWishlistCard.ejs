@@ -1,7 +1,7 @@
-<% (productData[0].products || [] ).forEach(product=> { %>
+<% (wishlistData[0]?.products || [] ).forEach(product=> { %>
     <li class="product-item">
         <div class="product-card" tabindex="0">
-            <h1><%=productData.men_products %></h1>
+
             <figure class="card-banner">
                 <a href="/product/<%=product._id%>"> <img src="/images/products_image/<%=product.product_image[0]%>"
                         width="312" height="350" loading="lazy" alt="Running Sneaker Shoes" class="image-contain"></a>
@@ -24,12 +24,11 @@
                             </li>
 
                             <li class="card-action-item">
-                                <button class="card-action-btn" onclick="addToWishlist('<%=product._id%>')"
-                                    aria-labelledby="card-label-2">
+                                <button onclick="deltPro('<%=wishlistData[0]?._id%>','<%=product._id%>')"  class="card-action-btn" aria-labelledby="card-label-2">
                                     <ion-icon name="heart-outline"></ion-icon>
                                 </button>
 
-                                <div class="card-action-tooltip" id="card-label-2">Add to Whishlist
+                                <div  class="card-action-tooltip" id="card-label-2">Remove to Whishlist
                                 </div>
                             </li>
 
@@ -55,14 +54,14 @@
             <div class="card-content">
 
                 <div class="card-cat">
-                
+                    <% (product.product_categoryName || []).forEach(i=> { %>
 
 
-                        <a href="/<%= productData[0].category %>" class="card-cat-link">
-                            <%= productData[0].category %>
+                        <a href="/<%= i.category %>" class="card-cat-link">
+                            <%= i.category %>
 
                         </a>
-                      
+                        <% }) %>
                             <!--   <a href="#" class="card-cat-link">Men</a> /
             <a href="#" class="card-cat-link">Women</a> -->
                 </div>
@@ -83,7 +82,7 @@
         </div>
     </li>
     <% }) %>
-        
+
         <script>
             function cartCount(id) {
                 console.log(id);
@@ -101,19 +100,20 @@
             }
         </script>
 
-        <script>
-            function addToWishlist(id) {
-                console.log(id);
-                $.ajax({
-                    type: 'get',
-                    url: '/add-toWishlist/' + id,
-                    success: (wishlistCount) => {
-                        if (wishlistCount) {
-                            document.getElementById('wishlistCount').innerHTML = wishlistCount
-                        }
+<script>
+    function deltPro(wishlistId,proId){
+         console.log(proId,wishlistId);
+         $.ajax({
+             url:'/delete-wishlist-product',
+             type:'delete',
+             data:{
+                 proId:proId,
+                 wishlistId:wishlistId
+             },
+             success:(Response=>{
+                 location.reload()
+             })
+         })
+     }
+ </script>
 
-
-                    }
-                })
-            }
-        </script>

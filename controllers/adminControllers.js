@@ -1,16 +1,17 @@
 const category = require('../models/category');
 var adminHelper = require('../server/helpers/admin-helpers');
+const { resetUserPassword } = require('../server/helpers/controller');
 var productHelper = require('../server/helpers/product-helper');
 let { imageUpdate } = require('../server/middleware/multer')
 let editView
 let editCategory
-exports.admin = (req, res,next) => {
-    res.locals.admin=true
+exports.admin = (req, res, next) => {
+    res.locals.admin = true
     next()
 }
 exports.adminView = (req, res) => {
     adminHelper.doSalesByState().then((States) => {
-        res.render('admin/admin_Dashboard', {  activeDashboard: 'active',States })
+        res.render('admin/admin_Dashboard', { activeDashboard: 'active', States })
     })
 
 
@@ -39,8 +40,8 @@ exports.userView = (req, res) => {
 
     adminHelper.doViewUsers().then(userData => {
 
-        console.log(userData, "kdjfk");
-        res.render('admin/users', {  activeUser: 'active', userData })
+
+        res.render('admin/users', { activeUser: 'active', userData })
     })
 
 
@@ -54,7 +55,7 @@ exports.logoutView = (req, res) => {
 
 exports.layoutView = (req, res) => {
 
-    res.render('admin/layout', {  activeLayout: 'active' })
+    res.render('admin/layout', { activeLayout: 'active' })
 
 }
 exports.productsView = (req, res) => {
@@ -75,16 +76,16 @@ exports.productsView = (req, res) => {
 
         } else {
 
-            res.render('admin/products', {  activeProducts: 'active', productData })
+            res.render('admin/products', { activeProducts: 'active', productData })
         }
     })
 
 }
 exports.productsData = (req, res) => {
 
-
+    console.log(req.files);
     productHelper.doAddProduct(req.body, req.files).then(response => {
-        console.log(response, "kdfkdjkfj");
+
         if (response.port === 200) {
 
             res.redirect('/admin/products')
@@ -99,7 +100,7 @@ exports.productsData = (req, res) => {
 }
 exports.deleteProductView = (req, res) => {
     let proId = req.params.id
-    console.log(proId);
+
     productHelper.doProductDelete(proId).then(response => {
         res.redirect('/admin/products')
     })
@@ -112,10 +113,10 @@ exports.editProductView = (req, res) => {
     })
 }
 exports.updataProductData = async (req, res) => {
-    console.log(req.files);
+
     let proId = req.params.id
 
-    productHelper.doUpdateProduct(proId, req.body).then(response => {
+    productHelper.doUpdateProduct(proId, req.body, req.files).then(response => {
         /* if (req.files) {
             let image = req.files.Image
             image.mv("./public/product-images/" + id + '.jpg')
@@ -126,7 +127,7 @@ exports.updataProductData = async (req, res) => {
 }
 exports.deleteUserView = (req, res) => {
     let proId = req.params.id
-    console.log(proId);
+
     adminHelper.doUserDelete(proId).then(response => {
         req.session.user = false
         res.redirect('/admin/users')
@@ -135,7 +136,7 @@ exports.deleteUserView = (req, res) => {
 }
 exports.userStatusView = (req, res) => {
     let proId = req.params.id
-    console.log(proId);
+
     adminHelper.doUserStatus(proId).then(response => {
 
         req.session.user = false
@@ -144,7 +145,7 @@ exports.userStatusView = (req, res) => {
 }
 exports.userStatusUnblockView = (req, res) => {
     let proId = req.params.id
-    console.log(proId);
+
     adminHelper.doUserUnblock(proId).then(response => {
         req.session.user = false
         res.redirect('/admin/users')
@@ -155,24 +156,24 @@ exports.categoryView = (req, res) => {
         let categorys = response.categorys
         if (editCategory) {
             let edCategory = editCategory
-            res.render('admin/category', {  categorys, edCategory,activeCategories: 'active' })
+            res.render('admin/category', { categorys, edCategory, activeCategories: 'active' })
             editCategory = null
         } else {
-            res.render('admin/category', {  categorys,activeCategories: 'active' })
+            res.render('admin/category', { categorys, activeCategories: 'active' })
 
         }
-     
+
     })
 }
 exports.categoryData = (req, res) => {
-    console.log(req.body, "body");
+
     adminHelper.doCategory(req.body).then(() => {
         res.redirect('/admin/category')
     })
 }
 exports.deleteCateagoryView = (req, res) => {
     let proId = req.params.id
-    console.log(proId, "kdfk////////////////////////////////////");
+
     adminHelper.doCategoryDelete(proId).then(response => {
         res.redirect('/admin/category')
     })
@@ -181,7 +182,7 @@ exports.editCategoryView = (req, res) => {
     let proId = req.params.id
     adminHelper.doCategoryEdit(proId).then(response => {
         editCategory = response
-        console.log(editCategory.category, "kdfjkd")
+
         res.redirect('/admin/category')
     })
 }
@@ -196,8 +197,8 @@ exports.unListView = (req, res) => {
 
     adminHelper.doUnlist().then(response => {
         let unListProduct = response
-        console.log(unListProduct);
-        res.render('admin/unlist', {  unListProduct,activeUnlists: 'active' })
+
+        res.render('admin/unlist', { unListProduct, activeUnlists: 'active' })
     })
 }
 exports.restoreProductView = (req, res) => {
@@ -214,11 +215,31 @@ exports.unlistDeleteProductView = (req, res) => {
     })
 }
 exports.orders = (req, res) => {
-   
+    adminHelper.getOrder().then((response) => {
+        let orders= response
+        res.render('admin/orders', { activeOrders: 'active',orders })
+    })
 
-        res.render('admin/orders',{activeOrders: 'active'})
- 
+
+},
+exports.coupons = (req, res) => {
+    adminHelper.getCopons().then((coupons) => {
+
+        res.render('admin/coupons', { activeCoupons: 'active',coupons })
+    })
+
+
 }
+exports.couponsGenerate = (req, res) => {
+    console.log(req.body);
+    adminHelper.generateCoupon(req.body).then(() => {
+       
+        res.redirect('/admin/coupons')
+    })
+
+   
+}
+
 
 
 

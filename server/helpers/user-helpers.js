@@ -6,6 +6,15 @@ const { resolveContent } = require("nodemailer/lib/shared")
 const createToken = require("../util/createToken")
 const { PHONE_NUMBER_OTP } = require("../config/collections")
 const { hashData, verifyHashedData } = require('../../server/util/hashData')
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
+const Razorpay = require('razorpay')
+var crypto = require("crypto");
+const order = require("../../models/order")
+var instance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 /* const { phoneOtp, verifyPhoneOTP } = require('../controller/user_controller/phone_otp')
 const { userFinding,checkphoneNumber,userStatus} = require('../controller/user_controller/user') */
@@ -146,10 +155,15 @@ module.exports = {
             }
         })
     }, */
-    doViewProducts() {
+    doViewProducts(pageNum) {
         return new Promise(async (resolve, reject) => {
 
             try {
+
+
+                pageNum = pageNum ? pageNum : 1
+                const perPage = 12;
+                const skipCount = (pageNum - 1) * perPage;
                 let productsView = await product.aggregate([{
                     $match: {
                         delete_status: {
@@ -165,10 +179,16 @@ module.exports = {
                         foreignField: "_id",
                         as: 'product_categoryName'
                     }
-                }])
-                console.log(productsView, "testing kjjkkkkkkk");
+                },
+                { $sort: { createdAt: -1 } },
+                { $skip: skipCount },
+                { $limit: perPage }
+                ])
 
-                resolve(productsView)
+                let totalProducts = await product.countDocuments({ delete_status: { $ne: true } });
+                let totalPages = Math.ceil(totalProducts / perPage);
+                console.log(totalPages);
+                resolve({ productsView, totalPages })
             }
             catch (error) {
                 let err = { port: 400, message: error.message }
@@ -185,7 +205,7 @@ module.exports = {
                     throw Error("An email is required.")
 
                 }
-                console.log(email, "dkfkdjf");
+
 
                 await sendPasswordResetOTPEmail(email)
                 const existingUser = await user.findOne({ email })
@@ -218,8 +238,7 @@ module.exports = {
         })
     },
     updataPassword(email, userData) {
-        console.log(email, userData);
-        console.log(email, userData, 'final//////////////////////');
+
         return new Promise(async (resolve, reject) => {
             try {
                 let { password } = userData
@@ -228,21 +247,26 @@ module.exports = {
                 }
 
                 const hashedPassword = await hashData(password)
-                console.log(hashedPassword, "nooooooooooo")
+
                 await user.updateOne({ email }, { $set: { password: hashedPassword, email_status: 'Verified' } })
                 resolve()
             }
             catch (error) {
                 let err = { port: 400, message: error.message }
+
                 resolve(err)
 
             }
         })
     },
-    doProductDetails(id) {
+    doProductDetails(proId) {
         return new Promise(async (resolve, reject) => {
+            console.log(typeof id, "nnnnnnnnnnn");
+
+
             try {
-                let productdata = await product.find({ _id: id })
+                let productdata = await product.findOne({ _id: proId })
+                console.log(productdata, "nnnnnnnnnnn");
                 let allProduct = await product.aggregate([{
                     $match: {
                         delete_status: {
@@ -258,11 +282,14 @@ module.exports = {
                 }, {
                     $limit: 4
                 }])
-                console.log(allProduct, "nooooooooooo");
+
                 resolve({ productdata, allProduct })
             }
             catch (error) {
-                console.log(error)
+                console.log(error, "error");
+
+                reject(error)
+
 
             }
         })
@@ -339,12 +366,12 @@ module.exports = {
         } */
 
     doProfile(userData, phoneNumber) {
-        console.log(userData);
+
         return new Promise(async (resolve, reject) => {
             try {
                 let { firstName, lastName, email, phone } = userData
                 let name = firstName + " " + lastName
-                console.log(email, "///////////personal info////////////")
+
                 if (firstName || lastName || email || phone) {
                     await user.updateOne({ phone: phoneNumber }, {
                         $set: {
@@ -355,7 +382,7 @@ module.exports = {
                         }
                     })
                     let users = await user.findOne({ phone: phoneNumber })
-                    console.log(users);
+
                     if (users) {
                         resolve(user)
                     }
@@ -367,7 +394,7 @@ module.exports = {
         })
     },
     doProfileAddress(userData, phoneNumber) {
-        console.log(userData);
+
         return new Promise(async (resolve, reject) => {
             try {
                 let { name, phone, pincode, locality, address, city, state, landmark, alternate_phone, address_type } = userData
@@ -390,7 +417,7 @@ module.exports = {
                                     address: address,
                                     city: city,
                                     state: stateName,
-                                    coords:coords,
+                                    coords: coords,
                                     landmark: landmark,
                                     alternate_phone: alternate_phone,
                                     address_type: address_type
@@ -444,13 +471,13 @@ module.exports = {
         }
     },
 
-    getWomenProduct() {
+    getWomenProduct(pageNum) {
         try {
             return new Promise(async (resolve, reject) => {
                 let womenProduct = await category.aggregate([{
                     $match: {
                         category: 'women'
-                    }
+                    },
                 }, {
                     $lookup: {
                         from: 'products',
@@ -459,7 +486,6 @@ module.exports = {
                         as: 'women_products'
                     }
                 }])
-
                 let products = womenProduct[0]?.women_products
                 let productData = []
                 let j = 0
@@ -470,8 +496,9 @@ module.exports = {
                     }
 
                 });
-                resolve(productData)
 
+                console.log(productData, "noooooooooooooo");
+                resolve(productData)
             })
         } catch (error) {
 
@@ -480,10 +507,13 @@ module.exports = {
     getSportsProduct() {
         try {
             return new Promise(async (resolve, reject) => {
+             /*    pageNum = pageNum ? pageNum : 1
+                const perPage = 12;
+                const skipCount = (pageNum - 1) * perPage; */
                 let sportsProduct = await category.aggregate([{
                     $match: {
                         category: 'sports'
-                    }
+                    },
                 }, {
                     $lookup: {
                         from: 'products',
@@ -492,7 +522,6 @@ module.exports = {
                         as: 'sports_products'
                     }
                 }])
-
                 let products = sportsProduct[0]?.sports_products
                 let productData = []
                 let j = 0
@@ -503,14 +532,98 @@ module.exports = {
                     }
 
                 });
-                resolve(productData)
 
+                console.log(productData, "noooooooooooooo");
+                resolve(productData)
             })
         } catch (error) {
 
         }
     },
 
+    doAddressUpdate(AddressData, userId) {
+       
 
+        return new Promise(async (resolve, reject) => {
+            let addresId = AddressData.id
+            const str = AddressData.state
+            const stateName = str.split('[')[0]; // state = "Kerala"
+            const coords = str.substring(str.indexOf('[') + 1, str.indexOf(']')).split(',').map(Number); // coords = [10.8505, 76.2711]
+            let data = await user.findOneAndUpdate({
+
+                _id: new ObjectId(userId),
+                'address._id': addresId,
+
+            }, {
+                $set: {
+                    'address.$.name': AddressData.name,
+                    'address.$.phone': AddressData.phone,
+                    'address.$.pincode': AddressData.pincode,
+                    'address.$.locality': AddressData.locality,
+                    'address.$.address': AddressData.address,
+                    'address.$.city': AddressData.city,
+                    'address.$.state': stateName,
+                    'address.$.landmark': AddressData.landmark,
+                    'address.$.alternate_phone': AddressData.alternate_phone,
+                    'address.$.address_type': AddressData.address_type,
+                    'address.$.coords': coords,
+                },
+            },
+                { new: true }
+            )
+            resolve(true)
+
+        })
+    }
+
+    ,
+    generateRazorpay(orders) {
+        return new Promise((resolve, reject) => {
+            var options = {
+                amount: orders.totalAmount * 100,  // amount in the smallest currency unit
+                currency: "INR",
+                receipt: String(orders._id)
+            };
+            instance.orders.create(options, function (err, order) {
+                console.log(order);
+                resolve(order)
+            });
+        })
+
+    }
+    ,
+    verifyPayment(details) {
+        return new Promise((resolve, reject) => {
+            var expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            expectedSignature.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
+            expectedSignature = expectedSignature.digest('hex')
+            if (expectedSignature === details['payment[razorpay_signature]']) {
+                resolve()
+            } else {
+                reject()
+            }
+        })
+
+    },
+    changePaymentStatus(orderId) {
+        return new Promise((resolve, reject) => {
+            order.updateOne({ _id: new ObjectId(orderId) }, {
+                $set: { status: 'placed' }
+            }).then(() => {
+                resolve()
+            })
+        })
+
+    },
+    deleteAddress(addressId, userId) {
+        return new Promise(async (resolve, reject) => {
+            let address = await user.updateOne(
+                { _id: new ObjectId(userId) },
+                { $pull: { address: { _id: new ObjectId(addressId) } } }
+            );
+            resolve(true)
+        })
+
+    },
 
 }

@@ -1,20 +1,22 @@
 let cart = require('../../models/cart')
 let order = require('../../models/order')
 let user = require('../../models/user')
+let wishlist = require('../../models/wishlist')
+let coupon = require('../../models/coupon')
 const mongoose = require('mongoose');
 const objectId = mongoose.Types.ObjectId;
 
 module.exports = {
-    addToCart(userId, proId) {
+    addToCart(userId, proId, quantity) {
         return new Promise(async (resolve, reject) => {
             let cartItem = await cart.findOne({ userId: userId })
             if (cartItem) {
                 let proExist = cartItem.products.findIndex(product => product.item == proId)
                 if (proExist != -1) {
-                    console.log("quantinnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+
                     await cart.updateOne({ userId: new objectId(userId), 'products.item': new objectId(proId) }, {
                         $inc: {
-                            'products.$.quantity': 1
+                            'products.$.quantity': quantity
                         }
                     }).then(async () => {
                         let cartCount = await cart.findOne({ userId: userId })
@@ -30,7 +32,7 @@ module.exports = {
                             products: [
                                 {
                                     item: proId,
-                                    quantity: 1
+                                    quantity: quantity
                                 }
                             ]
                         }
@@ -60,9 +62,10 @@ module.exports = {
         })
     }
 
+
     , getCartProduct(userId) {
         return new Promise(async (resolve, reject) => {
-            console.log(userId, "userrrrrrrrrrrrrrrrrrId");
+
             let cartItems = await cart.aggregate([{
                 $match: {
                     userId: new objectId(userId)
@@ -93,7 +96,7 @@ module.exports = {
                     total: { $multiply: ['$quantity', '$products.product_price'] }
                 }
             }])
-            console.log(cartItems, "nnnnntotalnnnnnn");
+
 
 
             /*   console.log(cartCount.productId.length,"leeeeeeeeeeeeeee"); */
@@ -104,7 +107,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let { count, cartId, proId } = cartData
             count = new Number(count)
-            console.log(cartId);
+
             await cart.updateOne({
                 _id: new objectId(cartId), 'products.item': new objectId(proId)
             }, {
@@ -116,9 +119,10 @@ module.exports = {
         })
     }
     ,
-    getTotalAmount(userId) {
+    getTotalAmount(userId, discount,minPurchase) {
+        console.log(userId, discount,minPurchase);
         return new Promise(async (resolve, reject) => {
-            console.log(userId, "userrrrrrrrrrrrrrrrrrId");
+
             let totalPrice = await cart.aggregate([{
                 $match: {
                     userId: new objectId(userId)
@@ -149,14 +153,31 @@ module.exports = {
                     _id: null,
                     total: { $sum: { $multiply: ['$quantity', '$products.product_price'] } }
                 }
+            }, {
+                $project: {
+                    _id: 0,
+                    total: {
+                        $subtract: [
+                            '$total',
+                            {
+                                $cond: {
+                                    if: { $gte: ['$total', minPurchase] },
+                                    then: discount,
+                                    else: 0
+                                }
+                            }
+                        ]
+                    }
+                }
             }])
-            console.log(totalPrice, "nnnnnnnnnnn");
+            console.log(totalPrice, "///////////////total");
+
             resolve(totalPrice)
         })
     },
     getCartCount(userId) {
         return new Promise(async (resolve, reject) => {
-            console.log(userId, "userrrrrrrrrrrrrrrrrrId");
+
 
             /* let cartCount = await cart.aggregate([{
                 $match: {
@@ -197,7 +218,7 @@ module.exports = {
     },
     getSubTotal(userId) {
         return new Promise(async (resolve, reject) => {
-            console.log(userId, "userrrrrrrrrrrrrrrrrrId");
+
             let subTotal = await cart.aggregate([{
                 $match: {
                     userId: new objectId(userId)
@@ -229,7 +250,7 @@ module.exports = {
                     subTotal: { $sum: '$products.product_price' }
                 }
             }])
-            console.log(subTotal, "nnnnnnsubTotalnnnnn");
+
             resolve(subTotal)
         })
     },
@@ -242,13 +263,13 @@ module.exports = {
                     products: { item: new objectId(proId) }
                 }
             })
-            console.log(deleteStatus);
+
             resolve()
         })
     },
 
     placeOrder(orders, products, total) {
-        console.log(orders, products, total, "////////////");
+        console.log(orders,products,total,'mmmmm');
         return new Promise(async (resolve, reject) => {
             let status = orders.payment_method === 'COD' ? 'placed' : 'pending'
             let deliveryAddressId = orders.delevery_address
@@ -277,9 +298,9 @@ module.exports = {
                 totalAmount: total
             })
             orderData.save()
-
+            console.log(orderData, 'checkingorder');
             await cart.deleteOne({ userId: new objectId(userId) })
-            resolve()
+            resolve(orderData)
 
         })
     },
@@ -306,9 +327,122 @@ module.exports = {
                     as: 'productInfo'
                 }
             }])
-            console.log(orders[0].productInfo, "nnnnnnnnnnn");
+            console.log(orders,"orrrrrrrrrrdseeeeeeeeeeerrrrrr");
             resolve(orders)
 
         })
-    }
+    },
+    getWishList(userId) {
+        return new Promise(async (resolve, reject) => {
+            let wishlistData = await wishlist.aggregate([{
+                $match: {
+                    userId: new objectId(userId)
+                }
+            }, {
+                $project: {
+                    item: '$products.item'
+                }
+            }, {
+                $lookup: {
+                    from: 'products',
+                    localField: 'item',
+                    foreignField: '_id',
+                    as: 'products'
+                }
+            }])
+            console.log(wishlistData, '/////////');
+            resolve(wishlistData)
+        })
+    },
+    addToWishList(userId, proId) {
+        return new Promise(async (resolve, reject) => {
+            let wishlistItem = await wishlist.findOne({ userId: userId })
+            if (wishlistItem) {
+                let proExist = wishlistItem.products.findIndex(product => product.item == proId)
+                if (proExist != -1) {
+
+
+                    let cartCount = await wishlist.findOne({ userId: userId })
+
+                    cartCount = cartCount?.products.length
+                    resolve(cartCount)
+
+                } else {
+                    await wishlist.updateOne({
+                        userId: new objectId(userId)
+                    }, {
+                        $push: {
+                            products:
+                            {
+                                item: proId
+                            }
+
+                        }
+                    }).then(async () => {
+                        let wishlistCount = await wishlist.findOne({ userId: userId })
+
+                        wishlistCount = wishlistCount?.products.length
+                        resolve(wishlistCount)
+                    })
+                }
+
+
+
+            } else {
+                let newWishlist = new wishlist({
+                    userId: userId,
+                    products: [
+                        {
+                            item: proId
+                        }
+                    ]
+                })
+                newWishlist.save()
+                resolve()
+            }
+        })
+    },
+
+    getwishListCount(userId) {
+        return new Promise(async (resolve, reject) => {
+
+            let wishlistCount = await wishlist.findOne({ userId: userId })
+
+            wishlistCount = wishlistCount?.products.length
+            resolve(wishlistCount)
+        })
+    },
+
+    deleteWishListProduct(data) {
+        return new Promise(async (resolve, reject) => {
+            let { proId, wishlistId } = data
+
+            let deleteStatus = await wishlist.findOneAndUpdate({ _id: new objectId(wishlistId) }, {
+                $pull: {
+                    products: { item: new objectId(proId) }
+                }
+            })
+
+            resolve()
+        })
+    },
+    couponCheck(Coupon,total) {
+        return new Promise(async (resolve, reject) => {
+            let { appliedCoupon } = Coupon
+            let couponCheck = await coupon.find({ code: appliedCoupon })
+            console.log(couponCheck);
+            if (couponCheck.length === 1) {
+                 console.log(total);
+                if(couponCheck[0].minPurchase<=total){
+                    resolve({ status: true, code: appliedCoupon, discount: couponCheck[0].discount,minPurchase: couponCheck[0].minPurchase })
+                }else{
+                    resolve({status:false,message:'minimum purchase ₹ '+couponCheck[0].minPurchase})
+                }
+                
+            } else {
+
+                resolve({status:false,message:'invaild coupon'})
+            }
+        })
+    },
 }

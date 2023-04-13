@@ -20,7 +20,8 @@ module.exports = {
                             {
                                 $match: {
                                     $expr: {
-                                        $in: ['$_id', '$$productIds']
+                                        $in: ['$_id', '$$productIds'],
+
                                     }
                                 }
                             }
@@ -31,15 +32,17 @@ module.exports = {
                     $project:{
                         _id:1,
                         productInfo:1,
-                        productsData:1
+                        productsData:1,
+                        createdAt:1,
+                        paymentMethod:1,
+                        status:1
                     }
                 },{
                     $unwind:'$productInfo'
                 },{$match:{
                     'productInfo._id':new ObjectId(pro)
                 }}])
-
-                console.log(ordersData,"nnnnnnnnnnnnnnnn");
+                console.log(ordersData,"ordddddddser");
                 resolve(ordersData)
             }
             catch (e) {

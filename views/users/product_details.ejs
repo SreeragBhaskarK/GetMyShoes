@@ -56,14 +56,15 @@
                     <div class="product__details__button">
                         <div class="quantity">
                             <span>Quantity:</span>
-                            <div class="pro-qty">
+                            <div class="proDet-qty">
                                 <input type="text" value="1">
                             </div>
                         </div>
                         <a onclick="cartCount('<%=products._id%>')" class="cart-btn"><span class="icon_bag_alt"></span>
                             Add to cart</a>
                         <ul>
-                            <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+                            <li onclick="addToWishlist('<%=products._id%>')"><a><span class="icon_heart_alt"></span></a>
+                            </li>
                             <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
                         </ul>
                     </div>
@@ -194,15 +195,62 @@
 
 
 <script>
+    var proQty = $('.proDet-qty');
+    var timeoutId;
+    var quantity = 1
+    proQty.prepend('<span class="dec qtybtn">-</span>');
+    proQty.append('<span class="inc qtybtn">+</span>');
+    proQty.on('click', '.qtybtn', function () {
+        var $button = $(this);
+        var oldValue = $button.parent().find('input').val();
+        clearTimeout(timeoutId);
+        if ($button.hasClass('inc')) {
+            var newVal = parseFloat(oldValue) + 1;
+        } else {
+            // Don't allow decrementing below zero
+            if (oldValue > 1) {
+                var newVal = parseFloat(oldValue) - 1;
+            } else {
+                newVal = 1;
+            }
+        }
+        $button.parent().find('input').val(newVal);
+        quantity = newVal
+
+    });
+    console.log(quantity);
     function cartCount(id) {
         console.log(id);
         $.ajax({
-            type: 'get',
+            type: 'post',
             url: '/add-toCart/' + id,
+            data:({quantity:quantity}),
             success: (cartCount) => {
                 if (cartCount) {
                     document.getElementById('cartCount').innerHTML = cartCount
                 }
+
+            }
+        })
+    }
+</script>
+
+
+
+<script>
+
+
+    function addToWishlist(id) {
+        console.log(newVal);
+        console.log(id);
+        $.ajax({
+            type: 'get',
+            url: '/add-toWishlist/' + id,
+            success: (wishlistCount) => {
+                if (wishlistCount) {
+                    document.getElementById('wishlistCount').innerHTML = wishlistCount
+                }
+
 
             }
         })

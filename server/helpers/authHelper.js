@@ -41,13 +41,13 @@ module.exports = {
                 /* send otp in phone number */
                 phone_number = Number('91' + phone_number)
                 let checkNumber = await module.exports.checkphoneNumber(phone_number)
-                console.log(checkNumber, "//////////////////111111111111111");
+             
                 if (checkNumber.result) {
-                    console.log("noooooooooooooooo");
+           
                     resolve(false)
                 } else {
                     let number = await module.exports.sendOtpPhone(phone_number)
-                    console.log("nnnnnnnnnnn", phone_number);
+            
                     resolve(phone_number)
                 }
 
@@ -75,7 +75,7 @@ module.exports = {
                 let { otp, phone_number } = OtpData
                 const otpNumber = String(otp.join(''));
                 phone_number = Number(phone_number)
-                console.log(otpNumber, phone_number, "ttttttttttttttttttt");
+         
                 let userCheck = user.findOne({ phone: phone_number })
                 let validOTP
                 if (userCheck.status === 'active') {
@@ -89,10 +89,6 @@ module.exports = {
 
                 }
 
-
-
-
-                console.log(validOTP, '/////////jjjjjjj');
                 let phone = phone_number
                 resolve({ phone, validOTP })
             }
@@ -105,7 +101,7 @@ module.exports = {
 
     userFinding: async (phone_number) => {
         try {
-            console.log(phone_number);
+     
             let result = await user.findOne({ phone: phone_number })
 
             if (result) {
@@ -510,8 +506,9 @@ module.exports = {
         return new Promise(async(resolve,reject)=>{
             let {current_password,new_password,confirm_password}=pass
             const passwordMatch = await verifyHashedData(current_password, oldPass)
+            console.log(passwordMatch,"ppppppassssssssssss");
             if (!passwordMatch) {
-               resolve({result:true})
+               resolve({result:false})
             }else{
                 if(new_password===confirm_password){
                     let hashedPass = await hashData(new_password)

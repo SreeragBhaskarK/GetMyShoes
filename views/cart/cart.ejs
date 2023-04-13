@@ -24,39 +24,48 @@
                             </tr>
                         </thead>
                         <tbody>
-                         
-                            
-                              
-                            
-                          <% products.forEach(product => { %>
-                           
-                      
-                            <tr>
-                                <td class="cart__product__item">
-                                    <img style="width: 90px;" src="/images/products_image/<%=product.products.product_image[0]%>" alt="">
-                                    <div class="cart__product__item__title">
-                                        <h6><%=product.products.product_name %></h6>
-                                        <div class="rating">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
+
+
+
+
+                            <% products.forEach(product=> { %>
+
+
+                                <tr>
+                                    <td class="cart__product__item">
+                                        <img style="width: 90px;"
+                                            src="/images/products_image/<%=product.products.product_image[0]%>" alt="">
+                                        <div class="cart__product__item__title">
+                                            <h6>
+                                                <%=product.products.product_name %>
+                                            </h6>
+                                            <div class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="cart__price"  >₹ <%=product.products.product_price %></td>
-                                <td class="cart__quantity">
-                                    <div class="pro-qty"data-product-price="<%=product.products.product_price %>"  data-cart-id="<%=product._id%>" data-product-id="<%=product.products._id%>">
-                                        <input  type="text" value="<%=product.quantity%>" >
-                                    </div>
-                                </td>
-                                
-                                <td class="cart__total" id="cart__total_<%=product.products._id%>" >₹ <%=product.total%> </td>
-                                <td class="cart__close"><span onclick="deltPro('<%=product.products._id%>','<%=product._id%>')" class="icon_close"></span></td>
-                            </tr> 
-                            <% }) %>
-            
+                                    </td>
+                                    <td class="cart__price">₹ <%=product.products.product_price %>
+                                    </td>
+                                    <td class="cart__quantity">
+                                        <div class="pro-qty" data-product-price="<%=product.products.product_price %>"
+                                            data-cart-id="<%=product._id%>" data-product-id="<%=product.products._id%>">
+                                            <input type="text" value="<%=product.quantity%>">
+                                        </div>
+                                    </td>
+
+                                    <td class="cart__total" id="cart__total_<%=product.products._id%>">₹
+                                        <%=product.total%>
+                                    </td>
+                                    <td class="cart__close"><span
+                                            onclick="deltPro('<%=product.products._id%>','<%=product._id%>')"
+                                            class="icon_close"></span></td>
+                                </tr>
+                                <% }) %>
+
                         </tbody>
                     </table>
                 </div>
@@ -78,10 +87,15 @@
             <div class="col-lg-6">
                 <div class="discount__content">
                     <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" placeholder="Enter your coupon code">
+                    <form id="couponApply">
+                        <input type="text" placeholder="Enter your coupon code" id="appliedCoupon" required
+                            name="appliedCoupon" value="<%=locals.appliedCoupon%>">
+                        <!-- <input hidden type="number" name="total" value="<%#totalPrice[0]?.total %>"> -->
                         <button type="submit" class="site-btn">Apply</button>
                     </form>
+                    <span class="text-danger mt-2" style="display: none; width: fit-content;
+                    margin-left: auto;" id="coupon_message"></span>
+
                 </div>
             </div>
             <div class="col-lg-4 offset-lg-2">
@@ -89,6 +103,7 @@
                     <h6>Cart total</h6>
                     <ul>
                         <li>Subtotal <span>₹ <%=subTotal %></span></li>
+                        <li>Discount <span id="discount">₹<%=discount %></span></li>
                         <li>Total <span id="totalPrice" aria-placeholder="">₹ <%=totalPrice[0]?.total %></span></li>
                     </ul>
                     <a href="/checkout" class="primary-btn">Proceed to checkout</a>
@@ -98,21 +113,59 @@
     </div>
 </section>
 <script>
-   function deltPro(proId,cartId){
-        console.log(proId,cartId);
+    function deltPro(proId, cartId) {
+        console.log(proId, cartId);
         $.ajax({
-            url:'/delete-cart-product',
-            type:'delete',
-            data:{
-                proId:proId,
-                cartId:cartId
+            url: '/delete-cart-product',
+            type: 'delete',
+            data: {
+                proId: proId,
+                cartId: cartId
             },
-            success:(Response=>{
+            success: (Response => {
                 location.reload()
             })
         })
     }
 </script>
 
+<script>
+    $('#couponApply').submit((e) => {
+        e.preventDefault()
+        const totalPriceElem = document.getElementById('totalPrice');
+        const totalPrices = totalPriceElem.innerText;
+        let oldPrice = totalPrices
+        console.log(totalPrice);
+        const priceWithoutSymbol = totalPrices.replace("₹ ", "");
 
+        $.ajax({
+            url: '/coupon_check/' + priceWithoutSymbol,
+            type: 'post',
+            data: $('#couponApply').serialize(),
+            success: (response) => {
 
+                if (response.status) {
+                    document.getElementById('discount').innerHTML = '₹ ' + response.discount
+                    document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
+                    document.getElementById('coupon_message').innerHTML ='applied successfull'
+                    document.getElementById('coupon_message').style.color ="green"
+                
+                document.getElementById('coupon_message').style.display = 'block'
+                setTimeout(() => {
+                    document.getElementById('coupon_message').style.display = 'none'
+                }, 5000);
+                } else {
+                    document.getElementById('coupon_message').innerHTML =response.message
+                
+                    document.getElementById('coupon_message').style.display = 'block'
+                    setTimeout(() => {
+                        document.getElementById('coupon_message').style.display = 'none'
+                    }, 5000);
+                    document.getElementById('appliedCoupon').value = ''
+                    document.getElementById('discount').innerHTML = '₹ ' + 0
+                    document.getElementById('totalPrice').innerHTML = totalPrices
+                }
+            }
+        })
+    })
+</script>

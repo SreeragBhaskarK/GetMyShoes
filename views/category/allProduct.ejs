@@ -1,7 +1,7 @@
-<% (productData[0].products || [] ).forEach(product=> { %>
+<% (productData || [] ).forEach(product=> { %>
     <li class="product-item">
         <div class="product-card" tabindex="0">
-            <h1><%=productData.men_products %></h1>
+
             <figure class="card-banner">
                 <a href="/product/<%=product._id%>"> <img src="/images/products_image/<%=product.product_image[0]%>"
                         width="312" height="350" loading="lazy" alt="Running Sneaker Shoes" class="image-contain"></a>
@@ -55,14 +55,14 @@
             <div class="card-content">
 
                 <div class="card-cat">
-                
+                    <% (product.product_categoryName || []).forEach(i=> { %>
 
 
-                        <a href="/<%= productData[0].category %>" class="card-cat-link">
-                            <%= productData[0].category %>
+                        <a href="/<%= i.category %>" class="card-cat-link">
+                            <%= i.category %>
 
                         </a>
-                      
+                        <% }) %>
                             <!--   <a href="#" class="card-cat-link">Men</a> /
             <a href="#" class="card-cat-link">Women</a> -->
                 </div>

@@ -83,12 +83,12 @@ module.exports = {
     },
     doProductDelete(proId) {
         return new Promise(async (resolve, reject) => {
-            console.log(proId);
+
             try {
                 let productId = await product.find({ _id: proId })
 
                 if (!productId) throw Error("Empty products")
-                console.log(productId, "kdjf");
+      
                 await module.exports.deleteProduct(proId)
                 resolve()
             }
@@ -104,7 +104,7 @@ module.exports = {
                 let productId = await product.find({ _id: proId })
 
                 if (!productId) throw Error("Empty products")
-                console.log(productId, "kdjf");
+              
                 let viewProducts = await module.exports.viewProduct(proId)
                 resolve(viewProducts)
             }
@@ -114,17 +114,17 @@ module.exports = {
             }
         })
     },
-    doUpdateProduct(proId, productData) {
-        console.log(proId, productData.product_image, "nooooooooooooooooooooooooooo")
+    doUpdateProduct(proId, productData,images) {
+        let image = images.map(file => file.filename)
         return new Promise(async (resolve, reject) => {
-            console.log(proId);
+    
             try {
                 let productId = await product.find({ _id: proId })
 
                 if (!productId) throw Error("Empty user")
-                let images = await module.exports.imageUpdate(productData.product_image, productId)
-                console.log(proId,productData,images);
-                let status = await module.exports.updateProduct(proId, productData, images)
+      /*           let images = await module.exports.imageUpdate(productData.product_image, productId) */
+            
+                let status = await module.exports.updateProduct(proId, productData, image)
                 resolve({ status })
             }
             catch (error) {
@@ -136,7 +136,7 @@ module.exports = {
     async addProduct(productData) {
         try {
             let { product_name, product_description, product_category, product_price, product_old_price, product_badge, image } = productData
-            console.log(productData, "kkkkkkkkkkkk")
+        
             const addProduct = new product({
                 product_name,
                 product_description,
@@ -150,7 +150,7 @@ module.exports = {
 
             })
             const createProduct = await addProduct.save()
-            console.log(createProduct, '///////');
+        
             return createProduct
         }
         catch {
@@ -197,7 +197,7 @@ module.exports = {
 
                     }
                 })
-            console.log(result, 'kdkfkd////////');
+   
             return user.findOne({ _id: proId })
         }
         catch {
@@ -207,7 +207,7 @@ module.exports = {
     },
     async imageUpdate(images, products) {
 
-        console.log(products[0].product_image, "product image      kkkkkkkkkkkkkkkkkk");
+
        /*  await upload.single(images[0]).then(response=>{
             console.log(response,req.file);
         }) */
@@ -233,7 +233,7 @@ module.exports = {
             } else if (images[3] == '') {
                 images[3] = product_image[3]
             }
-            console.log("nooooooooooo");
+
             return images
         } catch (error) {
 

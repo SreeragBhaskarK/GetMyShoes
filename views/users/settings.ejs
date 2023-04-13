@@ -239,8 +239,14 @@
 
                                     <h5 class="card-title mb-0">Address Information</h5>
                                 </div>
-                                <div class="card-body">
-                                    <form id="perInfoAdrs">
+                                <div class="card-body" style="border: solid 0.5px currentColor;">
+                                    <div onclick="addAddress()">
+                                        <div><img height="14" width="14"
+                                                src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiMyMTc1RkYiIGQ9Ik0xMS4yNSA2Ljc1aC00LjV2NC41aC0xLjV2LTQuNUguNzV2LTEuNWg0LjVWLjc1aDEuNXY0LjVoNC41Ii8+PHBhdGggZD0iTS0zLTNoMTh2MThILTMiLz48L2c+PC9zdmc+">
+                                            ADD
+                                            A NEW ADDRESS</div>
+                                    </div>
+                                    <form style="display: none;" id="perInfoAdrs">
 
                                         <div class="mb-3 ">
                                             <label class="form-label" for="">Name</label>
@@ -285,14 +291,16 @@
                                             <select id="state-select" class="form-control" name="state">
                                                 <option value="">--Select State--</option>
                                                 <option value="Andhra Pradesh[16.5062, 80.6480]">Andhra Pradesh</option>
-                                                <option value="Arunachal Pradesh[28.2180, 94.7278]">Arunachal Pradesh</option>
+                                                <option value="Arunachal Pradesh[28.2180, 94.7278]">Arunachal Pradesh
+                                                </option>
                                                 <option value="Assam[26.2006, 92.9376]">Assam</option>
                                                 <option value="Bihar[25.0961, 85.3131]">Bihar</option>
                                                 <option value="Chhattisgarh[21.2787, 81.8661]">Chhattisgarh</option>
                                                 <option value="Goa[15.2993, 74.1240]">Goa</option>
                                                 <option value="Gujarat[22.2587, 71.1924]">Gujarat</option>
                                                 <option value="Haryana[29.0588, 76.0856]">Haryana</option>
-                                                <option value="Himachal Pradesh[31.1048, 77.1734]">Himachal Pradesh</option>
+                                                <option value="Himachal Pradesh[31.1048, 77.1734]">Himachal Pradesh
+                                                </option>
                                                 <option value="Jharkhand[23.6102, 85.2799]">Jharkhand</option>
                                                 <option value="Karnataka[15.3173, 75.7139]">Karnataka</option>
                                                 <option value="Kerala[10.8505, 76.2711]">Kerala</option>
@@ -338,62 +346,223 @@
                                             <label for="work-radio">Work</label>
                                         </div>
 
-                                        <button type="submit" id="submit" class="btn btn-primary">Add
+                                        <button type="submit" id="submit" class="btn btn-primary me-2">Add
                                             Address</button>
+                                        <button onclick="addressCancel()" class="btn btn-warning">Cancel</button>
                                     </form>
 
                                 </div>
+
+
                             </div>
+
                             <% (users?.address || []).forEach(address=> { %>
+                                <div id="editAds<%=address?._id%>" style="display: none;" class="card">
 
-                           
+                                    <div class="card-body" style="border: solid 0.5px currentColor;">
+                                        <div>
+                                            <div>
+                                                Edit ADDRESS</div>
+                                        </div>
+                                        <form id="perInfoEditAdrs" class="perInfoEditAdrs">
+                                            <input hidden type="text" value="<%=address?._id%>" name="id">
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="">Name</label>
+                                                <input type="text" class="form-control" name="name"
+                                                    value="<%=address?.name%>" required placeholder="Name">
+                                            </div>
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="">phone</label>
+                                                <input type="tel" class="form-control" name="phone"
+                                                    value="<%=address?.phone%>" required
+                                                    placeholder="10-digit mobile number">
+                                            </div>
 
-                                <div class="card">
-                                    <div class="card-header" style="display: flex;">
-                                        <h5>
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="">pincode</label>
+                                                <input type="text" class="form-control" name="pincode"
+                                                    value="<%=address?.pincode%>" required placeholder="Pincode">
+                                            </div>
 
-                                            <%=address?.address_type%>
-                                        </h5>
-                                        <button class="btn btn-primary" style="margin-left: auto;">Edit</button>
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="">Locality</label>
+                                                <input type="text" class="form-control" name="locality"
+                                                    value="<%=address?.locality%>" required placeholder="Locality">
+                                            </div>
+
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="inputLastName">Address</label>
+                                                <textarea name="address" id="" cols="10" rows="4" tabindex="5" value=""
+                                                    required class="form-control"
+                                                    placeholder="Address (Area and Street)"><%=address?.address%></textarea>
+
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label" for="inputEmail4">City</label>
+                                                <input type="text" value="<%=address?.city%>" required name="city"
+                                                    class="form-control" placeholder="City/Distric/Town">
+
+
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="inputEmail4">State</label>
+                                                <select id="editstate-select" required data-address='<%=address?.state%>'
+                                                    class="form-control" name="state">
+                                                    <option value="">--Select State--</option>
+                                                    <option value="Andhra Pradesh[16.5062, 80.6480]">Andhra Pradesh
+                                                    </option>
+                                                    <option value="Arunachal Pradesh[28.2180, 94.7278]">Arunachal
+                                                        Pradesh
+                                                    </option>
+                                                    <option value="Assam[26.2006, 92.9376]">Assam</option>
+                                                    <option value="Bihar[25.0961, 85.3131]">Bihar</option>
+                                                    <option value="Chhattisgarh[21.2787, 81.8661]">Chhattisgarh</option>
+                                                    <option value="Goa[15.2993, 74.1240]">Goa</option>
+                                                    <option value="Gujarat[22.2587, 71.1924]">Gujarat</option>
+                                                    <option value="Haryana[29.0588, 76.0856]">Haryana</option>
+                                                    <option value="Himachal Pradesh[31.1048, 77.1734]">Himachal Pradesh
+                                                    </option>
+                                                    <option value="Jharkhand[23.6102, 85.2799]">Jharkhand</option>
+                                                    <option value="Karnataka[15.3173, 75.7139]">Karnataka</option>
+                                                    <option value="Kerala[10.8505, 76.2711]">Kerala</option>
+                                                    <option value="Madhya Pradesh[22.9734, 78.6569]">Madhya Pradesh
+                                                    </option>
+                                                    <option value="Maharashtra[19.7515, 75.7139]">Maharashtra</option>
+                                                    <option value="Manipur[24.6637, 93.9063]">Manipur</option>
+                                                    <option value="Meghalaya[25.4670, 91.3662]">Meghalaya</option>
+                                                    <option value="Mizoram[23.1645, 92.9376]">Mizoram</option>
+                                                    <option value="Nagaland[26.1584, 94.5624]">Nagaland</option>
+                                                    <option value="Odisha[20.9517, 85.0985]">Odisha</option>
+                                                    <option value="Punjab[31.1471, 75.3412]">Punjab</option>
+                                                    <option value="Rajasthan[27.0238, 74.2179]">Rajasthan</option>
+                                                    <option value="Sikkim[27.5330, 88.5122]">Sikkim</option>
+                                                    <option value="Tamil Nadu11.1271, 78.6569]">Tamil Nadu</option>
+                                                    <option value="Telangana[18.1124, 79.0193]">Telangana</option>
+                                                    <option value="Tripura[23.9408, 91.9882]">Tripura</option>
+                                                    <option value="Uttar Pradesh[26.8467, 80.9462]">Uttar Pradesh
+                                                    </option>
+                                                    <option value="Uttarakhand[30.0668, 79.0193]">Uttarakhand</option>
+                                                    <option value="West Bengal[22.9868, 87.8550]">West Bengal</option>
+                                                </select>
+
+
+                                            </div>
+
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="inputLastName">Landmark</label>
+                                                <input type="text" value="<%=address?.landmark%>" required
+                                                    class="form-control" name="landmark"
+                                                    placeholder="Landmark (Optional)">
+                                            </div>
+
+                                            <div class="mb-3 ">
+                                                <label class="form-label" for="inputLastName">Alternate Phone</label>
+                                                <input type="text" value="<%=address?.alternate_phone%>" required
+                                                    class="form-control" name="alternate_phone"
+                                                    placeholder="Alternate Phone (Optional)">
+                                            </div>
+
+                                            <div class="mb-3 ">
+                                                 <% if (address?.address_type==='home') { %>
+                                                  
+                                                    <label class="form-label" for="inputLastName">Address Type</label><br>
+                                                    <input type="radio" id="home-radio" checked  name="address_type" value="home">
+                                                    <label for="home-radio">Home</label>
+                                                    <input type="radio" id="work-radio" name="address_type" value="work">
+                                                    <label for="work-radio">Work</label>
+                                                 <% }else{%>
+                                                <label class="form-label" for="inputLastName">Address Type</label><br>
+                                                <input type="radio" id="home-radio"  name="address_type" value="home">
+                                                <label for="home-radio">Home</label>
+                                                <input type="radio" id="work-radio" checked name="address_type" value="work">
+                                                <label for="work-radio">Work</label>
+                                                <% } %>
+                                            </div>
+
+                                            <button type="submit" id="submit" class="btn btn-primary me-2">Save</button>
+                                            <button onclick="editAddressCancel('<%=address?._id%>')"
+                                                class="btn btn-warning">Cancel</button>
+                                        </form>
+
                                     </div>
-                                    <div class="card-body">
-                                        <table>
-                                            <tr>
-                                                <th>name</th>
-                                                <th>phone</th>
-                                                <th>address</th>
-                                                <th>locality</th>
-                                                <th>city</th>
-                                                <th>pincode</th>
-                                                
-                                            </tr>
-                                            <tr>
-                                                <td><%=address?.name%></td>
-                                                <td> <%=address?.phone%></td>
-                                                <td> <%=address?.address%></td>
-                                                <td> <%=address?.locality%></td>
-                                                <td> <%=address?.city%></td>
-                                                <td> <%=address?.pincode%></td>
-                                            </tr>
-                                        </table>
-                                        <p><span>
+                                </div>
+
+
+                                <!--                <style>
+                                    .dropstart:hover>.dropdown-menu {
+                                        display: block;
+                                    }
+
+                                    .dropstart>.dropdown-toggle:active {
+                                        /*Without this, clicking will make it sticky*/
+                                        pointer-events: none;
+                                    }
+                                </style> -->
+
+                                <div class="card" id="adrsCard<%=address?._id%>">
+                                    <div style=" 
+                                    overflow: hidden;
+                                    padding: 20px; ">
+                                        <div style="
+                                        max-width: 35px;
+                                        float: right; ">
+                                            <div class="dropstart">
+                                                <!-- <button class="btn btn-primary dropdown-toggle" type="button"
+                                                    id="dropdownMenuButton" data-mdb-toggle="dropdown"
+                                                    aria-expanded="false">
+                                                    Dropdown button
+                                                </button> -->
+                                                <img class=" dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
+                                                <ul class="dropdown-menu  ">
+                                                    <li><a class="dropdown-item"
+                                                            onclick="editAddress('<%=address?._id%>')">Edit</a></li>
+                                                    <li><a onclick="deleteAddress('<%=address?._id%>')" class="dropdown-item">Delete</a></li>
+
+                                                </ul>
+                                            </div>
+                                            <!-- <div class="dropdown"><img class="dropbtn"
+                                                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
+                                                <div class="dropdown-content">
+                                                    <div class="_16FXBY"><span>Edit</span></div>
+                                                    <div class="_16FXBY"><span>Delete</span></div>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                        <div style=" margin-bottom: 10px; "><span style="
+                                            text-transform: uppercase;
+                                            font-size: 11px;
+                                            color: #878787;
+                                            vertical-align: middle;
+                                            padding: 4px 7px;
+                                            border-radius: 2px;
+                                            background-color: #f0f0f0;
+                                            font-weight: 500;
+                                            margin-right: 15px;
+                                        ">
+                                                <%=address?.address_type%>
+                                            </span></div>
+                                        <p style="line-height: 1.5;">
+                                            <span style=" font-weight: 500;">
                                                 <%=address?.name%>
-                                            </span><span>
+                                            </span>
+                                            <span style="margin: 0 0 0 15px; font-weight: 500;">
                                                 <%=address?.phone%>
                                             </span>
+
                                         </p>
-                                        <span>
-                                            <%=address?.address%>
-                                        </span>,<span>
-                                            <%=address?.locality%>
-                                        </span>,<span>
-                                            <%=address?.city%>
-                                        </span>,<span>
-                                            <%=address?.pincode%>
+                                        <span style=" margin-top: 10px;display: block; max-width: 523px; ">
+                                            <%=address?.address%>, <%=address?.locality%>,
+                                                    <%=address?.city%>, <%=address?.state%> - <span
+                                                                style=" font-weight: 500; ">
+                                                                <%=address?.pincode%>
+                                                            </span>
                                         </span>
                                     </div>
-
                                 </div>
+
                                 <% }) %>
                         </div>
 
@@ -415,12 +584,14 @@
                                             <small><a href="/reset_password">Forgot your password?</a></small>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="inputPasswordNew">New password</label>
+                                            <label class="form-label" for="inputPasswordNew">New
+                                                password</label>
                                             <input type="password" name="new_password" class="form-control"
                                                 id="password" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="inputPasswordNew2">Confirm password</label>
+                                            <label class="form-label" for="inputPasswordNew2">Confirm
+                                                password</label>
                                             <input type="password" name="confirm_password" class="form-control"
                                                 id="confirmPassword" required>
                                         </div>
@@ -439,45 +610,119 @@
                         </div>
 
                         <div class="tab-pane fade " id="order" role="tabpanel">
-                            <div class="card" style="background: darkgray;">
+                            <div class="card">
                                 <div class="card-header">
 
                                     <h5 class="card-title mb-0">Orders Information</h5>
                                 </div>
                                 <div class="card-body">
-                         
-                                   
-                                        <div class="card">
-                                            <table>
-                                                <tr>
-                                                   
-                                                    <th></th>
-                                                    <th>product name</th>
-                                                    <th>price</th>
-                                                    <th>status</th>
-                                                    
 
-                                                </tr>
-                                              
-                                                <% (locals.orders || []).forEach(order=> { %>
-                                                    
-                                                    <% (order.productInfo || []).forEach(orderPro=> { %>
-                                                      
-                                                <tr style="border: 1px solid black;">
-                                                    <td>  <a href="/order-details/<%= order._id%>/<%= orderPro._id%>"  )"><img style="width: 100px;" src="/images/products_image/<%= orderPro.product_image[0]%>" alt=""></a></td>
-                                                    <td><%= orderPro.product_name %></td>
-                                                    <td><%= orderPro.product_price %></td>
-                                                    <td><%= order.status%></td>
-                                                    
-                                                </tr>
-                                           
-                                                <% }) %> 
-                                           
+                                    <% (locals.orders || []).forEach(order=> { %>
+                                        <div>
+
+                           Order Id : #<%=order._id  %>
+                                        <% (order.productInfo || []).forEach(orderPro=> { %>
+                                            <a style="text-decoration: none; color: black;"
+                                                href="/order-details/<%= order._id%>/<%= orderPro._id%>">
+                                                <div class="row"
+                                                    style="border: solid 0.5px; padding: 5px;    margin: 5px;">
+                                                    <div class="col-2">
+                                                        <div class="CXW8mj"
+                                                            style="height: 75px;width: 75px; margin: auto;"><img
+                                                                style=" height: 100%;" alt=""
+                                                                src="/images/products_image/<%= orderPro.product_image[0]%>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <span style="box-shadow: none;
+                                            padding: 0;
+                                            border: none;
+                                            font-size: 14px;
+                                            text-decoration: none;
+                                            color: #212121;
+                                            margin-bottom: 10px;
+                                            font-weight: 400;">
+                                                            <%= orderPro.product_name %>
+                                                        </span>
+                                                        <div><span style="color: #878787;
+                                                font-size: 12px;
+                                                margin-bottom: 5px;"><span>Color:
+                                                                </span><span class="-igymY">Grey</span></span><span
+                                                                class="_3dOR_a"></span></div>
+                                                    </div>
+                                                    <div style="color: #212121;
+                                        text-transform: uppercase;" class="col-2">
+                                                        ₹<%= orderPro.product_price %>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div>
+                                                            <% if (order.status==='placed') { %>
+                                                                <div class="me-2 mt-1" style="float: left;
+                                                                background-color: #6aec87;
+                                                                border: 7px solid #56e251;
+                                                                border-radius: 10px;"></div>
+                                                            <% }else{ %>
+                                                            <div class="me-2 mt-1" style="float: left;
+                                                            background-color: #ff6161;
+                                                            border: 7px solid #ff6161;
+                                                            border-radius: 10px;"></div>
+                                                            <% } %>
+                                                            <span style="font-size: 14px;
+                                                font-weight: 500;">
+                                                                <%= order.status%>
+                                                            </span>
+                                                            <div style="    font-size: 12px;
+                                                margin-top: 8px;">Your Payment was not confirmed by the bank.</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <% }) %>
+                                        </div>
                                                 <% }) %>
-                                          
-                                            </table>
-                                        </div> 
-                                      
+
+                                                    <!-- 
+                                    <div class="card">
+                                        <table>
+                                            <tr>
+
+                                                <th></th>
+                                                <th>product name</th>
+                                                <th>price</th>
+                                                <th>status</th>
+
+
+                                            </tr>
+
+                                            <% (locals.orders || []).forEach(order=> { %>
+
+                                                <% (order.productInfo || []).forEach(orderPro=> { %>
+
+                                                    <tr style="border: 1px solid black;">
+                                                        <td> <a
+                                                                href="/order-details/<%= order._id%>/<%= orderPro._id%>"><img
+                                                                    style="width: 100px;"
+                                                                    src="/images/products_image/<%= orderPro.product_image[0]%>"
+                                                                    alt=""></a></td>
+                                                        <td>
+                                                            <%= orderPro.product_name %>
+                                                        </td>
+                                                        <td>
+                                                            <%= orderPro.product_price %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order.status%>
+                                                        </td>
+
+                                                    </tr>
+
+                                                    <% }) %>
+
+                                                        <% }) %>
+
+                                        </table>
+                                    </div>
+ -->
                                 </div>
                             </div>
 
@@ -543,6 +788,33 @@
                 url: '/profile_info_adrs',
                 data: formData,
                 success: function (data) {
+                    document.getElementById('perInfoAdrs').style.display = 'none'
+                    document.getElementById('perInfoAdrs').reset();
+                    console.log('Success:', data);
+                },
+                error: function (err) {
+                    console.log('Error:', err);
+                }
+            });
+        });
+
+    </script>
+    <script>
+        $('.perInfoEditAdrs').submit(function (event) {
+            event.preventDefault();
+
+            var formData = $(this).serialize()
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: '/updateAddress',
+                data: formData,
+                success: (data)=> {
+                    console.log(data);
+                    location.reload()
+                    document.getElementById('perInfoEditAdrs').style.display = 'none'
+                    document.getElementById('perInfoEditAdrs').reset();
+                    document.getElementById('adrsCard' + id).style.display = 'block'
                     console.log('Success:', data);
                 },
                 error: function (err) {
@@ -553,7 +825,7 @@
 
     </script>
 
-<!--     <script>
+    <!--     <script>
         function orderDetails(orderId,proId){
             console.log("noooooooooo");
             $.ajax({
@@ -623,6 +895,7 @@
         const passwordField = document.getElementById('password');
         const confirmPasswordField = document.getElementById('confirmPassword');
         if (passwordField.value !== confirmPasswordField.value) {
+            document.getElementById('mySpan').innerHTML =' Please enter match password!';
             document.getElementById("error_message").style.display = "block"
             /* alert("Please enter a valid 10-digit phone number"); */
             setTimeout(function () {
@@ -636,7 +909,21 @@
 </script>
 
 <script>
+    function deleteAddress(id){
+        $.ajax({
+            type:'post',
+            url:"/address_delete/"+id,
+            success:(response)=>{
+                location.reload()
+
+            }
+        })
+    }
+</script>
+
+<script>
     $('#changePass').submit((e) => {
+
         e.preventDefault()
         $.ajax({
             url: '/change-password',
@@ -645,13 +932,12 @@
             success: (Response) => {
                 console.log(Response);
                 if (Response) {
-                    const mySpanElement = document.getElementById('mySpan');
-                    mySpanElement.innerText = 'Successfully!';
-                    mySpanElement.style.color = 'green'
+                     document.getElementById('mySpan').innerHTML ='Successfully!';
+                    document.getElementById('mySpan').style.color = 'green'
                     document.getElementById("error_message").style.display = "block"
-                 
+
                     setTimeout(function () {
-                        
+
                         document.getElementById("error_message").style.display = "none";
                         const myForm = document.getElementById('changePass').reset()
 
@@ -684,4 +970,34 @@
         })
     }
 
+    function editAddress(id) {
+        document.getElementById('editAds' + id).style.display = 'block'
+        document.getElementById('adrsCard' + id).style.display = 'none'
+    }
+    function editAddressCancel(id) {
+        document.getElementById('editAds' + id).style.display = 'none'
+        document.getElementById('perInfoEditAdrs').reset()
+        document.getElementById('adrsCard' + id).style.display = 'block'
+    }
+    function addAddress() {
+        document.getElementById('perInfoAdrs').style.display = 'block'
+    }
+    function addressCancel() {
+        document.getElementById('perInfoAdrs').style.display = 'none'
+        document.getElementById('perInfoAdrs').reset()
+    }
+</script>
+
+<script>
+    /*     const addresses = document.querySelectorAll('#editstate-select');
+      
+        addresses.forEach(address => {
+        const data = JSON.parse(address.getAttribute('data-address'));
+        // use the data as needed
+        console.log(data);
+      });
+        let stateSelect = document.getElementById("editstate-select");
+    
+    
+        stateSelect.value = "West Bengal[22.9868, 87.8550]"; */
 </script>

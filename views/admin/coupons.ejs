@@ -1,0 +1,147 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<main class="content">
+    <div class="container-fluid p-0">
+        <!-- Button trigger modal -->
+
+
+        <a href="" data-bs-toggle="modal" data-bs-target="#couponAdd" id="editbtn"
+            class="btn btn-primary float-end mt-n1"><i class="fas fa-plus"></i> New coupons</a>
+        <div class="mb-3">
+            <h1 class="h3 d-inline align-middle">Coupons</h1>
+        </div>
+
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Coupon Code</th>
+                    <th>Coupon Name</th>
+                    <th>Expirey Date</th>
+                    <th>Minimum Purchase</th>
+                    <th>Discount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+
+
+            <tbody>
+
+                <% (coupons || []).forEach(coupon=> { %>
+                    <tr>
+                        <td>
+                            <%= coupon.code %>
+                        </td>
+                        <td>
+
+                            <%= coupon.couponName %>
+
+                        </td>
+                        <td>
+
+                            <% const date=new Date(coupon.expiryDate); %>
+                                <%= `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` %>
+                        </td>
+                        <td>
+
+                            <%= coupon.minPurchase %>
+
+                        </td>
+                        <td>
+
+                            <%= coupon.discount %>
+
+                        </td>
+
+                        </td>
+                        <td style="display: flex;"><a href="/admin/edit-product/<%# productData._id%>"><button
+                                    type="button" class="btn btn-primary me-2">Edit</button></a>
+
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop<%# productData._id%>">Delete</button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop<%# productData._id%>" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class=" modal-dialog modal-sm modal-dialog-centered">
+                            <div class="modal-content ">
+
+                                <div class="modal-body">
+                                    Are you want to delete <%# productData.product_name %> ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                    <a href="/admin/delete-product/<%# productData._id%>"><button type="button"
+                                            class="btn btn-danger">Delete</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%}) %>
+
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+</main>
+
+
+<!-- Modal -->
+<div class="modal fade" id="couponAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Coupon Generate</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- views/coupons/create.ejs -->
+
+               
+
+                <form method="post" action="/admin/coupons">
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Coupon Name</label>
+                        <input type="text" class="form-control" name="couponName">
+                    </div>
+                    <div class="mb-3">
+
+                        <label for="message-text" class="col-form-label">Discount amount</label>
+                        <input type="number" class="form-control" name="discount" required>
+
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Expiry date</label>
+                        <input type="text" id="date" name="expiryDate" class="form-control flatpickr"
+                            placeholder="Select date..">
+                    </div>
+                    <div class="mb-3">
+
+                        <label for="message-text" class="col-form-label">Minimum purchase</label>
+                        <input type="number" class="form-control" name="minPurchase" required>
+
+                    </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Generate Coupon</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+<script>
+    flatpickr("#date", {
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        minDate: "today"
+    });
+</script>

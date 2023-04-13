@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="/users/product_details/css/owl.carousel.min.css" type="text/css">
 <link rel="stylesheet" href="/users/product_details/css/slicknav.min.css" type="text/css">
 <link rel="stylesheet" href="/users/product_details/css/style.css" type="text/css">
+<link class="js-stylesheet" href="/admin/css/light.css" rel="stylesheet">
 <!-- Shop Section Begin -->
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
@@ -19,45 +20,347 @@
                     here to enter your code.</h6>
             </div>
         </div>
-        <form action="" id="checkout_form">
-            <div class="row" >
-                <div class="col-lg-8">
+
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="card">
+                    <div class="card-header">
+
+                        <h5 class="card-title mb-0">Address Information</h5>
+                    </div>
+                    <div class="card-body" style="border: solid 0.5px currentColor;">
+                        <div onclick="addAddress()">
+                            <div><img height="14" width="14"
+                                    src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxMiAxMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGZpbGw9IiMyMTc1RkYiIGQ9Ik0xMS4yNSA2Ljc1aC00LjV2NC41aC0xLjV2LTQuNUguNzV2LTEuNWg0LjVWLjc1aDEuNXY0LjVoNC41Ii8+PHBhdGggZD0iTS0zLTNoMTh2MThILTMiLz48L2c+PC9zdmc+">
+                                ADD
+                                A NEW ADDRESS</div>
+                        </div>
+                        <form style="display: none;" id="perInfoAdrs">
+
+                            <div class="mb-3 ">
+                                <label class="form-label" for="">Name</label>
+                                <input type="text" class="form-control" name="name" value="" required
+                                    placeholder="Name">
+                            </div>
+                            <div class="mb-3 ">
+                                <label class="form-label" for="">phone</label>
+                                <input type="tel" class="form-control" name="phone" value="" required
+                                    placeholder="10-digit mobile number">
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label class="form-label" for="">pincode</label>
+                                <input type="text" class="form-control" name="pincode" value="" required
+                                    placeholder="Pincode">
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label class="form-label" for="">Locality</label>
+                                <input type="text" class="form-control" name="locality" value="" required
+                                    placeholder="Locality">
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label class="form-label" for="inputLastName">Address</label>
+                                <textarea name="address" id="" cols="10" rows="4" tabindex="5" value="" required
+                                    class="form-control" placeholder="Address (Area and Street)"></textarea>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" for="inputEmail4">City</label>
+                                <input type="text" value="" required name="city" class="form-control"
+                                    placeholder="City/Distric/Town">
+
+
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="inputEmail4">State</label>
+                                <select id="state-select" class="form-control" name="state">
+                                    <option value="">--Select State--</option>
+                                    <option value="Andhra Pradesh[16.5062, 80.6480]">Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh[28.2180, 94.7278]">Arunachal Pradesh
+                                    </option>
+                                    <option value="Assam[26.2006, 92.9376]">Assam</option>
+                                    <option value="Bihar[25.0961, 85.3131]">Bihar</option>
+                                    <option value="Chhattisgarh[21.2787, 81.8661]">Chhattisgarh</option>
+                                    <option value="Goa[15.2993, 74.1240]">Goa</option>
+                                    <option value="Gujarat[22.2587, 71.1924]">Gujarat</option>
+                                    <option value="Haryana[29.0588, 76.0856]">Haryana</option>
+                                    <option value="Himachal Pradesh[31.1048, 77.1734]">Himachal Pradesh
+                                    </option>
+                                    <option value="Jharkhand[23.6102, 85.2799]">Jharkhand</option>
+                                    <option value="Karnataka[15.3173, 75.7139]">Karnataka</option>
+                                    <option value="Kerala[10.8505, 76.2711]">Kerala</option>
+                                    <option value="Madhya Pradesh[22.9734, 78.6569]">Madhya Pradesh</option>
+                                    <option value="Maharashtra[19.7515, 75.7139]">Maharashtra</option>
+                                    <option value="Manipur[24.6637, 93.9063]">Manipur</option>
+                                    <option value="Meghalaya[25.4670, 91.3662]">Meghalaya</option>
+                                    <option value="Mizoram[23.1645, 92.9376]">Mizoram</option>
+                                    <option value="Nagaland[26.1584, 94.5624]">Nagaland</option>
+                                    <option value="Odisha[20.9517, 85.0985]">Odisha</option>
+                                    <option value="Punjab[31.1471, 75.3412]">Punjab</option>
+                                    <option value="Rajasthan[27.0238, 74.2179]">Rajasthan</option>
+                                    <option value="Sikkim[27.5330, 88.5122]">Sikkim</option>
+                                    <option value="Tamil Nadu11.1271, 78.6569]">Tamil Nadu</option>
+                                    <option value="Telangana[18.1124, 79.0193]">Telangana</option>
+                                    <option value="Tripura[23.9408, 91.9882]">Tripura</option>
+                                    <option value="Uttar Pradesh[26.8467, 80.9462]">Uttar Pradesh</option>
+                                    <option value="Uttarakhand[30.0668, 79.0193]">Uttarakhand</option>
+                                    <option value="West Bengal[22.9868, 87.8550]">West Bengal</option>
+                                </select>
+
+
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label class="form-label" for="inputLastName">Landmark</label>
+                                <input type="text" value="" required class="form-control" name="landmark"
+                                    placeholder="Landmark (Optional)">
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label class="form-label" for="inputLastName">Alternate Phone</label>
+                                <input type="text" value="" required class="form-control" name="alternate-phone"
+                                    placeholder="Alternate Phone (Optional)">
+                            </div>
+
+                            <div class="mb-3 ">
+                                <label class="form-label" for="inputLastName">Address Type</label><br>
+
+                                <input type="radio" id="home-radio" name="address-type" value="home">
+                                <label for="home-radio">Home</label>
+                                <input type="radio" id="work-radio" name="address-type" value="work">
+                                <label for="work-radio">Work</label>
+                            </div>
+
+                            <button type="submit" id="submit" class="btn btn-primary me-2">Add
+                                Address</button>
+                            <button onclick="addressCancel()" class="btn btn-warning">Cancel</button>
+                        </form>
+
+                    </div>
+
+
+                </div>
+                <form id="checkout_form">
                     <input type="text" hidden name="user_id" value="<%=users._id  %>">
-                    <% (users.address || []).forEach(address=> { %>
-                        <div style="display: flex;">
-                            
-                            <input style="width: fit-content;" type="radio" id="" name="delevery_address" value="<%=address._id%>">
-                            <div class="card" style="width: 100%;">
-                                <div class="card-header" style="display: flex;">
-                                    <h5>
-                                        <%=address?.address_type%>
-                                    </h5>
-                                    <button class="btn btn-primary" style="margin-left: auto;">Edit</button>
+                <% (users?.address || []).forEach(address=> { %>
+                  <!--   <div id="editAds<%=address?._id%>" style="display: none;" class="card">
+
+                        <div class="card-body" style="border: solid 0.5px currentColor;">
+                            <div>
+                                <div>
+                                    Edit ADDRESS</div>
+                            </div>
+                            <form id="perInfoEditAdrs" class="perInfoEditAdrs">
+                                <input hidden type="text" value="<%=address?._id%>" name="id">
+                                <div class="mb-3 ">
+                                    <label class="form-label" for="">Name</label>
+                                    <input type="text" class="form-control" name="name" value="<%=address?.name%>"
+                                        required placeholder="Name">
                                 </div>
-                                <div class="card-body">
-                                    <p><span>
-                                            <%=address?.name%>
-                                        </span><span>
-                                            <%=address?.phone%>
-                                        </span>
-                                    </p>
-                                    <span>
-                                        <%=address?.address%>
-                                    </span>,<span>
-                                        <%=address?.locality%>
-                                    </span>,<span>
-                                        <%=address?.city%>
-                                    </span>,<span>
-                                        <%=address?.pincode%>
-                                    </span>
+                                <div class="mb-3 ">
+                                    <label class="form-label" for="">phone</label>
+                                    <input type="tel" class="form-control" name="phone" value="<%=address?.phone%>"
+                                        required placeholder="10-digit mobile number">
                                 </div>
 
+                                <div class="mb-3 ">
+                                    <label class="form-label" for="">pincode</label>
+                                    <input type="text" class="form-control" name="pincode" value="<%=address?.pincode%>"
+                                        required placeholder="Pincode">
+                                </div>
+
+                                <div class="mb-3 ">
+                                    <label class="form-label" for="">Locality</label>
+                                    <input type="text" class="form-control" name="locality"
+                                        value="<%=address?.locality%>" required placeholder="Locality">
+                                </div>
+
+                                <div class="mb-3 ">
+                                    <label class="form-label" for="inputLastName">Address</label>
+                                    <textarea name="address" id="" cols="10" rows="4" tabindex="5" value="" required
+                                        class="form-control"
+                                        placeholder="Address (Area and Street)"><%=address?.address%></textarea>
+
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="inputEmail4">City</label>
+                                    <input type="text" value="<%=address?.city%>" required name="city"
+                                        class="form-control" placeholder="City/Distric/Town">
+
+
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="inputEmail4">State</label>
+                                    <select id="editstate-select" required data-address='<%=address?.state%>'
+                                        class="form-control" name="state">
+                                        <option value="">--Select State--</option>
+                                        <option value="Andhra Pradesh[16.5062, 80.6480]">Andhra Pradesh
+                                        </option>
+                                        <option value="Arunachal Pradesh[28.2180, 94.7278]">Arunachal
+                                            Pradesh
+                                        </option>
+                                        <option value="Assam[26.2006, 92.9376]">Assam</option>
+                                        <option value="Bihar[25.0961, 85.3131]">Bihar</option>
+                                        <option value="Chhattisgarh[21.2787, 81.8661]">Chhattisgarh</option>
+                                        <option value="Goa[15.2993, 74.1240]">Goa</option>
+                                        <option value="Gujarat[22.2587, 71.1924]">Gujarat</option>
+                                        <option value="Haryana[29.0588, 76.0856]">Haryana</option>
+                                        <option value="Himachal Pradesh[31.1048, 77.1734]">Himachal Pradesh
+                                        </option>
+                                        <option value="Jharkhand[23.6102, 85.2799]">Jharkhand</option>
+                                        <option value="Karnataka[15.3173, 75.7139]">Karnataka</option>
+                                        <option value="Kerala[10.8505, 76.2711]">Kerala</option>
+                                        <option value="Madhya Pradesh[22.9734, 78.6569]">Madhya Pradesh
+                                        </option>
+                                        <option value="Maharashtra[19.7515, 75.7139]">Maharashtra</option>
+                                        <option value="Manipur[24.6637, 93.9063]">Manipur</option>
+                                        <option value="Meghalaya[25.4670, 91.3662]">Meghalaya</option>
+                                        <option value="Mizoram[23.1645, 92.9376]">Mizoram</option>
+                                        <option value="Nagaland[26.1584, 94.5624]">Nagaland</option>
+                                        <option value="Odisha[20.9517, 85.0985]">Odisha</option>
+                                        <option value="Punjab[31.1471, 75.3412]">Punjab</option>
+                                        <option value="Rajasthan[27.0238, 74.2179]">Rajasthan</option>
+                                        <option value="Sikkim[27.5330, 88.5122]">Sikkim</option>
+                                        <option value="Tamil Nadu11.1271, 78.6569]">Tamil Nadu</option>
+                                        <option value="Telangana[18.1124, 79.0193]">Telangana</option>
+                                        <option value="Tripura[23.9408, 91.9882]">Tripura</option>
+                                        <option value="Uttar Pradesh[26.8467, 80.9462]">Uttar Pradesh
+                                        </option>
+                                        <option value="Uttarakhand[30.0668, 79.0193]">Uttarakhand</option>
+                                        <option value="West Bengal[22.9868, 87.8550]">West Bengal</option>
+                                    </select>
+
+
+                                </div>
+
+                                <div class="mb-3 ">
+                                    <label class="form-label" for="inputLastName">Landmark</label>
+                                    <input type="text" value="<%=address?.landmark%>" required class="form-control"
+                                        name="landmark" placeholder="Landmark (Optional)">
+                                </div>
+
+                                <div class="mb-3 ">
+                                    <label class="form-label" for="inputLastName">Alternate Phone</label>
+                                    <input type="text" value="<%=address?.alternate_phone%>" required
+                                        class="form-control" name="alternate_phone"
+                                        placeholder="Alternate Phone (Optional)">
+                                </div>
+
+                                <div class="mb-3 ">
+                                    <% if (address?.address_type==='home' ) { %>
+
+                                        <label class="form-label" for="inputLastName">Address Type</label><br>
+                                        <input type="radio" id="home-radio" checked name="address_type" value="home">
+                                        <label for="home-radio">Home</label>
+                                        <input type="radio" id="work-radio" name="address_type" value="work">
+                                        <label for="work-radio">Work</label>
+                                        <% }else{%>
+                                            <label class="form-label" for="inputLastName">Address
+                                                Type</label><br>
+                                            <input type="radio" id="home-radio" name="address_type" value="home">
+                                            <label for="home-radio">Home</label>
+                                            <input type="radio" id="work-radio" checked name="address_type"
+                                                value="work">
+                                            <label for="work-radio">Work</label>
+                                            <% } %>
+                                </div>
+
+                                <button type="submit" id="submit" class="btn btn-primary me-2">Save</button>
+                                <button onclick="editAddressCancel('<%=address?._id%>')"
+                                    class="btn btn-warning">Cancel</button>
+                            </form>
+
+                        </div>
+                    </div> -->
+             
+
+                        <!--                <style>
+                                .dropstart:hover>.dropdown-menu {
+                                    display: block;
+                                }
+
+                                .dropstart>.dropdown-toggle:active {
+                                    /*Without this, clicking will make it sticky*/
+                                    pointer-events: none;
+                                }
+                            </style> -->
+ 
+                        <input style="width: fit-content;" type="radio" id="" required name="delevery_address"
+                            value="<%=address._id%>">
+                        <div class="card" id="adrsCard<%=address?._id%>">
+                            <div style=" 
+                                overflow: hidden;
+                                padding: 20px; ">
+                                <div style="
+                                    max-width: 35px;
+                                    float: right; ">
+                                    <div class="dropstart">
+                                        <!-- <button class="btn btn-primary dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-mdb-toggle="dropdown"
+                                                aria-expanded="false">
+                                                Dropdown button
+                                            </button> -->
+                                        <img class=" dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
+                                        <ul class="dropdown-menu  ">
+                                            <!-- <li><a class="dropdown-item"
+                                                    onclick="editAddress('<%=address?._id%>')">Edit</a></li> -->
+                                            <li><a onclick="deleteAddress('<%=address?._id%>')"
+                                                    class="dropdown-item">Delete</a></li>
+
+                                        </ul>
+                                    </div>
+                                    <!-- <div class="dropdown"><img class="dropbtn"
+                                                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
+                                            <div class="dropdown-content">
+                                                <div class="_16FXBY"><span>Edit</span></div>
+                                                <div class="_16FXBY"><span>Delete</span></div>
+                                            </div>
+                                        </div> -->
+                                </div>
+                                <div style=" margin-bottom: 10px; "><span style="
+                                        text-transform: uppercase;
+                                        font-size: 11px;
+                                        color: #878787;
+                                        vertical-align: middle;
+                                        padding: 4px 7px;
+                                        border-radius: 2px;
+                                        background-color: #f0f0f0;
+                                        font-weight: 500;
+                                        margin-right: 15px;
+                                    ">
+                                        <%=address?.address_type%>
+                                    </span></div>
+                                <p style="line-height: 1.5;">
+                                    <span style=" font-weight: 500;">
+                                        <%=address?.name%>
+                                    </span>
+                                    <span style="margin: 0 0 0 15px; font-weight: 500;">
+                                        <%=address?.phone%>
+                                    </span>
+
+                                </p>
+                                <span style=" margin-top: 10px;display: block; max-width: 523px; ">
+                                    <%=address?.address%>, <%=address?.locality%>,
+                                            <%=address?.city%>, <%=address?.state%> - <span style=" font-weight: 500; ">
+                                                        <%=address?.pincode%>
+                                                    </span>
+                                </span>
                             </div>
                         </div>
 
                         <% }) %>
-                </div>
-                <!-- <div class="col-lg-8">
+
+            </div>
+
+
+            <!-- <div class="col-lg-8">
                     <h5>Billing detail</h5>
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -136,78 +439,225 @@
                             </div>
                         </div>
                     </div> -->
-                <div class="col-lg-4">
-                    <div class="checkout__order">
-                        <h5>Your order</h5>
-                        <div class="checkout__order__product">
-                            <ul>
-                                <li>
-                                    <span class="top__text">Product</span>
-                                    <span class="top__text__right">Total</span>
-                                </li>
-                                <% let i=1 %>
-                                    <% userCart.forEach(pro=> { %>
+            <div class="col-lg-4">
+                <div class="checkout__order">
+                    <h5>Your order</h5>
+                    <div class="checkout__order__product">
+                        <ul>
+                            <li>
+                                <span class="top__text">Product</span>
+                                <span class="top__text__right">Total</span>
+                            </li>
+                            <% let i=1 %>
+                                <% userCart.forEach(pro=> { %>
 
 
-                                        <li>
-                                            <%= i.toString().padStart(2, '0' ) %>. <%=pro.products.product_name%>
-                                                    <span>₹ <%=pro.products.product_price%></span>
-                                        </li>
-                                        <% i++ %>
-                                            <% }) %>
-                            </ul>
-                        </div>
-                        <div class="checkout__order__total">
-                            <ul>
-                                <li>Subtotal <span>₹ <%=subTotal%></span></li>
-                                <li>Total <span>₹ <%=totalPrice%></span></li>
-                            </ul>
-                        </div>
-                        <div class="checkout__order__widget">
-                            <label for="o-acc">
+                                    <li>
+                                        <%= i.toString().padStart(2, '0' ) %>. <%=pro.products.product_name%>
+                                                <span>₹ <%=pro.products.product_price%></span>
+                                    </li>
+                                    <% i++ %>
+                                        <% }) %>
+                        </ul>
+                    </div>
+                    <div class="checkout__order__total">
+                        <ul>
+                            <li>Subtotal <span>₹ <%=subTotal%></span></li>
+                            <li>Total <span>₹ <%=totalPrice%></span></li>
+                        </ul>
+                    </div>
+                    <div class="checkout__order__widget">
+                        <!-- <label for="o-acc">
                                 Create an acount?
                                 <input type="checkbox" id="o-acc">
                                 <span class="checkmark"></span>
                             </label>
                             <p>Create am acount by entering the information below. If you are a returing customer
-                                login at the top of the page.</p>
-                            <label for="cash-and-delivery">
-                                Cash On Delivery
-                                <input type="radio" name="payment_method" value="COD" id="cash-and-delivery">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="check-payment">
-                                Cheque payment
-                                <input type="radio" name="payment-method" value="COD" id="check-payment">
-                                <span class="checkmark"></span>
-                            </label>
-                            <label for="paypal">
+                                login at the top of the page.</p> -->
+                        <label for="cash-and-delivery">
+                            Cash On Delivery
+                            <input type="radio" name="payment_method" value="COD" id="cash-and-delivery">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label for="online-payment">
+                            Online payment
+                            <input type="radio" name="payment_method" value="ONLINE" id="online-payment">
+                            <span class="checkmark"></span>
+                        </label>
+                        <!--  <label for="paypal">
                                 PayPal
-                                <input type="radio" name="payment-method" value="COD" id="paypal">
+                                <input type="radio" name="payment_method" value="COD" id="paypal">
                                 <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <button type="submit" class="site-btn">Place oder</button>
+                            </label> -->
                     </div>
+                    <button type="submit" class="site-btn">Place oder</button>
                 </div>
             </div>
+        </div>
         </form>
     </div>
 </section>
 <!-- Checkout Section End -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $('#perInfoAdrs').submit(function (event) {
+        event.preventDefault();
+
+        const formData = {
+            name: $('input[name=name]').val(),
+            phone: $('input[name=phone]').val(),
+            pincode: $('input[name=pincode]').val(),
+            locality: $('input[name=locality]').val(),
+            address: $('textarea[name=address]').val(),
+            city: $('input[name=city]').val(),
+            state: $('select[name=state]').val(),
+            landmark: $('input[name=landmark]').val(),
+            alternate_phone: $('input[name=alternate-phone]').val(),
+            address_type: $('input[name=address-type]:checked').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/profile_info_adrs',
+            data: formData,
+            success: function (data) {
+                document.getElementById('perInfoAdrs').style.display = 'none'
+                document.getElementById('perInfoAdrs').reset();
+                console.log('Success:', data);
+            },
+            error: function (err) {
+                console.log('Error:', err);
+            }
+        });
+    });
+
+</script>
+<script>
+    $('.perInfoEditAdrs').submit(function (event) {
+        event.preventDefault();
+
+        var formData = $(this).serialize()
+        console.log(formData);
+        $.ajax({
+            type: 'POST',
+            url: '/updateAddress',
+            data: formData,
+            success: (data) => {
+                console.log(data);
+                location.reload()
+                document.getElementById('perInfoEditAdrs').style.display = 'none'
+                document.getElementById('perInfoEditAdrs').reset();
+                document.getElementById('adrsCard' + id).style.display = 'block'
+                console.log('Success:', data);
+            },
+            error: function (err) {
+                console.log('Error:', err);
+            }
+        });
+    });
+
+</script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    function editAddress(id) {
+        document.getElementById('editAds' + id).style.display = 'block'
+        document.getElementById('adrsCard' + id).style.display = 'none'
+    }
+    function editAddressCancel(id) {
+        document.getElementById('editAds' + id).style.display = 'none'
+        document.getElementById('perInfoEditAdrs').reset()
+        document.getElementById('adrsCard' + id).style.display = 'block'
+    }
+    function addAddress() {
+        document.getElementById('perInfoAdrs').style.display = 'block'
+    }
+    function addressCancel() {
+        document.getElementById('perInfoAdrs').style.display = 'none'
+        document.getElementById('perInfoAdrs').reset()
+    }
+
+</script>
 
 <script>
-    $('#checkout_form').submit((e)=>{
-        
+    function deleteAddress(id) {
+        $.ajax({
+            type: 'post',
+            url: "/address_delete/" + id,
+            success: (response) => {
+                location.reload()
+
+            }
+        })
+    }
+</script>
+<script>
+    $('#checkout_form').submit((e) => {
+
         e.preventDefault()
         $.ajax({
-            url:'/place-order',
-            type:'post',
-            data:$('#checkout_form').serialize(),
-            success:(Response)=>{
-                window.location.href='/shop'
+            url: '/place-order',
+            type: 'post',
+            data: $('#checkout_form').serialize(),
+            success: (response) => {
+                if (response.codsuccess) {
+                    window.location.href = '/order-successfull'
+                } else {
+                    razorpayPayment(response)
+                }
             }
         })
     })
-</script>
 
+
+
+    function razorpayPayment(order) {
+        var options = {
+            "key": "rzp_test_YNltnS1mdzdtvV", // Enter the Key ID generated from the Dashboard
+            "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "GetMyShoes",
+            "description": "Test Transaction",
+            "image": "/images/logo.png",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                /* alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature) */
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+
+    }
+
+    function verifyPayment(payment, order) {
+        $.ajax({
+            type: 'post',
+            url: '/verify-payment',
+            data: {
+                payment, order
+            }, success: (response) => {
+                if (response.status) {
+                    window.location.href = '/order-successfull'
+                } else {
+                    window.location.href = '/order-failed'
+                }
+            }
+        })
+    }
+
+
+</script>
