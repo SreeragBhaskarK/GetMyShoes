@@ -49,7 +49,8 @@
                            
                         </td>
                         <td>
-                            <%# productData.product_stock %>
+                            <% const date=new Date(order.createdAt); %>
+                            <%= `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` %>
                         </td>
                         <td>
                             ₹ <%=order.totalAmount%>

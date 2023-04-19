@@ -10,8 +10,18 @@ exports.admin = (req, res, next) => {
     next()
 }
 exports.adminView = (req, res) => {
-    adminHelper.doSalesByState().then((States) => {
-        res.render('admin/admin_Dashboard', { activeDashboard: 'active', States })
+    adminHelper.doDashboard().then((response) => {
+        let States = response.States
+        let orderCount = response.orderCount
+        let percentageChange = response.percentageChange
+        let revenueWeek = response.revenueWeek.toLocaleString('en-IN');
+        let revenuepercentage = response.revenuepercentage
+        let totalAmountByMonth = response.totalAmountByMonth
+        let incomeWeek = response.incomeWeek.toLocaleString('en-IN');
+        let incomepercentage = response.incomepercentage
+        let totalMonthOrder = response.totalMonthOrder
+        let totalIncomeByMonth = response.totalIncomeByMonth
+        res.render('admin/admin_Dashboard', { activeDashboard: 'active', States, orderCount, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth,incomeWeek,incomepercentage,totalMonthOrder,totalIncomeByMonth })
     })
 
 
@@ -216,28 +226,37 @@ exports.unlistDeleteProductView = (req, res) => {
 }
 exports.orders = (req, res) => {
     adminHelper.getOrder().then((response) => {
-        let orders= response
-        res.render('admin/orders', { activeOrders: 'active',orders })
+        let orders = response
+        res.render('admin/orders', { activeOrders: 'active', orders })
     })
 
 
 },
-exports.coupons = (req, res) => {
-    adminHelper.getCopons().then((coupons) => {
+    exports.coupons = (req, res) => {
+        adminHelper.getCopons().then((coupons) => {
 
-        res.render('admin/coupons', { activeCoupons: 'active',coupons })
+            res.render('admin/coupons', { activeCoupons: 'active', coupons })
+        })
+
+
+    }
+exports.couponsGenerate = (req, res) => {
+    console.log(req.body);
+    adminHelper.generateCoupon(req.body).then(() => {
+
+        res.redirect('/admin/coupons')
     })
 
 
 }
-exports.couponsGenerate = (req, res) => {
-    console.log(req.body);
-    adminHelper.generateCoupon(req.body).then(() => {
-       
-        res.redirect('/admin/coupons')
+exports.saleByStateMonth = (req, res) => {
+
+    adminHelper.doSalesByStateMonth(req.body).then((state) => {
+        res.send(state)
+
     })
 
-   
+
 }
 
 

@@ -198,6 +198,18 @@
                                                 value=" <%=locals.users?.phone%>" name="phone" id="inputEmail4"
                                                 placeholder="Phone">
                                         </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label" for="">Your Gender</label><br>
+                                            <input type="radio" value=" male" name="gender" id="">
+                                            <label class="form-label" for="">Male</label>
+                                            <input type="radio" value=" female" name="gender" id="">
+                                            <label class="form-label" for="">Female</label><br>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="age">Age:</label>
+                                            <input type="number" id="age" name="age" min="0" max="150">
+                                        </div>
                                         <!-- <div class="mb-3">
                                             <label class="form-label" for="inputAddress">Address</label>
                                             <input type="text" class="form-control" id="inputAddress"
@@ -407,8 +419,9 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="inputEmail4">State</label>
-                                                <select id="editstate-select" required data-address='<%=address?.state%>'
-                                                    class="form-control" name="state">
+                                                <select id="editstate-select" required
+                                                    data-address='<%=address?.state%>' class="form-control"
+                                                    name="state">
                                                     <option value="">--Select State--</option>
                                                     <option value="Andhra Pradesh[16.5062, 80.6480]">Andhra Pradesh
                                                     </option>
@@ -464,20 +477,26 @@
                                             </div>
 
                                             <div class="mb-3 ">
-                                                 <% if (address?.address_type==='home') { %>
-                                                  
-                                                    <label class="form-label" for="inputLastName">Address Type</label><br>
-                                                    <input type="radio" id="home-radio" checked  name="address_type" value="home">
+                                                <% if (address?.address_type==='home' ) { %>
+
+                                                    <label class="form-label" for="inputLastName">Address
+                                                        Type</label><br>
+                                                    <input type="radio" id="home-radio" checked name="address_type"
+                                                        value="home">
                                                     <label for="home-radio">Home</label>
-                                                    <input type="radio" id="work-radio" name="address_type" value="work">
+                                                    <input type="radio" id="work-radio" name="address_type"
+                                                        value="work">
                                                     <label for="work-radio">Work</label>
-                                                 <% }else{%>
-                                                <label class="form-label" for="inputLastName">Address Type</label><br>
-                                                <input type="radio" id="home-radio"  name="address_type" value="home">
-                                                <label for="home-radio">Home</label>
-                                                <input type="radio" id="work-radio" checked name="address_type" value="work">
-                                                <label for="work-radio">Work</label>
-                                                <% } %>
+                                                    <% }else{%>
+                                                        <label class="form-label" for="inputLastName">Address
+                                                            Type</label><br>
+                                                        <input type="radio" id="home-radio" name="address_type"
+                                                            value="home">
+                                                        <label for="home-radio">Home</label>
+                                                        <input type="radio" id="work-radio" checked name="address_type"
+                                                            value="work">
+                                                        <label for="work-radio">Work</label>
+                                                        <% } %>
                                             </div>
 
                                             <button type="submit" id="submit" class="btn btn-primary me-2">Save</button>
@@ -519,7 +538,8 @@
                                                 <ul class="dropdown-menu  ">
                                                     <li><a class="dropdown-item"
                                                             onclick="editAddress('<%=address?._id%>')">Edit</a></li>
-                                                    <li><a onclick="deleteAddress('<%=address?._id%>')" class="dropdown-item">Delete</a></li>
+                                                    <li><a onclick="deleteAddress('<%=address?._id%>')"
+                                                            class="dropdown-item">Delete</a></li>
 
                                                 </ul>
                                             </div>
@@ -620,21 +640,21 @@
                                     <% (locals.orders || []).forEach(order=> { %>
                                         <div>
 
-                           Order Id : #<%=order._id  %>
-                                        <% (order.productInfo || []).forEach(orderPro=> { %>
-                                            <a style="text-decoration: none; color: black;"
-                                                href="/order-details/<%= order._id%>/<%= orderPro._id%>">
-                                                <div class="row"
-                                                    style="border: solid 0.5px; padding: 5px;    margin: 5px;">
-                                                    <div class="col-2">
-                                                        <div class="CXW8mj"
-                                                            style="height: 75px;width: 75px; margin: auto;"><img
-                                                                style=" height: 100%;" alt=""
-                                                                src="/images/products_image/<%= orderPro.product_image[0]%>">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <span style="box-shadow: none;
+                                            Order Id : #<%=order._id %>
+                                                <% (order.productInfo || []).forEach(orderPro=> { %>
+                                                    <a style="text-decoration: none; color: black;"
+                                                        href="/order-details/<%= order._id%>/<%= orderPro._id%>">
+                                                        <div class="row"
+                                                            style="border: solid 0.5px; padding: 5px;    margin: 5px;">
+                                                            <div class="col-2">
+                                                                <div class="CXW8mj"
+                                                                    style="height: 75px;width: 75px; margin: auto;"><img
+                                                                        style=" height: 100%;" alt=""
+                                                                        src="/images/products_image/<%= orderPro.product_image[0]%>">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <span style="box-shadow: none;
                                             padding: 0;
                                             border: none;
                                             font-size: 14px;
@@ -642,46 +662,47 @@
                                             color: #212121;
                                             margin-bottom: 10px;
                                             font-weight: 400;">
-                                                            <%= orderPro.product_name %>
-                                                        </span>
-                                                        <div><span style="color: #878787;
+                                                                    <%= orderPro.product_name %>
+                                                                </span>
+                                                                <div><span style="color: #878787;
                                                 font-size: 12px;
                                                 margin-bottom: 5px;"><span>Color:
-                                                                </span><span class="-igymY">Grey</span></span><span
-                                                                class="_3dOR_a"></span></div>
-                                                    </div>
-                                                    <div style="color: #212121;
+                                                                        </span><span
+                                                                            class="-igymY">Grey</span></span><span
+                                                                        class="_3dOR_a"></span></div>
+                                                            </div>
+                                                            <div style="color: #212121;
                                         text-transform: uppercase;" class="col-2">
-                                                        ₹<%= orderPro.product_price %>
-                                                    </div>
-                                                    <div class="col-4">
-                                                        <div>
-                                                            <% if (order.status==='placed') { %>
-                                                                <div class="me-2 mt-1" style="float: left;
+                                                                ₹<%= orderPro.product_price %>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <div>
+                                                                    <% if (order.status==='placed' ) { %>
+                                                                        <div class="me-2 mt-1" style="float: left;
                                                                 background-color: #6aec87;
                                                                 border: 7px solid #56e251;
                                                                 border-radius: 10px;"></div>
-                                                            <% }else{ %>
-                                                            <div class="me-2 mt-1" style="float: left;
+                                                                        <% }else{ %>
+                                                                            <div class="me-2 mt-1" style="float: left;
                                                             background-color: #ff6161;
                                                             border: 7px solid #ff6161;
                                                             border-radius: 10px;"></div>
-                                                            <% } %>
-                                                            <span style="font-size: 14px;
+                                                                            <% } %>
+                                                                                <span style="font-size: 14px;
                                                 font-weight: 500;">
-                                                                <%= order.status%>
-                                                            </span>
-                                                            <div style="    font-size: 12px;
+                                                                                    <%= order.status%>
+                                                                                </span>
+                                                                                <div style="    font-size: 12px;
                                                 margin-top: 8px;">Your Payment was not confirmed by the bank.</div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <% }) %>
+                                                    </a>
+                                                    <% }) %>
                                         </div>
-                                                <% }) %>
+                                        <% }) %>
 
-                                                    <!-- 
+                                            <!-- 
                                     <div class="card">
                                         <table>
                                             <tr>
@@ -809,7 +830,7 @@
                 type: 'POST',
                 url: '/updateAddress',
                 data: formData,
-                success: (data)=> {
+                success: (data) => {
                     console.log(data);
                     location.reload()
                     document.getElementById('perInfoEditAdrs').style.display = 'none'
@@ -895,7 +916,7 @@
         const passwordField = document.getElementById('password');
         const confirmPasswordField = document.getElementById('confirmPassword');
         if (passwordField.value !== confirmPasswordField.value) {
-            document.getElementById('mySpan').innerHTML =' Please enter match password!';
+            document.getElementById('mySpan').innerHTML = ' Please enter match password!';
             document.getElementById("error_message").style.display = "block"
             /* alert("Please enter a valid 10-digit phone number"); */
             setTimeout(function () {
@@ -909,11 +930,11 @@
 </script>
 
 <script>
-    function deleteAddress(id){
+    function deleteAddress(id) {
         $.ajax({
-            type:'post',
-            url:"/address_delete/"+id,
-            success:(response)=>{
+            type: 'post',
+            url: "/address_delete/" + id,
+            success: (response) => {
                 location.reload()
 
             }
@@ -932,7 +953,7 @@
             success: (Response) => {
                 console.log(Response);
                 if (Response) {
-                     document.getElementById('mySpan').innerHTML ='Successfully!';
+                    document.getElementById('mySpan').innerHTML = 'Successfully!';
                     document.getElementById('mySpan').style.color = 'green'
                     document.getElementById("error_message").style.display = "block"
 

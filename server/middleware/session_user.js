@@ -13,6 +13,7 @@ const verifyAdmin = (req, res, next) => {
     if (req.session.adminLoggedIn) {
         next()
     } else {
+       /*  next() */
         res.redirect('/admin/login')
     }
 }

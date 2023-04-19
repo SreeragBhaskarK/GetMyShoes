@@ -4,7 +4,7 @@ const { verifyAdmin } = require("../server/middleware/session_user")
 const upload = require('../server/middleware/multer')
 const { adminView, loginView, loginData, userView, logoutView, layoutView,productsView,productsData,deleteProductView ,editProductView
 ,updataProductData,deleteUserView,userStatusView,userStatusUnblockView,categoryView,categoryData,deleteCateagoryView,updateCategoryView,
-editCategoryView,unListView,restoreProductView,unlistDeleteProductView,orders,admin,coupons,couponsGenerate} = require('../controllers/adminControllers')
+editCategoryView,unListView,restoreProductView,unlistDeleteProductView,orders,admin,coupons,couponsGenerate,saleByStateMonth} = require('../controllers/adminControllers')
 
 
 
@@ -55,6 +55,7 @@ router.get('/unlistdelete-product/:id',verifyAdmin, unlistDeleteProductView)
 router.get('/orders',verifyAdmin, orders)
 router.get('/coupons',verifyAdmin, coupons)
 router.post('/coupons',verifyAdmin, couponsGenerate)
+router.post('/salesbystate',verifyAdmin, saleByStateMonth)
 
 
 

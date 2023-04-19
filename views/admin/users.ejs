@@ -35,11 +35,24 @@
                                             <% if(userData.email) { %>
 
                                                 <% if (userData.email_status==="Verified" ) { %>
-                                                    <input type="button" class="btn btn-success"
-                                                        value="Verified" disabled></input>
+
+                                                    <l><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                            fill="blue" class="bi ms-2 bi-patch-check"
+                                                            viewBox="0 0 16 16">
+                                                            <path fill-rule="evenodd"
+                                                                d="M10.354 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                                                            <path
+                                                                d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z" />
+                                                        </svg></l>
                                                     <% }else if(userData.email_status==="notVerified" ){ %>
-                                                        <input type="button" class="btn btn-danger"
-                                                            value="notVerified" disabled></input>
+                                                        <l><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                height="16" fill="red" class="bi ms-2 bi-patch-check"
+                                                                viewBox="0 0 16 16">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M10.354 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
+                                                                <path
+                                                                    d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z" />
+                                                            </svg></l>
                                                         <% } %>
                                                             <% } %>
                                     </td>
@@ -69,29 +82,36 @@
                                                 <% } %>
 
                                                     <% if (userData.status=='process' ) { %>
-                                                        <td><a href="/admin/delete_user/<%= userData._id%>"><button
+                                                        <td><!-- <a href="/admin/delete_user/<%= userData._id%>"><button
                                                                     type="button" class="btn btn-danger"
-                                                                    onclick="return confirm('Are you want to Cancel <%= userData.name %> ?')">Cancel</button></a>
+                                                                    onclick="return confirm('Are you want to Cancel <%= userData.name %> ?')">Cancel</button></a> -->
+                                                                    <button type="button" class="btn btn-danger"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#staticBackdropCancel<%= userData._id%>">Cancel</button>
                                                         </td>
 
                                                         <% }else{ %>
                                                             <td style="
                                                                 display: flex;">
 
-                                                                <a class="me-3"
+                                                          <!--       <a class="me-3"
                                                                     href="/admin/delete_user/<%= userData._id%>"><button
                                                                         type="button" class="btn btn-danger"
-                                                                        onclick="return confirm('Are you want to delete <%= userData.name %> ?')">Delete</button></a>
+                                                                        onclick="return confirm('Are you want to delete <%= userData.name %> ?')">Delete</button></a> -->
+                                                                        <button type="button" class="btn btn-danger me-3"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#staticBackdropDel<%= userData._id%>">Delete</button>
 
                                                                 <% if (userData.status=='active' ) { %>
-                                                                    <a href="/admin/status_user/<%= userData._id%>"><button
-                                                                            type="button" class="btn btn-primary"
-                                                                            onclick="return confirm('Are you want to block <%= userData.name %> ?')">Block</button></a>
+                                                                    
+                                                                            <button type="button" class="btn btn-primary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#staticBackdropBlock<%= userData._id%>">Block</button>
                                                                     <% }else{ %>
-                                                                        <a
-                                                                            href="/admin/status_user_unblock/<%= userData._id%>"><button
-                                                                                type="button" class="btn btn-success"
-                                                                                onclick="return confirm('Are you want to unblock <%= userData.name %> ?')">Unblock</button></a>
+                                                                       
+                                                                          <button type="button" class="btn btn-success"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#staticBackdrop<%= userData._id%>">Unblock</button>
                                                                         <% } %>
 
 
@@ -99,26 +119,7 @@
                                                             <% } %>
 
 
-                                                                <!--      <div class="dropdown">
-                                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"  aria-expanded="false">
-                                              Dropdown button
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-dark">
-                                              <li><a class="dropdown-item" href="#">Action</a></li>
-                                              <li><a class="dropdown-item" href="#">Another action</a></li>
-                                              <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                            </ul>
-                                          </div> -->
-                                                                <!-- 
-                                           <select class="form-select" aria-label="Default select example"
-                                                name="product_category" required>
-                                                <option value="none" selected disabled hidden>Select
-                                                    an Option
-                                                </option>
-                                                <option value="Women">Women</option>
-                                                <option value="Men">Men</option>
-                                                <option value="Sports">Sports</option>
-                                            </select> -->
+
 
                                 </tr>
                                 <script>
@@ -130,6 +131,85 @@
                                         statusBtn.className = "btn btn-success"
                                     }
                                 </script>
+
+                                 <!-- Modal -->
+                                 <div class="modal fade" id="staticBackdropDel<%= userData._id%>" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div class=" modal-dialog modal-sm modal-dialog-centered">
+                                        <div class="modal-content ">
+
+                                            <div class="modal-body">
+                                                Are you want to delete <%= userData.name %> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <a href="/admin/delete_user/<%= userData._id%>"><button
+                                                        type="button" class="btn btn-danger">Delete</button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <!-- Modal -->
+                                 <div class="modal fade" id="staticBackdropCancel<%= userData._id%>" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div class=" modal-dialog modal-sm modal-dialog-centered">
+                                        <div class="modal-content ">
+
+                                            <div class="modal-body">
+                                                Are you want to Cancel <%= userData.name %> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <a href="/admin/delete_user/<%= userData._id%>"><button
+                                                        type="button" class="btn btn-danger">Cancel</button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop<%= userData._id%>" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div class=" modal-dialog modal-sm modal-dialog-centered">
+                                        <div class="modal-content ">
+
+                                            <div class="modal-body">
+                                                Are you want to unblock <%= userData.name %> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <a href="/admin/status_user_unblock/<%= userData._id%>"><button
+                                                        type="button" class="btn btn-success">Unblock</button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdropBlock<%= userData._id%>" data-bs-backdrop="static"
+                                    data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                    aria-hidden="true">
+                                    <div class=" modal-dialog modal-sm modal-dialog-centered">
+                                        <div class="modal-content ">
+
+                                            <div class="modal-body">
+                                                Are you want to block <%= userData.name %> ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <a href="/admin/status_user/<%= userData._id%>"><button
+                                                        type="button" class="btn btn-danger">Block</button></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <% }) %>
                         </tbody>
 

@@ -37,16 +37,31 @@
                 <a href="/admin/edit-category/<%= i._id%>"><button type="button"
                     class="btn btn-primary me-2">Edit</button></a>
 
-                <a href="/admin/delete-category/<%= i._id%>"><button type="button" class="btn btn-danger"
-                    onclick="return confirm('Are you want to delete <%= i.product_name %> ?')">Delete</button></a>
-
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop<%= i._id%>">Delete</button>
               </td>
               <% }else{ %>
-                <td >
+                <td>
                 </td>
                 <% } %>
           </tr>
+          <!-- Modal -->
+          <div class="modal fade" id="staticBackdrop<%= i._id%>" data-bs-backdrop="static"
+            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class=" modal-dialog modal-sm modal-dialog-centered">
+              <div class="modal-content ">
 
+                <div class="modal-body">
+                  Are you want to delete <%= i.product_name %> ?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                  <a href="/admin/delete-category/<%= i._id%>"><button type="button"
+                      class="btn btn-danger">Delete</button></a>
+                </div>
+              </div>
+            </div>
+          </div>
           <% }) %>
 
 

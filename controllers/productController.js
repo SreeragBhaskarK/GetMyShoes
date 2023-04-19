@@ -27,11 +27,11 @@ exports.productDetail = (req, res) => {
 }
 exports.shopView = async (req, res) => {
 
-console.log(shopCategory,'................');
+    console.log(shopCategory, '................');
     if (shopCategory) {
-        console.log(shopCategory,'......if.........');
+        console.log(shopCategory, '......if.........');
         let productData = shopCategory
-        console.log(productData,'11111111111111111111111111');
+        console.log(productData, '11111111111111111111111111');
         res.render('users/shop', { productData })
         shopCategory = undefined
 
@@ -40,7 +40,7 @@ console.log(shopCategory,'................');
         userHelper.doViewProducts(pageNum).then((response) => {
             productData = response.productsView
             totalPages = response.totalPages
-            console.log(productData,'222222222222222222222222');
+            console.log(productData, '222222222222222222222222');
             res.render('users/shop', { productData, totalPages })
         })
     }
@@ -51,41 +51,16 @@ console.log(shopCategory,'................');
 exports.shopCategory = (req, res) => {
 
     let categorys = req.body.category
-    if (categorys == 'men') {
-
-        userHelper.getMenProduct().then(response => {
-
-            shopCategory = response
-            res.json({ status: true })
+    console.log(categorys);
+    let pageNum
+    userHelper.getCategoryProduct(pageNum, categorys).then(response => {
 
 
-        })
-    } else if (categorys == 'women') {
-        let pageNum = req.query.page
-        userHelper.getWomenProduct().then(response => {
 
-            shopCategory = response
-            res.json({ status: true })
+        res.send(response)
 
 
-        })
-    } else if (categorys == 'sports') {
-       /*  let pageNum = req.query.page */
-        userHelper.getSportsProduct().then(response => {
+    })
 
-            shopCategory = response
-            res.json({ status: true })
-
-
-        })
-    } else if (categorys == 'all') {
-        let pageNum = req.query.page
-        userHelper.doViewProducts().then(response => {
-
-            shopCategory = response
-            res.json({ status: true })
-
-        })
-    }
 
 }

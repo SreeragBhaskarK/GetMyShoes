@@ -159,8 +159,6 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
 
             try {
-
-
                 pageNum = pageNum ? pageNum : 1
                 const perPage = 12;
                 const skipCount = (pageNum - 1) * perPage;
@@ -369,16 +367,18 @@ module.exports = {
 
         return new Promise(async (resolve, reject) => {
             try {
-                let { firstName, lastName, email, phone } = userData
+                let { firstName, lastName, email, phone,gender,age } = userData
                 let name = firstName + " " + lastName
 
-                if (firstName || lastName || email || phone) {
+                if (firstName || lastName || email || phone || gender || age) {
                     await user.updateOne({ phone: phoneNumber }, {
                         $set: {
                             name: name,
                             email: email,
                             first_name: firstName,
-                            last_name: lastName
+                            last_name: lastName,
+                            gender:gender,
+                            age:age
                         }
                     })
                     let users = await user.findOne({ phone: phoneNumber })
@@ -437,9 +437,12 @@ module.exports = {
             }
         })
     },
-    getMenProduct() {
+    getMenProduct(pageNum) {
         try {
             return new Promise(async (resolve, reject) => {
+                pageNum = pageNum ? pageNum : 1
+                const perPage = 2;
+                const skipCount = (pageNum - 1) * perPage;
                 let menProduct = await category.aggregate([{
                     $match: {
                         category: 'men'
@@ -449,30 +452,57 @@ module.exports = {
                         from: 'products',
                         localField: '_id',
                         foreignField: 'product_category',
-                        as: 'men_products'
+                        as: 'products'
                     }
-                }])
-                let products = menProduct[0]?.men_products
-                let productData = []
-                let j = 0
-                products?.forEach(element => {
-                    if (element.delete_status === false) {
-                        productData[j] = element
-                        j++
+                }, {
+                    $match: {
+                        'products.delete_status': false
                     }
+                }, {
+                    $project: {
+                        products: {
+                            $filter: {
+                                input: '$products',
+                                as: 'product',
+                                cond: {
+                                    $eq: ['$$product.delete_status', false]
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    $addFields: {
+                        men_products_count: { $size: "$products" }
+                    }
+                }, {
+                    $project: {
+                        products: {
+                            $slice: ['$products', skipCount, perPage]
+                        },
+                        men_products_count: 1
+                    }
+                }, {
+                    $sort: {
+                        'products.createdAt': -1
+                    }
+                }
+                ])
 
-                });
+                let totalPages = Math.ceil(menProduct[0].men_products_count / perPage);
 
-                console.log(productData, "noooooooooooooo");
-                resolve(productData)
+                console.log(menProduct, "noooooooooooooo");
+                resolve({ menProduct, totalPages })
             })
         } catch (error) {
 
         }
     },
-
+    
     getWomenProduct(pageNum) {
         try {
+            pageNum = pageNum ? pageNum : 1
+            const perPage = 2;
+            const skipCount = (pageNum - 1) * perPage;
             return new Promise(async (resolve, reject) => {
                 let womenProduct = await category.aggregate([{
                     $match: {
@@ -483,33 +513,57 @@ module.exports = {
                         from: 'products',
                         localField: '_id',
                         foreignField: 'product_category',
-                        as: 'women_products'
+                        as: 'products'
                     }
-                }])
-                let products = womenProduct[0]?.women_products
-                let productData = []
-                let j = 0
-                products?.forEach(element => {
-                    if (element.delete_status === false) {
-                        productData[j] = element
-                        j++
+                }, {
+                    $match: {
+                        'products.delete_status': false
                     }
+                }, {
+                    $project: {
+                        products: {
+                            $filter: {
+                                input: '$products',
+                                as: 'product',
+                                cond: {
+                                    $eq: ['$$product.delete_status', false]
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    $addFields: {
+                        women_products_count: { $size: "$products" }
+                    }
+                }, {
+                    $project: {
+                        products: {
+                            $slice: ['$products', skipCount, perPage]
+                        },
+                        women_products_count: 1
+                    }
+                }, {
+                    $sort: {
+                        'products.createdAt': -1
+                    }
+                }
+            ])
+            
+                let totalPages = Math.ceil(womenProduct[0].women_products_count / perPage);
 
-                });
-
-                console.log(productData, "noooooooooooooo");
-                resolve(productData)
+                console.log(womenProduct, "noooooooooooooo");
+                resolve({ womenProduct, totalPages })
             })
         } catch (error) {
-
+            
         }
     },
-    getSportsProduct() {
+    getSportsProduct(pageNum) {
         try {
             return new Promise(async (resolve, reject) => {
-             /*    pageNum = pageNum ? pageNum : 1
-                const perPage = 12;
-                const skipCount = (pageNum - 1) * perPage; */
+                pageNum = pageNum ? pageNum : 1
+                const perPage = 2;
+                const skipCount = (pageNum - 1) * perPage;
                 let sportsProduct = await category.aggregate([{
                     $match: {
                         category: 'sports'
@@ -519,82 +573,105 @@ module.exports = {
                         from: 'products',
                         localField: '_id',
                         foreignField: 'product_category',
-                        as: 'sports_products'
+                        as: 'products'
                     }
-                }])
-                let products = sportsProduct[0]?.sports_products
-                let productData = []
-                let j = 0
-                products?.forEach(element => {
-                    if (element.delete_status === false) {
-                        productData[j] = element
-                        j++
+                }, {
+                    $match: {
+                        'products.delete_status': false
                     }
+                }, {
+                    $project: {
+                        products: {
+                            $filter: {
+                                input: '$products',
+                                as: 'product',
+                                cond: {
+                                    $eq: ['$$product.delete_status', false]
+                                }
+                            }
+                        }
+                    }
+                }, {
+                    $addFields: {
+                        sports_products_count: { $size: "$products" }
+                    }
+                }, {
+                    $project: {
+                        products: {
+                            $slice: ['$products', skipCount, perPage]
+                        },
+                        sports_products_count: 1
+                    }
+                }, {
+                    $sort: {
+                        'products.createdAt': -1
+                    }
+                }
+            ])
+            let totalPages = Math.ceil(sportsProduct[0].sports_products_count / perPage);
+            
+            console.log(sportsProduct, "noooooooooooooo");
+            resolve({ sportsProduct, totalPages })
+        })
+    } catch (error) {
+        
+    }
+},
 
-                });
-
-                console.log(productData, "noooooooooooooo");
-                resolve(productData)
-            })
-        } catch (error) {
-
-        }
-    },
-
-    doAddressUpdate(AddressData, userId) {
-       
-
-        return new Promise(async (resolve, reject) => {
-            let addresId = AddressData.id
-            const str = AddressData.state
-            const stateName = str.split('[')[0]; // state = "Kerala"
-            const coords = str.substring(str.indexOf('[') + 1, str.indexOf(']')).split(',').map(Number); // coords = [10.8505, 76.2711]
-            let data = await user.findOneAndUpdate({
-
-                _id: new ObjectId(userId),
-                'address._id': addresId,
-
-            }, {
-                $set: {
-                    'address.$.name': AddressData.name,
-                    'address.$.phone': AddressData.phone,
-                    'address.$.pincode': AddressData.pincode,
-                    'address.$.locality': AddressData.locality,
-                    'address.$.address': AddressData.address,
-                    'address.$.city': AddressData.city,
-                    'address.$.state': stateName,
-                    'address.$.landmark': AddressData.landmark,
-                    'address.$.alternate_phone': AddressData.alternate_phone,
-                    'address.$.address_type': AddressData.address_type,
-                    'address.$.coords': coords,
-                },
+doAddressUpdate(AddressData, userId) {
+    
+    
+    return new Promise(async (resolve, reject) => {
+        let addresId = AddressData.id
+        const str = AddressData.state
+        const stateName = str.split('[')[0]; // state = "Kerala"
+        const coords = str.substring(str.indexOf('[') + 1, str.indexOf(']')).split(',').map(Number); // coords = [10.8505, 76.2711]
+        let data = await user.findOneAndUpdate({
+            
+            _id: new ObjectId(userId),
+            'address._id': addresId,
+            
+        }, {
+            $set: {
+                'address.$.name': AddressData.name,
+                'address.$.phone': AddressData.phone,
+                'address.$.pincode': AddressData.pincode,
+                'address.$.locality': AddressData.locality,
+                'address.$.address': AddressData.address,
+                'address.$.city': AddressData.city,
+                'address.$.state': stateName,
+                'address.$.landmark': AddressData.landmark,
+                'address.$.alternate_phone': AddressData.alternate_phone,
+                'address.$.address_type': AddressData.address_type,
+                'address.$.coords': coords,
             },
-                { new: true }
-            )
-            resolve(true)
+        },
+        { new: true }
+        )
+        resolve(true)
+        
+    })
+}
 
-        })
-    }
-
-    ,
-    generateRazorpay(orders) {
-        return new Promise((resolve, reject) => {
-            var options = {
-                amount: orders.totalAmount * 100,  // amount in the smallest currency unit
-                currency: "INR",
-                receipt: String(orders._id)
-            };
-            instance.orders.create(options, function (err, order) {
-                console.log(order);
-                resolve(order)
-            });
-        })
-
-    }
-    ,
-    verifyPayment(details) {
-        return new Promise((resolve, reject) => {
-            var expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+,
+generateRazorpay(orders) {
+    return new Promise((resolve, reject) => {
+        var options = {
+            amount: orders.totalAmount * 100,  // amount in the smallest currency unit
+            currency: "INR",
+            receipt: String(orders._id)
+        };
+        instance.orders.create(options, function (err, order) {
+            console.log(order);
+            resolve(order)
+        });
+    })
+    
+}
+,
+verifyPayment(details) {
+    return new Promise((resolve, reject) => {
+        var expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
             expectedSignature.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
             expectedSignature = expectedSignature.digest('hex')
             if (expectedSignature === details['payment[razorpay_signature]']) {
@@ -603,7 +680,7 @@ module.exports = {
                 reject()
             }
         })
-
+        
     },
     changePaymentStatus(orderId) {
         return new Promise((resolve, reject) => {
@@ -613,17 +690,78 @@ module.exports = {
                 resolve()
             })
         })
-
+        
     },
     deleteAddress(addressId, userId) {
         return new Promise(async (resolve, reject) => {
             let address = await user.updateOne(
                 { _id: new ObjectId(userId) },
                 { $pull: { address: { _id: new ObjectId(addressId) } } }
-            );
-            resolve(true)
-        })
-
-    },
-
+                );
+                resolve(true)
+            })
+            
+        },
+        
+        getCategoryProduct(pageNum,categorys) {
+            try {
+        
+                return new Promise(async (resolve, reject) => {
+                    pageNum = pageNum ? pageNum : 1
+                    const perPage = 2;
+                    const skipCount = (pageNum - 1) * perPage;
+                    let categoryProduct = await category.aggregate([{
+                        $match: {
+                            category: categorys
+                        },
+                    }, {
+                        $lookup: {
+                            from: 'products',
+                            localField: '_id',
+                            foreignField: 'product_category',
+                            as: 'products'
+                        }
+                    }, {
+                        $match: {
+                            'products.delete_status': false
+                        }
+                    }, {
+                        $project: {
+                            products: {
+                                $filter: {
+                                    input: '$products',
+                                    as: 'product',
+                                    cond: {
+                                        $eq: ['$$product.delete_status', false]
+                                    }
+                                }
+                            }
+                        }
+                    }, {
+                        $addFields: {
+                            category_products_count: { $size: "$products" }
+                        }
+                    }, {
+                        $project: {
+                            products: {
+                                $slice: ['$products', skipCount, perPage]
+                            },
+                            category_products_count: 1
+                        }
+                    }, {
+                        $sort: {
+                            'products.createdAt': -1
+                        }
+                    }
+                    ])
+        
+                    let totalPages = Math.ceil(categoryProduct[0].category_products_count / perPage);
+        
+                    console.log(categoryProduct, "noooooooooooooo");
+                    resolve({ categoryProduct, totalPages })
+                })
+            } catch (error) {
+        
+            }
+        },
 }
