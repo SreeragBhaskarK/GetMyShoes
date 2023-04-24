@@ -5,6 +5,11 @@ let wishlist = require('../../models/wishlist')
 let coupon = require('../../models/coupon')
 const mongoose = require('mongoose');
 const objectId = mongoose.Types.ObjectId;
+const Razorpay = require('razorpay')
+var instance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 module.exports = {
     addToCart(userId, proId, quantity) {
@@ -268,11 +273,13 @@ module.exports = {
         })
     },
 
-    placeOrder(orders, products, total) {
+    placeOrder(orders, products, total,discount,address) {
         console.log(orders,products,total,'mmmmm');
         return new Promise(async (resolve, reject) => {
             let status = orders.payment_method === 'COD' ? 'placed' : 'pending'
-            let deliveryAddressId = orders.delevery_address
+            let ShippingStatus = orders.payment_method === 'COD' ? 'Order Placed' : 'Processing'
+            
+            /* let deliveryAddressId = orders.delevery_address */
             let userId = orders.user_id
             let paymentMethod = orders.payment_method
             let deliveryAddress = await user.aggregate([{
@@ -283,7 +290,7 @@ module.exports = {
             }, {
                 $unwind: '$address'
             }, {
-                $match: { 'address._id': new objectId(deliveryAddressId) }
+                $match: { 'address._id': new objectId(address) }
 
             }, {
                 $project: { address: 1, _id: 0 }
@@ -295,7 +302,9 @@ module.exports = {
                 paymentMethod: paymentMethod,
                 products: products,
                 status: status,
-                totalAmount: total
+                totalAmount: total,
+                discount:discount,
+                shipping_status:ShippingStatus
             })
             orderData.save()
             console.log(orderData, 'checkingorder');
@@ -332,6 +341,21 @@ module.exports = {
 
         })
     },
+    generateRazorpay(orders) {
+        return new Promise((resolve, reject) => {
+            var options = {
+                amount: orders.totalAmount * 100,  // amount in the smallest currency unit
+                currency: "INR",
+                receipt: String(orders._id)
+            };
+            instance.orders.create(options, function (err, order) {
+                console.log(order);
+                resolve(order)
+            });
+        })
+
+    }
+   ,
     getWishList(userId) {
         return new Promise(async (resolve, reject) => {
             let wishlistData = await wishlist.aggregate([{
@@ -422,19 +446,22 @@ module.exports = {
                     products: { item: new objectId(proId) }
                 }
             })
+            
 
-            resolve()
+            let wishlistCount = deleteStatus.products.length-1
+            console.log(wishlistCount);
+            resolve(wishlistCount)
         })
     },
     couponCheck(Coupon,total) {
         return new Promise(async (resolve, reject) => {
             let { appliedCoupon } = Coupon
-            let couponCheck = await coupon.find({ code: appliedCoupon })
+            let couponCheck = await coupon.find({ code: appliedCoupon,status:'active' })
             console.log(couponCheck);
             if (couponCheck.length === 1) {
                  console.log(total);
                 if(couponCheck[0].minPurchase<=total){
-                    resolve({ status: true, code: appliedCoupon, discount: couponCheck[0].discount,minPurchase: couponCheck[0].minPurchase })
+                    resolve({ status: true, code: appliedCoupon, discount: couponCheck[0].discount,minPurchase: couponCheck[0].minPurchase,coupon:couponCheck })
                 }else{
                     resolve({status:false,message:'minimum purchase ₹ '+couponCheck[0].minPurchase})
                 }
@@ -443,6 +470,13 @@ module.exports = {
 
                 resolve({status:false,message:'invaild coupon'})
             }
+        })
+    },
+    getCoupons() {
+        return new Promise(async (resolve, reject) => {
+            let coupons = await coupon.find({status:'active'}).sort({$natural:-1}).limit(4)
+                
+           resolve(coupons)
         })
     },
 }

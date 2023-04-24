@@ -1,26 +1,145 @@
 const mongoose = require('mongoose');
 var orderHelper = require('../server/helpers/order-helper');
+const fs = require('fs');
+const pdf = require('html-pdf');
+var path = require('path');
+let ejs = require('ejs')
 
+exports.middleWare = (req, res, next) => {
+    if (req.session.userLoggedIn) {
+        next()
+    } else {
+        res.redirect('/login')
+    }
+}
 exports.orderDetails = (req, res) => {
 
-  /*   // Check if idData is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(idData)) {
-        return res.status(400).send('Invalid ID');
-    }
- */
-let orderId = req.params.id
-let proId = req.params.id1
-    orderHelper.doOrderDetails(orderId,proId).then(response => {
+
+    let orderId = req.params.id
+    let proId = req.params.id1
+    orderHelper.doOrderDetails(orderId, proId).then(response => {
         let orders = response[0]
-   
+        console.log(orders);
         res.render('orders/ordersDetails', { orders, layout: false })
     })
 
 }
 
-exports.orderSuccessfull = (req,res)=>{
+exports.verifyPayment = (req, res) => {
+    console.log(req.body, "nnnnnnnnnnnnnn");
+    orderHelper.verifyPayment(req.body).then(() => {
+        let razorpay_payment_id = req.body['payment[razorpay_payment_id]']
+        let razorpay_order_id = req.body['payment[razorpay_order_id]']
+        let razorpay_signature = req.body['payment[razorpay_signature]']
+        let paymentDetails = { razorpay_payment_id, razorpay_order_id, razorpay_signature }
+        orderHelper.changePaymentStatus(req.body['order[receipt]'], paymentDetails).then(() => {
+            console.log('Payment successfull');
+            res.json({ status: true })
+        })
+    }).catch((err) => {
+
+        console.log(err);
+        res.json({ status: false })
+    })
+}
+
+exports.orderSuccessfull = (req, res) => {
     res.render('orders/order_successfull')
 }
-exports.orderFailed = (req,res)=>{
+exports.orderFailed = (req, res) => {
     res.render('orders/order_failed')
+}
+exports.orderInvoice = (req, res) => {
+    let orderId = req.params.id
+    console.log(orderId);
+    let userEmail = req.session.user?.email
+    orderHelper.doOrderInvoice(orderId).then(response => {
+        let orderDetail = response
+        res.render('orders/invoice', { layout: false, orderDetail, userEmail })
+    })
+}
+exports.orderCancel = (req, res) => {
+    let orderId = req.params.id
+    console.log(orderId);
+    orderHelper.doOrderCancel(orderId).then(response => {
+        
+        res.redirect('/settings')
+    })
+}
+exports.downloadInvoice = async (req, res) => {
+    try {
+        orderId = req.params.id
+        let orderDetail = await orderHelper.doOrderInvoice(orderId)
+        console.log(orderDetail, 'hhhhhhhhhhh');
+        let filePathName = path.resolve(__dirname, '../views/orders/invoice.ejs')
+        let htmlString = fs.readFileSync(filePathName).toString()
+        htmlString += `
+        <style>
+            body {
+                
+                font-size: 80%;
+                border: 1px solid black;
+                padding: 5px;
+                
+            }
+            .InvoiceTitle{
+                text-align: center;
+            }
+            .InvoiceCard{
+                width:100%
+            }
+            .payment{
+                text-align: left;
+                width: fit-content;
+                margin-right: auto;
+
+            }
+            .paymentDate{
+                text-align: right;
+                width: fit-content;
+                margin-left: auto;
+
+            }
+            .table{
+                width:100%
+
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 5px;
+            }
+           
+        </style>
+    `
+        let options = {
+            format: 'A4',
+            orientation: "portrait",
+            border: '5mm',
+        }
+        let userEmail = req.session.user?.email
+        let ejsData = ejs.render(htmlString, { layout: false, orderDetail, noButton: true, userEmail })
+
+        pdf.create(ejsData, options).toFile('invoice.pdf', (err, response) => {
+            if (err) console.log(err);
+            let filePath = path.resolve(__dirname, '../invoice.pdf')
+
+            fs.readFile(filePath, (err, file) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send('Could not download file')
+                }
+                console.log('file generated');
+                res.setHeader('Content-disposition', 'attachment; filename=invoice.pdf');
+                res.setHeader('Content-type', 'application/pdf');
+
+                res.send(file)
+            })
+
+
+        })
+    }
+    catch (e) {
+        console.log(e);
+    }
+
 }

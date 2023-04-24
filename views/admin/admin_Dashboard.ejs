@@ -25,7 +25,8 @@
 						<h1 class="mt-1 mb-3">₹ <%=locals.incomeWeek %>
 						</h1>
 						<div class="mb-0">
-							<% if (locals.incomepercentage===Infinity || locals.incomepercentage===0 ) { %>
+							<% if (locals.incomepercentage==Infinity || locals.incomepercentage===0 ||
+								locals.incomepercentage=='NaN' ) { %>
 								<span class="badge badge-warning-light"> <i class="mdi mdi-arrow-bottom-right"></i>0%
 									<% }else{ %>
 										<% if (locals.incomepercentage>0) { %>
@@ -64,7 +65,8 @@
 						</h1>
 						<div class="mb-0">
 
-							<% if (locals.percentageChange===Infinity || locals.percentageChange===0 ) { %>
+							<% if (locals.percentageChange===Infinity || locals.percentageChange===0 ||
+							locals.percentageChange ==='NaN') { %>
 								<span class="badge badge-warning-light"> <i class="mdi mdi-arrow-bottom-right"></i>0%
 									<% }else{ %>
 										<% if (locals.percentageChange>0) { %>
@@ -123,7 +125,7 @@
 						<h1 class="mt-1 mb-3">₹ <%=locals.revenueWeek%>
 						</h1>
 						<div class="mb-0">
-							<% if (locals.revenuepercentage==Infinity || locals.revenuepercentage===0 ) { %>
+							<% if (locals.revenuepercentage==Infinity || locals.revenuepercentage===0 || locals.revenuepercentage=== 'NaN'  ) { %>
 								<span class="badge badge-warning-light"> <i class="mdi mdi-arrow-bottom-right"></i>0%
 									<% }else{ %>
 										<% if (locals.revenuepercentage>0) { %>
@@ -136,7 +138,7 @@
 															<%=locals.revenuepercentage %>%
 																<% } %>
 																	<% } %>
-																		<!-- <span class="badge badge-success-light"> <i class="mdi mdi-arrow-bottom-right"></i> <%=locals.revenuepercentage%>% -->
+																		
 														</span>
 														<span class="text-muted">Since last week</span>
 						</div>
@@ -150,28 +152,19 @@
 				<div class="card flex-fill w-100">
 					<div class="card-header">
 						<div class="float-end">
-							<!-- <form class="row g-2">
+							<form class="row g-2" id="totalRevenueFilter">
 								<div class="col-auto">
-									<select class="form-select form-select-sm bg-light border-0">
-										<option value="0">Jan</option>
-										<option value="1">Feb</option>
-										<option value="2">Mar</option>
-										<option value="3">Apr</option>
-										<option value="4">May</option>
-										<option value="5">Jun</option>
-										<option value="6">Jul</option>
-										<option value="7">Aug</option>
-										<option value="8">Sep</option>
-										<option value="9">Oct</option>
-										<option value="10">Nov</option>
-										<option value="11">Dec</option>
+									<select class="form-select form-select-sm bg-light  border-0" name="totalFilter">
+										<option value="month">month</option>
+										<option value="year">year</option>
+										<option value="week">week</option>
 									</select>
 								</div>
-								<div class="col-auto">
+								<!-- <div class="col-auto">
 									<input type="text" class="form-control form-control-sm bg-light rounded-2 border-0"
 										style="width: 100px;" placeholder="Search..">
-								</div>
-							</form> -->
+								</div> -->
+							</form>
 						</div>
 						<h5 class="card-title mb-0">Total Revenue</h5>
 					</div>
@@ -280,214 +273,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-12 col-lg-8 col-xxl-9 d-flex">
-				<div class="card flex-fill">
-					<div class="card-header">
-						<div class="card-actions float-end">
-							<div class="dropdown show">
-								<a href="#" data-bs-toggle="dropdown" data-bs-display="static">
-									<i class="align-middle" data-feather="more-horizontal"></i>
-								</a>
 
-								<div class="dropdown-menu dropdown-menu-end">
-									<a class="dropdown-item" href="#">Action</a>
-									<a class="dropdown-item" href="#">Another action</a>
-									<a class="dropdown-item" href="#">Something else here</a>
-								</div>
-							</div>
-						</div>
-						<h5 class="card-title mb-0">Top Selling Products</h5>
-					</div>
-					<table class="table table-borderless my-0">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th class="d-none d-xxl-table-cell">Company</th>
-								<th class="d-none d-xl-table-cell">Assigned</th>
-								<th class="d-none d-xl-table-cell text-end">Orders</th>
-								<th>Status</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<div class="flex-shrink-0">
-											<div class="bg-light rounded-2">
-												<img class="p-2" src="img/icons/brand-4.svg">
-											</div>
-										</div>
-										<div class="flex-grow-1 ms-3">
-											<strong>Aurora</strong>
-											<div class="text-muted">
-												UI Kit
-											</div>
-										</div>
-									</div>
-								</td>
-								<td class="d-none d-xxl-table-cell">
-									<strong>Lechters</strong>
-									<div class="text-muted">
-										Real Estate
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell">
-									<strong>Vanessa Tucker</strong>
-									<div class="text-muted">
-										HTML, JS, React
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell text-end">
-									520
-								</td>
-								<td>
-									<span class="badge badge-success-light">In progress</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<div class="flex-shrink-0">
-											<div class="bg-light rounded-2">
-												<img class="p-2" src="img/icons/brand-1.svg">
-											</div>
-										</div>
-										<div class="flex-grow-1 ms-3">
-											<strong>Bender</strong>
-											<div class="text-muted">
-												Dashboard
-											</div>
-										</div>
-									</div>
-								</td>
-								<td class="d-none d-xxl-table-cell">
-									<strong>Cellophane Transportation</strong>
-									<div class="text-muted">
-										Transportation
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell">
-									<strong>William Harris</strong>
-									<div class="text-muted">
-										HTML, JS, Vue
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell text-end">
-									240
-								</td>
-								<td>
-									<span class="badge badge-warning-light">Paused</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<div class="flex-shrink-0">
-											<div class="bg-light rounded-2">
-												<img class="p-2" src="img/icons/brand-5.svg">
-											</div>
-										</div>
-										<div class="flex-grow-1 ms-3">
-											<strong>Camelot</strong>
-											<div class="text-muted">
-												Dashboard
-											</div>
-										</div>
-									</div>
-								</td>
-								<td class="d-none d-xxl-table-cell">
-									<strong>Clemens</strong>
-									<div class="text-muted">
-										Insurance
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell">
-									<strong>Darwin</strong>
-									<div class="text-muted">
-										HTML, JS, Laravel
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell text-end">
-									180
-								</td>
-								<td>
-									<span class="badge badge-success-light">In progress</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<div class="flex-shrink-0">
-											<div class="bg-light rounded-2">
-												<img class="p-2" src="img/icons/brand-2.svg">
-											</div>
-										</div>
-										<div class="flex-grow-1 ms-3">
-											<strong>Edison</strong>
-											<div class="text-muted">
-												UI Kit
-											</div>
-										</div>
-									</div>
-								</td>
-								<td class="d-none d-xxl-table-cell">
-									<strong>Affinity Investment Group</strong>
-									<div class="text-muted">
-										Finance
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell">
-									<strong>Vanessa Tucker</strong>
-									<div class="text-muted">
-										HTML, JS, React
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell text-end">
-									410
-								</td>
-								<td>
-									<span class="badge badge-danger-light">Cancelled</span>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="d-flex">
-										<div class="flex-shrink-0">
-											<div class="bg-light rounded-2">
-												<img class="p-2" src="img/icons/brand-3.svg">
-											</div>
-										</div>
-										<div class="flex-grow-1 ms-3">
-											<strong>Fusion</strong>
-											<div class="text-muted">
-												Dashboard
-											</div>
-										</div>
-									</div>
-								</td>
-								<td class="d-none d-xxl-table-cell">
-									<strong>Konsili</strong>
-									<div class="text-muted">
-										Retail
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell">
-									<strong>Christina Mason</strong>
-									<div class="text-muted">
-										HTML, JS, Vue
-									</div>
-								</td>
-								<td class="d-none d-xl-table-cell text-end">
-									250
-								</td>
-								<td>
-									<span class="badge badge-warning-light">Paused</span>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
+			
+		
+			
 		</div>
 
 	</div>
@@ -499,8 +288,231 @@
 		$('#month-form select[name="month"]').val(currentMonth);
 	});
 </script>
+
 <script>
 
+	$(document).ready(function () {
+
+		$('#categorySalesFilter select[name="categorySales"]').change(function () {
+			$.ajax({
+				type: 'POST',
+				url: '/admin/totalcategorysales',
+				data: $('#categorySales').serialize(),
+				success: function (response) {
+					console.log(response);
+					/* totalRevenue(response) */
+				},
+				error: function (xhr, status, error) {
+					// Handle error
+				}
+			});
+		});
+	});
+
+
+</script>
+
+<script>
+
+
+	$(document).ready(function () {
+
+		$('#totalRevenueFilter select[name="totalFilter"]').change(function () {
+			$.ajax({
+				type: 'POST',
+				url: '/admin/totalrevenue',
+				data: $('#totalRevenueFilter').serialize(),
+				success: function (response) {
+					console.log(response);
+					totalRevenue(response)
+				},
+				error: function (xhr, status, error) {
+					// Handle error
+				}
+			});
+		});
+	});
+
+
+	function totalRevenue(revenue) {
+		let totalrevenue = revenue.totalRevenue[0]
+		console.log(totalrevenue, 'jjjjjjjjjj');
+		var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
+		var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
+		gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");
+		gradientLight.addColorStop(1, "rgba(215, 227, 244, 0)");
+		var gradientDark = ctx.createLinearGradient(0, 0, 0, 225);
+		gradientDark.addColorStop(0, "rgba(51, 66, 84, 1)");
+		gradientDark.addColorStop(1, "rgba(51, 66, 84, 0)");
+
+
+
+
+		// Line chart
+		if (revenue.name == 'month') {
+			console.log('👽👽👽');
+			new Chart(document.getElementById("chartjs-dashboard-line"), {
+				type: "line",
+				data: {
+					labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+					datasets: [{
+						label: "Sales (₹)",
+						fill: true,
+						backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
+						borderColor: window.theme.primary,
+						data: [totalrevenue?.jan??0, totalrevenue?.feb??0, totalrevenue?.mar??0, totalrevenue?.apr??0, totalrevenue?.may??0, totalrevenue?.jun??0, totalrevenue?.jul??0, totalrevenue?.aug??0, totalrevenue?.sep??0, totalrevenue?.oct??0, totalrevenue?.nov??0, totalrevenue?.dec??0]
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					tooltips: {
+						intersect: false
+					},
+					hover: {
+						intersect: true
+					},
+					plugins: {
+						filler: {
+							propagate: false
+						}
+					},
+					scales: {
+						xAxes: [{
+							reverse: true,
+							gridLines: {
+								color: "rgba(0,0,0,0.0)"
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								stepSize: 1000
+							},
+							display: true,
+							borderDash: [3, 3],
+							gridLines: {
+								color: "rgba(0,0,0,0.0)",
+								fontColor: "#fff"
+							}
+						}]
+					}
+				}
+
+			});
+		} else if (revenue.name == 'year') {
+			console.log('❤️‍🔥❤️‍🔥❤️‍🔥');
+			new Chart(document.getElementById("chartjs-dashboard-line"), {
+				type: "line",
+				data: {
+					labels: ["2021", "2022", "2023", "2024", "2025"],
+					datasets: [{
+						label: "Sales (₹)",
+						fill: true,
+						backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
+						borderColor: window.theme.primary,
+						data: [totalrevenue['2021'], totalrevenue['2022'], totalrevenue['2023'], totalrevenue['2024'], totalrevenue['2025']],
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					tooltips: {
+						intersect: false
+					},
+					hover: {
+						intersect: true
+					},
+					plugins: {
+						filler: {
+							propagate: false
+						}
+					},
+					scales: {
+						xAxes: [{
+							reverse: true,
+							gridLines: {
+								color: "rgba(0,0,0,0.0)"
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								stepSize: 1000
+							},
+							display: true,
+							borderDash: [3, 3],
+							gridLines: {
+								color: "rgba(0,0,0,0.0)",
+								fontColor: "#fff"
+							}
+						}]
+					}
+				}
+			});
+		} else if (revenue.name == 'week') {
+			console.log('❤️‍🔥❤️‍🔥❤️‍🔥');
+			new Chart(document.getElementById("chartjs-dashboard-line"), {
+				type: "line",
+				data: {
+					labels: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
+					datasets: [{
+						label: "Sales (₹)",
+						fill: true,
+						backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
+						borderColor: window.theme.primary,
+						data: [totalrevenue?.mon??0, totalrevenue?.tue??0, totalrevenue?.wed??0, totalrevenue?.thu??0, totalrevenue?.fri??0, totalrevenue?.sat??0, totalrevenue?.sun??0],
+					}]
+				},
+				options: {
+					maintainAspectRatio: false,
+					legend: {
+						display: false
+					},
+					tooltips: {
+						intersect: false
+					},
+					hover: {
+						intersect: true
+					},
+					plugins: {
+						filler: {
+							propagate: false
+						}
+					},
+					scales: {
+						xAxes: [{
+							reverse: true,
+							gridLines: {
+								color: "rgba(0,0,0,0.0)"
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								stepSize: 1000
+							},
+							display: true,
+							borderDash: [3, 3],
+							gridLines: {
+								color: "rgba(0,0,0,0.0)",
+								fontColor: "#fff"
+							}
+						}]
+					}
+				}
+			});
+		}
+
+	}
+
+
+
+
+
+</script>
+<script>
 	$(document).ready(function () {
 
 		$('#month-form select[name="month"]').change(function () {
@@ -520,8 +532,9 @@
 		});
 	});
 
+
 	async function stateSaleinMonth(states) {
-		
+
 		console.log(states, 'nnnnnnnnnn')
 		var markers = states.map(i => ({
 			coords: i.coords,
@@ -531,7 +544,7 @@
 		var mapContainer = $('#ind_map');
 		var mapInstance = mapContainer.empty()
 		/* mapContainer.append() */
-		
+
 		var map = new jsVectorMap({
 			map: "in_mill_en",
 			selector: "#ind_map",
@@ -619,7 +632,7 @@
 <script>
 	document.addEventListener("DOMContentLoaded", function () {
 		// Bar chart
-		
+
 		const data = `<%- JSON.stringify(totalMonthOrder) %>`;
 		const parsedData = JSON.parse(data);
 		new Chart(document.getElementById("chartjs-dashboard-bar"), {
@@ -632,7 +645,7 @@
 					borderColor: window.theme.primary,
 					hoverBackgroundColor: window.theme.primary,
 					hoverBorderColor: window.theme.primary,
-					data: [parsedData[0].jan, parsedData[0].feb, parsedData[0].mar, parsedData[0].apr, parsedData[0].may, parsedData[0].jun, parsedData[0].jul, parsedData[0].aug, parsedData[0].sep, parsedData[0].oct, parsedData[0].nov, parsedData[0].dec],
+					data: [parsedData[0]?.jan??0, parsedData[0]?.feb??0, parsedData[0]?.mar??0, parsedData[0]?.apr??0, parsedData[0]?.may??0, parsedData[0]?.jun??0, parsedData[0]?.jul, parsedData[0]?.aug??0, parsedData[0]?.sep??0, parsedData[0]?.oct??0, parsedData[0]?.nov??0, parsedData[0]?.dec??0],
 					barPercentage: .75,
 					categoryPercentage: .5
 				}]
@@ -669,7 +682,7 @@
 	document.addEventListener("DOMContentLoaded", function () {
 		const data = `<%- JSON.stringify(totalAmountByMonth) %>`;
 		const parsedData = JSON.parse(data);
-		console.log(parsedData[0].apr)
+	
 		var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
 		var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
 		gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");
@@ -688,18 +701,18 @@
 					backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
 					borderColor: window.theme.primary,
 					data: [
-						parsedData[0].jan,
-						parsedData[0].feb,
-						parsedData[0].mar,
-						parsedData[0].apr,
-						parsedData[0].may,
-						parsedData[0].jun,
-						parsedData[0].jul,
-						parsedData[0].aug,
-						parsedData[0].sep,
-						parsedData[0].oct,
-						parsedData[0].nov,
-						parsedData[0].dec,
+						parsedData[0]?.jan ??0,
+						parsedData[0]?.feb ??0,
+						parsedData[0]?.mar ??0,
+						parsedData[0]?.apr ??0,
+						parsedData[0]?.may ??0,
+						parsedData[0]?.jun ??0,
+						parsedData[0]?.jul ??0,
+						parsedData[0]?.aug ??0,
+						parsedData[0]?.sep ??0,
+						parsedData[0]?.oct ??0,
+						parsedData[0]?.nov ??0,
+						parsedData[0]?.dec ??0,
 
 					]
 				}]
@@ -747,7 +760,7 @@
 	document.addEventListener("DOMContentLoaded", function () {
 		const data = `<%- JSON.stringify(totalAmountByMonth) %>`;
 		const parsedData = JSON.parse(data);
-		console.log(parsedData[0].apr)
+		console.log(parsedData)
 		var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
 		var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
 		gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");
@@ -766,18 +779,18 @@
 					backgroundColor: window.theme.id === "light" ? gradientLight : gradientDark,
 					borderColor: window.theme.primary,
 					data: [
-						parsedData[0].jan,
-						parsedData[0].feb,
-						parsedData[0].mar,
-						parsedData[0].apr,
-						parsedData[0].may,
-						parsedData[0].jun,
-						parsedData[0].jul,
-						parsedData[0].aug,
-						parsedData[0].sep,
-						parsedData[0].oct,
-						parsedData[0].nov,
-						parsedData[0].dec,
+						parsedData[0]?.jan ??0,
+						parsedData[0]?.feb ??0,
+						parsedData[0]?.mar ??0,
+						parsedData[0]?.apr ??0,
+						parsedData[0]?.may ??0,
+						parsedData[0]?.jun ??0,
+						parsedData[0]?.jul ??0,
+						parsedData[0]?.aug ??0,
+						parsedData[0]?.sep ??0,
+						parsedData[0]?.oct ??0,
+						parsedData[0]?.nov ??0,
+						parsedData[0]?.dec ??0,
 
 					]
 				}]
@@ -817,6 +830,38 @@
 						}
 					}]
 				}
+			}
+		});
+	});
+</script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		// Pie chart
+		new Chart(document.getElementById("chartjs-dashboard-pie"), {
+			type: "pie",
+			data: {
+				labels: ["Men", "Women", "Sports", "Other"],
+				datasets: [{
+					data: [4306, 3801, 1689, 3251],
+					backgroundColor: [
+						window.theme.primary,
+						window.theme.warning,
+						window.theme.danger,
+						window.theme.black,
+						"#E8EAED"
+					],
+					borderWidth: 5,
+					borderColor: window.theme.white
+				}]
+			},
+			options: {
+				responsive: !window.MSInputMethodContext,
+				maintainAspectRatio: false,
+				legend: {
+					display: false
+				},
+				cutoutPercentage: 70
 			}
 		});
 	});

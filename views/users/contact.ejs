@@ -1,0 +1,114 @@
+<link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+<link rel="stylesheet" href="/users/product_details/css/font-awesome.min.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/elegant-icons.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/jquery-ui.min.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/magnific-popup.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/owl.carousel.min.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/slicknav.min.css" type="text/css">
+<link rel="stylesheet" href="/users/product_details/css/style.css" type="text/css">
+
+
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="contact__content">
+                    <div class="contact__address">
+                        <h5>Contact info</h5>
+                        <ul>
+                            <li>
+                                <h6><i class="fa fa-map-marker"></i> Address</h6>
+                                <p>GetMyShoes Services, Infopark Road, Kakkanad, Kochi, Kerala, India 682042</p>
+                            </li>
+                            <li>
+                                <a href="tel:+919600000000">
+                                    <h6><i class="fa fa-phone"></i> Phone</h6>
+                                    <p><span>+918848988510</span><span>+919633372084</span></p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:getmyshoes@help.com">
+                                    <h6><i class="fa fa-headphones"></i> Support</h6>
+                                    <p>Support.getmyshoes@help.com</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="contact__form">
+                        <h5>SEND MESSAGE</h5>
+                        <form action="/contact_message" class="needs-validation" novalidate="" onsubmit="submitForm()" method="post">
+                            <input type="text" name="name" class="form-control" required placeholder="Name">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Enter Your Name!
+                            </div>
+                            <input type="email" name="email" class="form-control" required placeholder="Email">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Enter Your Email!
+                            </div>
+                            <input type="url" name="website" class="form-control" placeholder="Website">
+                            <textarea name="message" class="form-control"  required placeholder="Message"></textarea>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Enter Message!
+                            </div>
+                            <button type="submit"  class="site-btn">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="contact__map">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.620666625033!2d76.3001006142678!3d10.002135392872532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0807a3c2b3d949%3A0x3017ce8f670b1a7c!2sInfopark%20Road%2C%20Infopark%20Campus%2C%20Kakkanad%2C%20Kerala%20682042%2C%20India!5e0!3m2!1sen!2sus!4v1650659467934!5m2!1sen!2sus"
+                        height="780" style="border:0" allowfullscreen="">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Section End -->
+<script>
+    function submitForm(){
+
+        const toastLiveExample = document.getElementById('toasterMessage')
+    
+        document.getElementById('toastMessage').innerHTML = "Message sent successfully!"
+        const toast = new bootstrap.Toast(toastLiveExample, {
+            autohide: true,
+            delay: 3000
+        })
+        toast.show()
+    }
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    });
+</script>

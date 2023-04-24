@@ -6,11 +6,18 @@ const user = require('../models/user');
 const product = require('../models/products');
 const cartHelper = require('../server/helpers/cart-helper');
 const { hashData } = require('../server/util/hashData');
+const productHelper = require('../server/helpers/product-helper');
 
 exports.userView = (req, res) => {
+    userHelper.getBrandProducts().then(async(response) => {
+        let brandProducts = response
+       
+       let brands = await userHelper.getBrands()
+       let newSpecial = await productHelper.getNewSpecial()
+       console.log(newSpecial);
+        res.render('users/index',{brandProducts,brands,newSpecial})
+    })
 
-
-    res.render('users/index')
 }
 exports.logInView = (req, res) => {
     let message = req.query.message
@@ -171,7 +178,8 @@ exports.profileInfoAdrsData = (req, res) => {
     let phone = req.session.user.phone
 
     userHelper.doProfileAddress(req.body, phone).then(response => {
-        res.send({ status: true })
+        let newAddress = response.Address
+        res.json({ status: response.status, newAddress })
 
     })
 }
@@ -182,7 +190,7 @@ exports.menCategoryView = (req, res) => {
         productData = response.menProduct
         totalPages = response.totalPages
 
-        res.render('category/men', { productData,totalPages })
+        res.render('category/men', { productData, totalPages })
     })
 
 }
@@ -192,7 +200,7 @@ exports.womenCategoryView = (req, res) => {
     userHelper.getWomenProduct(pageNum).then(response => {
         productData = response.womenProduct
         totalPages = response.totalPages
-        res.render('category/women', { productData,totalPages })
+        res.render('category/women', { productData, totalPages })
     })
 
 }
@@ -202,7 +210,7 @@ exports.sportsCategoryView = (req, res) => {
     userHelper.getSportsProduct(pageNum).then(response => {
         productData = response.sportsProduct
         totalPages = response.totalPages
-        res.render('category/sports', { productData,totalPages })
+        res.render('category/sports', { productData, totalPages })
     })
 
 }
@@ -277,24 +285,24 @@ exports.updateAddress = async (req, res) => {
     })
 
 }
-exports.verifyPayment = (req, res) => {
-    console.log(req.body, "nnnnnnnnnnnnnn");
-    userHelper.verifyPayment(req.body).then(() => {
-        userHelper.changePaymentStatus(req.body['order[receipt]']).then(() => {
-            console.log('Payment successfull');
-            res.json({ status: true })
-        })
-    }).catch((err) => {
 
-        console.log(err);
-        res.json({ status: false })
+exports.addressDelete = (req, res) => {
+    let id = req.params.id
+    let userId = req.session.user._id
+    userHelper.deleteAddress(id, userId).then((response) => {
+        res.send(response)
     })
 }
-exports.addressDelete = (req, res) => {
-   let id = req.params.id
-   let userId = req.session.user._id
-   userHelper.deleteAddress(id,userId).then((response)=>{
-    res.send(response)
-   })
+exports.about = (req, res) => {
+    res.render('users/about')
+}
+exports.contact = (req, res) => {
+    res.render('users/contact')
+}
+exports.contactMessage = (req, res) => {
+    authHelper.doContactMessage(req.body).then(response=>{
+
+        res.redirect('/contact')
+    })
 }
 

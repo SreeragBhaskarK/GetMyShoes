@@ -8,9 +8,40 @@
 <link rel="stylesheet" href="/users/product_details/css/owl.carousel.min.css" type="text/css">
 <link rel="stylesheet" href="/users/product_details/css/slicknav.min.css" type="text/css">
 <link rel="stylesheet" href="/users/product_details/css/style.css" type="text/css">
+
+
+
 <section class="shop-cart spad">
     <div class="container">
         <div class="row">
+            <div class="col-lg-12">
+                <div class="coupon__link">
+                    <h6 class="mb-3"><span class="icon_tag_alt"></span> Have a coupon?
+                    </h6>
+                    <ul class="has-scrollbar">
+                        <div style="display: flex; margin: 10px;">
+                            <% locals.coupons.forEach(coupon=> { %>
+                                <div class="me-5 ">
+                                    <%- include('./coupon.ejs',{ coupon: coupon }) %>
+                                </div>
+                                <% }) %>
+
+
+                        </div>
+                    </ul>
+
+
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+        <div class="row">
+
             <div class="col-lg-12">
                 <div class="shop__cart__table">
                     <table>
@@ -26,12 +57,10 @@
                         <tbody>
 
 
-
-
                             <% products.forEach(product=> { %>
 
 
-                                <tr>
+                                <tr id="cardProduct<%=product.products._id%>">
                                     <td class="cart__product__item">
                                         <img style="width: 90px;"
                                             src="/images/products_image/<%=product.products.product_image[0]%>" alt="">
@@ -102,8 +131,9 @@
                 <div class="cart__total__procced">
                     <h6>Cart total</h6>
                     <ul>
-                        <li>Subtotal <span>₹ <%=subTotal %></span></li>
+                        <li>Subtotal <span id="subtotal">₹ <%=subTotal %></span></li>
                         <li>Discount <span id="discount">₹<%=discount %></span></li>
+                        <li>Shipping <span id="discount">Free Delivery</span></li>
                         <li>Total <span id="totalPrice" aria-placeholder="">₹ <%=totalPrice[0]?.total %></span></li>
                     </ul>
                     <a href="/checkout" class="primary-btn">Proceed to checkout</a>
@@ -122,8 +152,19 @@
                 proId: proId,
                 cartId: cartId
             },
-            success: (Response => {
-                location.reload()
+            success: (response => {
+                console.log(response);
+                document.getElementById('discount').innerHTML = '₹ ' + response.discount
+                document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
+                document.getElementById('subtotal').innerHTML = '₹ ' + response.subTotal
+                $('#cardProduct' + proId).remove()
+                const toastLiveExample = document.getElementById('toasterMessage')
+                document.getElementById('toastMessage').innerHTML = "Product has been deleted in cart."
+                const toast = new bootstrap.Toast(toastLiveExample, {
+                    autohide: true,
+                    delay: 3000
+                })
+                toast.show()
             })
         })
     }
@@ -147,16 +188,16 @@
                 if (response.status) {
                     document.getElementById('discount').innerHTML = '₹ ' + response.discount
                     document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
-                    document.getElementById('coupon_message').innerHTML ='applied successfull'
-                    document.getElementById('coupon_message').style.color ="green"
-                
-                document.getElementById('coupon_message').style.display = 'block'
-                setTimeout(() => {
-                    document.getElementById('coupon_message').style.display = 'none'
-                }, 5000);
+                    document.getElementById('coupon_message').innerHTML = 'applied successfull'
+                    document.getElementById('coupon_message').style.color = "green"
+
+                    document.getElementById('coupon_message').style.display = 'block'
+                    setTimeout(() => {
+                        document.getElementById('coupon_message').style.display = 'none'
+                    }, 5000);
                 } else {
-                    document.getElementById('coupon_message').innerHTML =response.message
-                
+                    document.getElementById('coupon_message').innerHTML = response.message
+
                     document.getElementById('coupon_message').style.display = 'block'
                     setTimeout(() => {
                         document.getElementById('coupon_message').style.display = 'none'

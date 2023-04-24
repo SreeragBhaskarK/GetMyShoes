@@ -1,0 +1,23 @@
+
+
+    <link rel="stylesheet" href="/users/css/coupon.css">
+
+
+    <div class="container-coupon ">
+        <div class="coupon-card-coupon">
+            <img src="/images/logoCoupon.png" class="logo-coupon">
+            <h3 style="color: #fff;max-width: 207px;" ><%= coupon.coupon_description %></h3>
+            <di class="coupon-row-coupon">
+                <span style="color: #ffff;" class="cpnCode-coupon" id="cpnCode-coupon<%= coupon._id %>"><%= coupon.code %></span>
+                <span  class="cpnBtn-coupon" id="cpnBtn-coupon<%= coupon._id %>" onclick="copyCoupon('<%= coupon._id %>')">Copy Code</span>
+            </di>
+            <% const expiryDate = new Date( coupon.expiryDate);
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            const formattedDate = expiryDate.toLocaleDateString('en-US', options); %>
+            <p style="color: #fff; margin-bottom: 3px; font-size: 11.2px;
+            font-weight: 160;">Valid Till: <%=formattedDate %> </p>
+            <div class="circle1-coupon"></div>
+            <div class="circle2-coupon"></div>
+        </div>
+    </div>
+<script src="/users/js/coupon.js"></script>

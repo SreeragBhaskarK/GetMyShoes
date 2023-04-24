@@ -5,7 +5,7 @@ const { userView,logInView,logInData,sigUpView,signUpData,verifyView,verifyData
   ,logoutView,settingsView,resetPasswordView,resetPasswordData
 ,setPasswordView,setPasswordData,profileInfoData,menCategoryView,womenCategoryView,
 sportsCategoryView,profileInfoAdrsData,emailVerificationView,verifyEmailView,verifyEmailData,
-logInEmailView,changePasswordData,cartCount,updateAddress,verifyPayment,addressDelete} = require("../controllers/userController")
+logInEmailView,changePasswordData,cartCount,updateAddress,addressDelete,about,contact,contactMessage} = require("../controllers/userController")
 
 const auth= require("../server/middleware/auth")
 
@@ -45,8 +45,11 @@ router.post('/verifyemail', verifyEmailData)
 router.post('/change-password', changePasswordData)
 
 router.post('/updateAddress', updateAddress)
-router.post('/verify-payment', verifyPayment)
+
 router.post('/address_delete/:id', addressDelete)
+router.get('/about', about)
+router.get('/contact', contact)
+router.post('/contact_message', contactMessage)
 
 
 

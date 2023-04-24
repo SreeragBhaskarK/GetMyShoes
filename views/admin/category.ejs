@@ -14,6 +14,7 @@
         <tr>
 
           <th>Category </th>
+          <th>Category Type </th>
           <th>Options </th>
 
         </tr>
@@ -30,12 +31,14 @@
             <td>
               <%= i.category %>
             </td>
+            <td>
+              <%= i.category_type %>
+            </td>
 
-            <% if (i.parent!=true) { %>
+            <% if (i.category_type!='parent' ) { %>
               <td style="display: flex;">
 
-                <a href="/admin/edit-category/<%= i._id%>"><button type="button"
-                    class="btn btn-primary me-2">Edit</button></a>
+                <button onclick="categoryEdit('<%= i._id%>')" type="button" class="btn btn-primary me-2">Edit</button>
 
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                   data-bs-target="#staticBackdrop<%= i._id%>">Delete</button>
@@ -46,8 +49,8 @@
                 <% } %>
           </tr>
           <!-- Modal -->
-          <div class="modal fade" id="staticBackdrop<%= i._id%>" data-bs-backdrop="static"
-            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal fade" id="staticBackdrop<%= i._id%>" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class=" modal-dialog modal-sm modal-dialog-centered">
               <div class="modal-content ">
 
@@ -71,69 +74,133 @@
 
   </div>
 </main>
-<% if (locals.edCategory) { %>
-  <% edCategory.forEach(edCategory=> { %>
 
 
-    <form action="/admin/category_update/<%= edCategory._id%>" method="post">
 
-      <!-- Modal -->
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Category Edit</h5>
-              <a href="/admin/category"><button type="button" class="btn-close" data-bs-dismiss="modal"
-                  aria-label="Close"></button></a>
-            </div>
-            <div class="modal-body">
+<!-- Modal -->
+<div class="modal fade" id="exampleModalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/admin/category_update" class="needs-validation" novalidate="" method="post">
+        <input type="text" hidden value="" id="category_id" name="category_id" id="">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Category Edit</h5>
+          <a href="/admin/category"><button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button></a>
+        </div>
+        <div class="modal-body">
 
-              <input type="text" value="<%= edCategory.category%>" placeholder="category" name="category" required>
 
-            </div>
-            <div class="modal-footer">
-              <a href="/admin/category"><button type="button" class="btn btn-secondary"
-                  data-bs-dismiss="modal">Close</button></a>
-              <button type="submit" class="btn btn-primary">Save</button>
-            </div>
+          <label for="">Category Name</label><br>
+          <input type="text" placeholder="category " class="form-control" id="categoryName" value="" name="category" required>
+          <div class="valid-feedback">
+            Looks good!
           </div>
+          <div class="invalid-feedback">
+            Enter Coupon Name!
+          </div>
+          <label for="" class="form-check-label">Category Type</label><br>
+          <label for="">Parent</label>
+          <input name="category_type" class="form-check-input" id="parent" value="parent" type="radio" required><br>
+          <label for="">Sub</label>
+          <input name="category_type" class="form-check-input" id="sub" value="sub" type="radio" required><br>
+          <label for="">Brand</label>
+          <input name="category_type" class="form-check-input" id="brand" value="brand" type="radio" required><br>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<form action="/admin/category" class="needs-validation" novalidate="" method="post">
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Category Add</h5>
+          <a href="/admin/category"><button type="button" class="btn-close" data-bs-dismiss="modal"
+              aria-label="Close"></button></a>
+        </div>
+        <div class="modal-body">
+          <label for="">Category Name</label><br>
+          <input type="text" placeholder="category" class="form-control" name="category" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Enter Coupon Name!
+          </div>
+          <label for="invalidCheck" class="form-check-label">Category Type</label><br>
+          <label for="" >Parent</label>
+          <input name="category_type" class="form-check-input" value="parent" type="radio" required><br>
+          <label for="">Sub</label>
+          <input name="category_type"  class="form-check-input" value="sub" type="radio" required><br>
+          <label for="">Brand</label>
+          <input name="category_type" class="form-check-input" value="brand" type="radio" required><br>
+          
+
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </div>
-    </form>
+    </div>
+  </div>
+</form>
 
-    <script>
-      window.onload = function () {
-        document.getElementById('editbtn').click()
+
+<script>
+  function categoryEdit(categoryId) {
+
+    $.ajax({
+      type: 'get',
+      url: '/admin/edit-category/' + categoryId,
+      success: (response) => {
+        console.log(response);
+        document.getElementById('categoryName').value = response.category
+        if (response.category_type == 'parent') {
+          document.getElementById("parent").setAttribute("checked", "checked");
+        } else if (response.category_type == 'brand') {
+          document.getElementById("brand").setAttribute("checked", "checked");
+        } else {
+          document.getElementById("sub").setAttribute("checked", "checked");
+        }
+        document.getElementById('category_id').value = response._id
+
+        $('#exampleModalEdit').modal('show');
       }
+    })
 
-    </script>
-    <% }) %>
-      <% }else{ %>
-        <form action="/admin/category" method="post">
+  }
+</script>
 
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Category Add</h5>
-                  <a href="/admin/category"><button type="button" class="btn-close" data-bs-dismiss="modal"
-                      aria-label="Close"></button></a>
-                </div>
-                <div class="modal-body">
-
-                  <input type="text" placeholder="category" name="category" required>
-
-                </div>
-                <div class="modal-footer">
-                  <a href="/admin/category"><button type="button" class="btn btn-secondary"
-                      data-bs-dismiss="modal">Close</button></a>
-                  <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-
-        <% } %>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  });
+</script>

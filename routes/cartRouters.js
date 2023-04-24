@@ -9,7 +9,7 @@ router.post('/change-product-quantity',changeProductQuantity)
 router.delete('/delete-cart-product',deleteCartProduct)
 
 router.get('/checkout',verify,checkOut)
-router.post('/place-order',verify,placeOrder)
+router.post('/place-order/:adrsid',verify,placeOrder)
 router.get('/wishlist',verify,wishlist)
 router.get('/add-toWishlist/:id',verify, addToWishListView)
 router.delete('/delete-wishlist-product',deleteWishListProduct)

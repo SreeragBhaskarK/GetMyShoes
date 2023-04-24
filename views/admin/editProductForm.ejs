@@ -1,15 +1,16 @@
 <!-- Mobiscroll JS and CSS Includes -->
 <link rel="stylesheet" href="/admin/css/mobiscroll.javascript.min.css">
 <script src="/admin/js/mobiscroll.javascript.min.js"></script>
-<form action="/admin/updataProduct/<%=editView._id %>" method="post" enctype="multipart/form-data">
+<form action="/admin/updataProduct" method="post" class="needs-validation" novalidate="" onsubmit="return imageCheck()"
+    enctype="multipart/form-data">
+    <input type="text" name="product_id" id="product_id" hidden>
     <!-- Modal -->
-    <div class="modal fade" id="productAdd" tabindex="-1" aria-labelledby="productAddLabel" aria-hidden="true">
+    <div class="modal fade" id="productEdit" tabindex="-1" aria-labelledby="productAddLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
 
-                    <a href="/admin/products"> <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button></a>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- Add Product Content -->
@@ -17,213 +18,197 @@
 
                     <main class="content">
                         <div class="container-fluid p-0">
-                            <% if (locals.editView) { %>
-                                <h1 class="h3 mb-3">Edit product</h1>
-                                <%} else {%>
-                                    <h1 class="h3 mb-3">Add new product</h1>
-                                    <% } %>
 
-                                        <div class="row">
-                                            <div class="col-8">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title mb-0">Product Title</h5>
-                                                        <input type="text" name="product_name"
-                                                            placeholder="Enter product title"
-                                                            value="<%=editView.product_name%>" required>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <h5 class="card-title mb-0">Description</h5>
-                                                        <textarea id="story" name="product_description"
-                                                            placeholder="type Description..." rows="5"
-                                                            cols="33"><%=editView.product_description%></textarea>
-                                                        <!-- ouill -->
-                                                        <!-- 
-                                                        <div class="clearfix">
-                                                            <div id="quill-toolbar">
-                                                                <span class="ql-formats">
-                                                                    <select class="ql-font"></select>
-                                                                    <select class="ql-size"></select>
-                                                                </span>
-                                                                <span class="ql-formats">
-                                                                    <button class="ql-bold"></button>
-                                                                    <button class="ql-italic"></button>
-                                                                    <button class="ql-underline"></button>
-                                                                    <button class="ql-strike"></button>
-                                                                </span>
-                                                                <span class="ql-formats">
-                                                                    <select class="ql-color"></select>
-                                                                    <select class="ql-background"></select>
-                                                                </span>
-                                                                <span class="ql-formats">
-                                                                    <button class="ql-script" value="sub"></button>
-                                                                    <button class="ql-script" value="super"></button>
-                                                                </span>
-                                                                <span class="ql-formats">
-                                                                    <button class="ql-header" value="1"></button>
-                                                                    <button class="ql-header" value="2"></button>
-                                                                    <button class="ql-blockquote"></button>
-                                                                    <button class="ql-code-block"></button>
-                                                                </span>
-                                                                <span class="ql-formats">
-                                                                    <button class="ql-list" value="ordered"></button>
-                                                                    <button class="ql-list" value="bullet"></button>
-                                                                    <button class="ql-indent" value="-1"></button>
-                                                                    <button class="ql-indent" value="+1"></button>
-                                                                </span>
-                                                                <span class="ql-formats">
-                                                                    <button class="ql-direction" value="rtl"></button>
-                                                                    <select class="ql-align"></select>
-                                                                </span>
-                                                                <span class="ql-formats">
-                                                                    <button class="ql-link"></button>
-                                                                    <button class="ql-image"></button>
-                                                                    <button class="ql-video"></button>
-                                                                </span>
-                                                                <span class="ql-formats">
+                            <h1 class="h3 mb-3">Edit product</h1>
 
-                                                                    <button class="ql-clean"></button>
-                                                                </span>
-                                                            </div>
-                                                            <div id="quill-editor" name="product_description">
-                                                            </div>
-                                                        </div>
-
- -->
-                                                    </div>
-
-                                                    <div class="card-body">
-                                                        <h5 class="card-title mb-0">Product Category</h5>
-                                                        <section class="ftco-section">
-                                                            <div class="container">
-
-                                                                <div class="row ">
-                                                                    <div
-                                                                        class="col-md-8 col-lg-5 d-flex justify-content-center align-items-center">
-                                                                        <div
-                                                                            class="d-flex text-left align-items-center w-100">
-                                                                            <label>
-                                                                                Select Category:
-                                                                                <input mbsc-input
-                                                                                    id="demo-multiple-select-input"
-                                                                                    placeholder="Please select..."
-                                                                                    data-dropdown="true"
-                                                                                    data-input-style="outline"
-                                                                                    data-label-style="stacked"
-                                                                                    data-tags="true" />
-                                                                            </label>
-                                                                            <select id="demo-multiple-select"
-                                                                                name="product_category" multiple>
-
-                                                                                <% (categoryView || []).forEach(i=> { %>
-                                                                                    <option value="<%=i._id %>">
-                                                                                        <%=i.category %>
-                                                                                    </option>
-                                                                                    <% }) %>
-
-                                                                                        <% (categroys || []).forEach(j=>
-                                                                                            { %>
-                                                                                            <option selected
-                                                                                                value="<%=j._id %>">
-                                                                                                <%=j.category %>
-                                                                                            </option>
-
-                                                                                            <% }) %>
-
-                                                                            </select>
-
-
-                                                                            <%# (categroyName || []).forEach(j=> { %>
-                                                                                <!--      <option selected value="<%#j._id %>"><%#j.category %></option> -->
-                                                                                <%# }) %>
-
-                                                                                    </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </section>
-                                                    </div>
-
-
-                                                    <div class="card-body">
-                                                        <h5 class="card-title mb-0">Product Image</h5>
-                                                        <div>
-
-
-                                                            <img id="imgView"
-                                                                src="/images/products_image/<%=editView.product_image[0]%>"
-                                                                class="pt-3 pb-3" alt=""
-                                                                style="width: 100px; height:auto;">
-                                                                
-                                                            <input type="file" class="form-control" value="/images/products_image/<%=editView.product_image[0]%>" name="product_image"
-                                                                onchange="viewImage(event,0)"><br>
-                                                        </div>
-                                                        <div>
-
-                                                            <img id="imgView1"
-                                                                src="/images/products_image/<%=editView.product_image[1]%>"
-                                                                class="pt-3 pb-3" alt=""
-                                                                style="width: 100px; height:auto;">
-                                                            <input type="file" class="form-control" name="product_image"
-                                                                onchange="viewImage(event,1)"><br>
-                                                        </div>
-                                                        <div>
-
-                                                            <img id="imgView2"
-                                                                src="/images/products_image/<%=editView.product_image[2]%>"
-                                                                class="pt-3 pb-3" alt=""
-                                                                style="width: 100px; height:auto;">
-                                                            <input type="file" class="form-control" name="product_image"
-                                                                onchange="viewImage(event,2)"><br>
-                                                        </div>
-                                                        <div>
-
-                                                            <img id="imgView3"
-                                                                src="/images/products_image/<%=editView.product_image[3]%>"
-                                                                class="pt-3 pb-3" alt=""
-                                                                style="width: 100px; height:auto;">
-                                                            <input type="file" class="form-control" name="product_image"
-                                                                onchange="viewImage(event,3)"><br>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-0">Product Title</h5>
+                                            <input id="product_name" type="text" name="product_name"
+                                                placeholder="Enter product title" class="form-control" value=""
+                                                required>
+                                            <div class="valid-feedback">
+                                                Looks good!
                                             </div>
-                                            <div class="col-4">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title mb-0">Pricing</h5>
-                                                        <input type="number" value="<%=editView.product_price%>"
-                                                            name="product_price" placeholder="product price" required>
-                                                    </div>
-                                                    <div class="card-body">
-                                                    </div>
-                                                </div>
-
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title mb-0">Old Pricing</h5>
-                                                        <input type="number" name="product_old_price"
-                                                            value="<%=editView.product_old_price%>"
-                                                            placeholder="product old price ">
-                                                    </div>
-                                                    <div class="card-body">
-                                                    </div>
-                                                </div>
-
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h5 class="card-title mb-0">Badge</h5>
-                                                        <input type="text" name="product_badge"
-                                                            value="<%=editView.product_badge%>"
-                                                            placeholder="product badge">
-                                                    </div>
-                                                    <div class="card-body">
-                                                    </div>
-                                                </div>
+                                            <div class="invalid-feedback">
+                                                Enter Product Name!
                                             </div>
                                         </div>
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-0">Description</h5>
+                                            <textarea class="form-control" id="product_description"
+                                                name="product_description" placeholder="type Description..." rows="5"
+                                                required cols="33"></textarea>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Enter Product Description!
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-0">Product Category</h5>
+                                            <section class="ftco-section">
+                                                <div class="container">
+
+                                                    <div class="row ">
+                                                        <div
+                                                            class="col-md-8 col-lg-5 d-flex justify-content-center align-items-center">
+                                                            <div class="d-flex text-left align-items-center w-100">
+                                                                <label>
+                                                                    Select Category:
+                                                                    <input mbsc-input
+                                                                        id="demo-multiple-edit-select-input"
+                                                                        placeholder="Please select..."
+                                                                        data-dropdown="true" data-input-style="outline"
+                                                                        data-label-style="stacked" data-tags="true" />
+                                                                </label>
+                                                                <select class="form-control" required
+                                                                    id="demo-multiple-edit-select" class="categorylist"
+                                                                    name="product_category" multiple>
+                                                                </select>
+
+
+                                                                <%# (categroyName || []).forEach(j=> { %>
+                                                                    <!--      <option selected value="<%#j._id %>"><%#j.category %></option> -->
+                                                                    <%# }) %>
+
+                                                                        </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+
+
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-0">Product Image</h5>
+                                            <div>
+
+
+                                                <img id="imgView4" src="" class="pt-3 pb-3" alt=""
+                                                    style="width: 100px; height:auto;">
+
+                                                <input type="file" class="form-control"  value="" name="product_image"
+                                                    onchange="viewImage(event,4)"><br>
+                                            </div>
+                                            <div>
+
+                                                <img id="imgView5" src="" class="pt-3 pb-3" alt=""
+                                                    style="width: 100px; height:auto;">
+                                                <input type="file" class="form-control" name="product_image"
+                                                    onchange="viewImage(event,5)"><br>
+                                            </div>
+                                            <div>
+
+                                                <img id="imgView6" src="" class="pt-3 pb-3" alt=""
+                                                    style="width: 100px; height:auto;">
+                                                <input type="file" class="form-control" name="product_image"
+                                                    onchange="viewImage(event,6)"><br>
+                                            </div>
+                                            <div>
+
+                                                <img id="imgView7" src="" class="pt-3 pb-3" alt=""
+                                                    style="width: 100px; height:auto;">
+                                                <input type="file" class="form-control" name="product_image"
+                                                    src="/images/products_image/1680367510840-1920x1080.jpg"
+                                                    onchange="viewImage(event,7)"><br>
+                                            </div>
+
+                                            <span style="display: none;" id="uploadImage">Upload image</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Stock</h5>
+                                            <input type="number" min="0" id="product_stock" class="form-control"
+                                                name="product_stock" placeholder="product stock" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Enter Product Stock!
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Pricing</h5>
+                                            <input type="number" min="0" id="product_price" class="form-control"
+                                                value="" name="product_price" placeholder="product price" required>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Enter Product Price!
+                                            </div>
+
+                                        </div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Size</h5>
+                                            <label>
+                                                <input type="checkbox" id="size7" class="form-check-input"  name="product_size" value="7">
+                                                Size 7
+                                              </label>
+                                              <label>
+                                                <input type="checkbox" id="size8" class="form-check-input"  name="product_size" value="8">
+                                                Size 8
+                                              </label>
+                                              <label>
+                                                <input type="checkbox" id="size9" class="form-check-input"  name="product_size" value="9">
+                                                Size 9
+                                              </label>
+                                              <label>
+                                                <input type="checkbox" id="size10" class="form-check-input" name="product_size" value="10">
+                                                Size 10
+                                              </label>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                select Product Size!
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Old Pricing</h5>
+                                            <input type="number" min="0" id="product_old_price" class="form-control"
+                                                name="product_old_price" value="" placeholder="product old price ">
+                                        </div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Badge</h5>
+                                            <input type="text" id="product_badge" class="form-control"
+                                                name="product_badge" value="" placeholder="product badge">
+                                        </div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
 
@@ -233,30 +218,38 @@
 
                 </div>
                 <div class="modal-footer">
-                    <a href="/admin/products"><button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">Close</button></a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
 <script>
-    window.onload = function () {
-        document.getElementById('editbtn').click()
-    }
+    mobiscroll.setOptions({
+        locale: mobiscroll.localeEn,
+        theme: 'ios',
+        themeVariant: 'light'
+    });
+
+    mobiscroll.select('#demo-multiple-edit-select', {
+        inputElement: document.getElementById('demo-multiple-edit-select-input')
+    });
 
 </script>
+
 <script>
-
-    mobiscroll.setOptions({
-        locale: mobiscroll.localeEn,                                         // Specify language like: locale: mobiscroll.localePl or omit setting to use default
-        theme: 'ios',                                                        // Specify theme like: theme: 'ios' or omit setting to use default
-        themeVariant: 'light'                                                // More info about themeVariant: https://docs.mobiscroll.com/5-22-3/javascript/select#opt-themeVariant
-    });
-
-    mobiscroll.select('#demo-multiple-select', {
-        inputElement: document.getElementById('demo-multiple-select-input')  // More info about inputElement: https://docs.mobiscroll.com/5-22-3/javascript/select#opt-inputElement
-    });
+    function imageCheck() {
+        let image = document.getElementById('imgView4').src
+        let image1 = document.getElementById('imgView5').src
+        let image2 = document.getElementById('imgView6').src
+        let image3 = document.getElementById('imgView4').src
+     
+        if (image == 'http://localhost:3000/images/products_image/undefined' || image1 == 'http://localhost:3000/images/products_image/undefined' || image2 == 'http://localhost:3000/images/products_image/undefined' || image3 == 'http://localhost:3000/images/products_image/undefined') {
+            document.getElementById('uploadImage').style.display='block'
+            return false
+        }
+       
+        
+    }
 </script>

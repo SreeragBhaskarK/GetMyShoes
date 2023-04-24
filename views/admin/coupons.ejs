@@ -1,3 +1,11 @@
+<style>
+    /* Remove increment and decrement buttons from input type number */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <main class="content">
@@ -19,6 +27,7 @@
                     <th>Expirey Date</th>
                     <th>Minimum Purchase</th>
                     <th>Discount</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -54,27 +63,60 @@
                         </td>
 
                         </td>
-                        <td style="display: flex;"><a href="/admin/edit-product/<%# productData._id%>"><button
-                                    type="button" class="btn btn-primary me-2">Edit</button></a>
+                        <% if (coupon.status=='active' ) { %>
+                            <td><input type="button" class="btn btn btn-success" value="<%= coupon.status %>"
+                                    disabled></input></td>
+                            <% }else if(coupon.status=='expired' ){ %>
+                                <td><input type="button" class="btn btn btn-warning" value="<%= coupon.status %>"
+                                        disabled></input></td>
+                                <% }else{ %>
+                                    <td><input type="button" class="btn btn btn-danger" value="<%= coupon.status %>"
+                                            disabled></input></td>
+                                    <% } %>
+                                        <td style="display: flex;"><a onclick="couponEdit('<%= coupon._id%>')"><button
+                                                    type="button" class="btn btn-primary me-2">Edit</button></a>
+                                            <% if (coupon.status=='remove' ) { %>
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                                    data-bs-target="#staticBackdropRe<%= coupon._id%>">Restore</button>
+                                                <% }else{ %>
 
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop<%# productData._id%>">Delete</button>
-                        </td>
+                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                        data-bs-target="#staticBackdrop<%= coupon._id%>">Delete</button>
+                                                    <% } %>
+                                        </td>
+
                     </tr>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="staticBackdrop<%# productData._id%>" data-bs-backdrop="static"
+                    <div class="modal fade" id="staticBackdrop<%= coupon._id%>" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class=" modal-dialog modal-sm modal-dialog-centered">
                             <div class="modal-content ">
 
                                 <div class="modal-body">
-                                    Are you want to delete <%# productData.product_name %> ?
+                                    Are you want to remove <%= coupon.couponName %> ?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                    <a href="/admin/delete-product/<%# productData._id%>"><button type="button"
+                                    <a href="/admin/delete-coupon/<%= coupon._id%>"><button type="button"
                                             class="btn btn-danger">Delete</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdropRe<%= coupon._id%>" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class=" modal-dialog modal-sm modal-dialog-centered">
+                            <div class="modal-content ">
+
+                                <div class="modal-body">
+                                    Are you want to restore <%= coupon.couponName %> ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                    <a href="/admin/restore-coupon/<%= coupon._id%>"><button type="button"
+                                            class="btn btn-success">Restore</button></a>
                                 </div>
                             </div>
                         </div>
@@ -95,53 +137,219 @@
 <div class="modal fade" id="couponAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Coupon Generate</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- views/coupons/create.ejs -->
+            <form method="post" action="/admin/coupons" class="needs-validation" novalidate="">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Coupon Generate</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- views/coupons/create.ejs -->
 
-               
-
-                <form method="post" action="/admin/coupons">
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Coupon Name</label>
-                        <input type="text" class="form-control" name="couponName">
+                        <input type="text" class="form-control" required name="couponName">
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Name!
+                        </div>
                     </div>
                     <div class="mb-3">
 
                         <label for="message-text" class="col-form-label">Discount amount</label>
-                        <input type="number" class="form-control" name="discount" required>
-
+                        <input type="number" class="form-control" min="0" name="discount" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Discount Amount!
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Expiry date</label>
                         <input type="text" id="date" name="expiryDate" class="form-control flatpickr"
-                            placeholder="Select date..">
+                            placeholder="Select date.." required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Enter Coupon Expiry date!
+                            </div>
                     </div>
                     <div class="mb-3">
 
                         <label for="message-text" class="col-form-label">Minimum purchase</label>
-                        <input type="number" class="form-control" name="minPurchase" required>
+                        <input type="number" class="form-control" min="0" name="minPurchase" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Minimum Purchase!
+                        </div>
+                    </div>
+                    <div class="mb-3">
 
+                        <label for="message-text" class="col-form-label">Offers Description</label><br>
+                        <textarea name="coupon_description" placeholder="type Description..." rows="5"
+                            cols="33" required></textarea>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Enter Coupon Offers Description!
+                            </div>
                     </div>
 
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Generate Coupon</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Generate Coupon</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-</form>
+<!-- Modal Edit -->
+<div class="modal fade" id="couponEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" action="/admin/coupon_update"  class="needs-validation" novalidate="" >
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Coupon Edit</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- views/coupons/create.ejs -->
+
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Coupon Name</label>
+                        <input type="text" id="couponName" class="form-control" name="couponName" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Name!
+                        </div>
+                    </div>
+                    <div class="mb-3">
+
+                        <label for="message-text" class="col-form-label">Discount amount</label>
+                        <input type="number" id="discount" min="0" class="form-control" name="discount" required>
+                        <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div class="invalid-feedback">
+                        Enter Coupon Discount Amount!
+                    </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Expiry date</label>
+                        <input type="text" id="date" name="expiryDate" required class="form-control expiry flatpickr"
+                            placeholder="Select date..">
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Enter Coupon Expiry date!
+                            </div>
+                    </div>
+                    <div class="mb-3">
+
+                        <label for="message-text" class="col-form-label">Minimum purchase</label>
+                        <input type="number" id="minPurchase" min="0" class="form-control" name="minPurchase" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Minimum Purchase!
+                        </div>
+                    </div>
+                    <div class="mb-3">
+
+                        <label for="message-text" class="col-form-label">Offers Description</label><br>
+                        <textarea name="coupon_description" required id="offerDescription" placeholder="type Description..."
+                            rows="5" cols="33"></textarea>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                            <div class="invalid-feedback">
+                                Enter Coupon Offers Description!
+                            </div>
+                    </div>
+
+                    <input type="text" hidden id="couponId" name="couponId">
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Coupon</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <script>
     flatpickr("#date", {
         enableTime: false,
         dateFormat: "Y-m-d",
         minDate: "today"
+    });
+</script>
+
+<script>
+    function couponEdit(couponId) {
+
+        $.ajax({
+            type: 'get',
+            url: '/admin/edit-coupon/' + couponId,
+            success: (response) => {
+                console.log(response);
+                document.getElementById('couponName').value = response.couponName
+                document.getElementById('discount').value = response.discount
+                const expiryDate = flatpickr.parseDate(response.expiryDate, "Y-m-d");
+                const formattedExpiryDate = flatpickr.formatDate(expiryDate, "m/d/Y");
+                document.querySelector('.expiry').value = formattedExpiryDate
+                document.getElementById('minPurchase').value = response.minPurchase
+                document.getElementById('offerDescription').value = response.coupon_description
+                document.getElementById('couponId').value = response._id
+                $('#couponEdit').modal('show');
+
+               
+            }
+        })
+
+    }
+</script>
+<script>
+    function toasterMessage(message){
+        const toastLiveExample = document.getElementById('toasterMessage')
+                document.getElementById('toastMessage').innerHTML = message
+                const toast = new bootstrap.Toast(toastLiveExample, {
+                    autohide: true,
+                    delay: 3000
+                })
+                toast.show()
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
     });
 </script>

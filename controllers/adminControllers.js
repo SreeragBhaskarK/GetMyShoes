@@ -3,8 +3,9 @@ var adminHelper = require('../server/helpers/admin-helpers');
 const { resetUserPassword } = require('../server/helpers/controller');
 var productHelper = require('../server/helpers/product-helper');
 let { imageUpdate } = require('../server/middleware/multer')
-let editView
-let editCategory
+const pdf = require('html-pdf');
+var path = require('path');
+const fs = require('fs');
 exports.admin = (req, res, next) => {
     res.locals.admin = true
     next()
@@ -14,14 +15,15 @@ exports.adminView = (req, res) => {
         let States = response.States
         let orderCount = response.orderCount
         let percentageChange = response.percentageChange
-        let revenueWeek = response.revenueWeek.toLocaleString('en-IN');
+        console.log(typeof percentageChange, percentageChange);
+        let revenueWeek = response.revenueWeek?.toLocaleString('en-IN');
         let revenuepercentage = response.revenuepercentage
         let totalAmountByMonth = response.totalAmountByMonth
-        let incomeWeek = response.incomeWeek.toLocaleString('en-IN');
+        let incomeWeek = response.incomeWeek?.toLocaleString('en-IN');
         let incomepercentage = response.incomepercentage
         let totalMonthOrder = response.totalMonthOrder
         let totalIncomeByMonth = response.totalIncomeByMonth
-        res.render('admin/admin_Dashboard', { activeDashboard: 'active', States, orderCount, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth,incomeWeek,incomepercentage,totalMonthOrder,totalIncomeByMonth })
+        res.render('admin/admin_Dashboard', { activeDashboard: 'active', States, orderCount, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth, incomeWeek, incomepercentage, totalMonthOrder, totalIncomeByMonth })
     })
 
 
@@ -76,18 +78,10 @@ exports.productsView = (req, res) => {
         productData = response.products
         categoryView = response.categorys
 
-        if (editView) {
 
-            adminHelper.doCategorys(editView).then((categroys) => {
 
-                res.render('admin/products', { activeProducts: 'active', productData, editView, categoryView, categroys })
-                editView = false
-            })
+        res.render('admin/products', { activeProducts: 'active', productData })
 
-        } else {
-
-            res.render('admin/products', { activeProducts: 'active', productData })
-        }
     })
 
 }
@@ -115,16 +109,37 @@ exports.deleteProductView = (req, res) => {
         res.redirect('/admin/products')
     })
 }
+exports.deleteCouponView = (req, res) => {
+    let couponId = req.params.id
+
+    productHelper.doCouponDelete(couponId).then(response => {
+        res.redirect('/admin/coupons')
+    })
+}
+exports.restoreCouponView = (req, res) => {
+    let couponId = req.params.id
+
+    productHelper.doCouponRestore(couponId).then(response => {
+        res.redirect('/admin/coupons')
+    })
+}
 exports.editProductView = (req, res) => {
     let proId = req.params.id
     productHelper.doProductEdit(proId).then(response => {
-        editView = response
-        res.redirect('/admin/products')
+        let productEdit = response[0]
+        res.send(productEdit)
+    })
+}
+exports.editCouponView = (req, res) => {
+    let couponId = req.params.id
+    productHelper.doCouponEdit(couponId).then(response => {
+        let couponData = response
+        res.send(couponData)
     })
 }
 exports.updataProductData = async (req, res) => {
 
-    let proId = req.params.id
+    let proId = req.body.product_id
 
     productHelper.doUpdateProduct(proId, req.body, req.files).then(response => {
         /* if (req.files) {
@@ -164,14 +179,14 @@ exports.userStatusUnblockView = (req, res) => {
 exports.categoryView = (req, res) => {
     adminHelper.doViewCategory().then((response) => {
         let categorys = response.categorys
-        if (editCategory) {
-            let edCategory = editCategory
-            res.render('admin/category', { categorys, edCategory, activeCategories: 'active' })
-            editCategory = null
-        } else {
-            res.render('admin/category', { categorys, activeCategories: 'active' })
-
-        }
+        /*   if (editCategory) {
+              let edCategory = editCategory
+              res.render('admin/category', { categorys, edCategory, activeCategories: 'active' })
+              editCategory = null */
+        /*  } else { */
+        res.render('admin/category', { categorys, activeCategories: 'active' })
+        /* 
+                } */
 
     })
 }
@@ -182,23 +197,23 @@ exports.categoryData = (req, res) => {
     })
 }
 exports.deleteCateagoryView = (req, res) => {
-    let proId = req.params.id
+    let categoryId = req.params.id
 
-    adminHelper.doCategoryDelete(proId).then(response => {
+    adminHelper.doCategoryDelete(categoryId).then(response => {
         res.redirect('/admin/category')
     })
 }
 exports.editCategoryView = (req, res) => {
-    let proId = req.params.id
-    adminHelper.doCategoryEdit(proId).then(response => {
-        editCategory = response
-
-        res.redirect('/admin/category')
+    let categoryId = req.params.id
+    adminHelper.doCategoryEdit(categoryId).then(response => {
+        let categoryData = response[0]
+        console.log(categoryData);
+        res.send(categoryData)
     })
 }
 exports.updateCategoryView = (req, res) => {
-    let proId = req.params.id
-    adminHelper.doCategoryUpdate(proId, req.body).then(response => {
+    let categoryId = req.body.category_id
+    adminHelper.doCategoryUpdate(categoryId, req.body).then(response => {
 
         res.redirect('/admin/category')
     })
@@ -257,6 +272,89 @@ exports.saleByStateMonth = (req, res) => {
     })
 
 
+}
+exports.totalRevenue = (req, res) => {
+
+    adminHelper.dototalRevenue(req.body).then((totalRevenue) => {
+        res.send(totalRevenue)
+
+    })
+
+
+}
+exports.totalCategorySales = (req, res) => {
+
+    adminHelper.doTotalCategorySales(req.body).then((totalCategorySales) => {
+        res.send(totalRevenue)
+
+    })
+
+
+}
+
+exports.couponUpdate = (req, res) => {
+    adminHelper.doCouponUpdate(req.body).then(response => {
+        res.redirect('/admin/coupons')
+    })
+}
+exports.updateShippingStatus = (req, res) => {
+    console.log(req.body);
+    adminHelper.updateShippingStatus(req.body).then(response => {
+        res.send()
+        /* res.redirect('/admin/coupons') */
+    })
+}
+exports.salesReport = (req, res) => {
+    adminHelper.getSalesData().then(response => {
+        let salesReport = response
+        res.render('admin/sales_report', { activeSalesReport: 'active', salesReport })
+    })
+}
+exports.salesReportExport = (req, res) => {
+
+
+    try {
+
+        let type = req.params.type
+        if (type == 'pdf') {
+            adminHelper.getSalesReportPDF().then(response => {
+                let { ejsData, options } = response
+                pdf.create(ejsData, options).toFile('sales_report.pdf', (err, response) => {
+                    if (err) console.log(err);
+                    let filePath = path.resolve(__dirname, '../sales_report.pdf')
+
+                    fs.readFile(filePath, (err, file) => {
+                        if (err) {
+                            console.log(err);
+                            return res.status(500).send('Could not download file')
+                        }
+                        console.log('file generated');
+                        res.setHeader('Content-disposition', 'attachment; filename=sales_report.pdf');
+                        res.setHeader('Content-type', 'application/pdf');
+
+                        res.send(file)
+                    })
+
+
+                })
+            })
+        } else {
+
+            adminHelper.getSalesReportExcel().then(response => {
+                console.log('file generated');
+                res.setHeader('Content-disposition', 'attachment; filename=sales_report.xlsx');
+                res.setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                res.send(fs.readFileSync('sales_report.xlsx'));
+            })
+
+        }
+
+
+
+    }
+    catch (e) {
+        console.log(e);
+    }
 }
 
 

@@ -1,7 +1,9 @@
 <% (productData[0].products || [] ).forEach(product=> { %>
     <li class="product-item">
         <div class="product-card" tabindex="0">
-            <h1><%=productData.men_products %></h1>
+            <h1>
+                <%=productData.men_products %>
+            </h1>
             <figure class="card-banner">
                 <a href="/product/<%=product._id%>"> <img src="/images/products_image/<%=product.product_image[0]%>"
                         width="312" height="350" loading="lazy" alt="Running Sneaker Shoes" class="image-contain"></a>
@@ -55,15 +57,15 @@
             <div class="card-content">
 
                 <div class="card-cat">
-                
 
 
-                        <a href="/<%= productData[0].category %>" class="card-cat-link">
-                            <%= productData[0].category %>
 
-                        </a>
-                      
-                            <!--   <a href="#" class="card-cat-link">Men</a> /
+                    <a href="/<%= productData[0].category %>" class="card-cat-link">
+                        <%= productData[0].category %>
+
+                    </a>
+
+                    <!--   <a href="#" class="card-cat-link">Men</a> /
             <a href="#" class="card-cat-link">Women</a> -->
                 </div>
 
@@ -73,17 +75,26 @@
                         <%= product.product_name %>
                     </a>
                 </h3>
+                <% if (product.product_stock>0) { %>
 
-                <data class="card-price" value="14799">₹<%=product.product_price %><del>
-                            <%=product.product_old_price %>
-                        </del></data>
+                    <data class="card-price" value="14799">₹<%=product.product_price %><del>
+                                <%=product.product_old_price %>
+                            </del></data>
+                    <% }else{ %>
+                        <span class="text-danger">
+                            Out Of Stock
+                        </span>
+
+                        <% } %>
+
 
             </div>
 
         </div>
     </li>
+
     <% }) %>
-        
+
         <script>
             function cartCount(id) {
                 console.log(id);
@@ -94,6 +105,15 @@
                         if (cartCount) {
                             document.getElementById('cartCount').innerHTML = cartCount
                         }
+
+                        const toastLiveExample = document.getElementById('toasterMessage')
+
+                        document.getElementById('toastMessage').innerHTML = "Product has been added to your cart."
+                        const toast = new bootstrap.Toast(toastLiveExample, {
+                            autohide: true,
+                            delay: 3000
+                        })
+                        toast.show()
 
 
                     }
@@ -111,6 +131,14 @@
                         if (wishlistCount) {
                             document.getElementById('wishlistCount').innerHTML = wishlistCount
                         }
+                        const toastLiveExample = document.getElementById('toasterMessage')
+                       
+                       document.getElementById('toastMessage').innerHTML="Product has been added to your wishlist."
+                          const toast = new bootstrap.Toast(toastLiveExample, {
+                              autohide: true,
+                              delay: 3000
+                          })
+                          toast.show()
 
 
                     }

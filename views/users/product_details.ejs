@@ -17,7 +17,7 @@
                         <a class="pt" href="#product-3">
                             <img src="\images\products_image\<%=products.product_image[2]%>" alt="">
                         </a>
-                        <a class="pt" href="#product-4">
+                        <a class="pt" href="#product-4">    
                             <img src="\images\products_image\<%=products.product_image[3]%>" alt="">
                         </a>
                     </div>
@@ -65,7 +65,7 @@
                         <ul>
                             <li onclick="addToWishlist('<%=products._id%>')"><a><span class="icon_heart_alt"></span></a>
                             </li>
-                            <li><a href="#"><span class="icon_adjust-horiz"></span></a></li>
+                           <!--  <li><a href="#"><span class="icon_adjust-horiz"></span></a></li> -->
                         </ul>
                     </div>
                     <div class="product__details__widget">
@@ -97,27 +97,28 @@
                                         </label>
                                     </div>
                                 </li> -->
-                            <li>
+                           <!--  <li>
                                 <span>Available size:</span>
                                 <div class="size__btn">
                                     <label for="xs-btn" class="active">
                                         <input type="radio" id="xs-btn">
+                                        7
+                                    </label>
+                                    <label for="s-btn" class="active">
+                                        <input type="radio" id="xs-btn">
                                         8
                                     </label>
-                                    <label for="s-btn">
+                                    <label for="m-btn">
                                         <input type="radio" id="s-btn">
                                         9
                                     </label>
-                                    <label for="m-btn">
+                                    <label for="l-btn">
                                         <input type="radio" id="m-btn">
                                         10
                                     </label>
-                                    <label for="l-btn">
-                                        <input type="radio" id="l-btn">
-                                        11
-                                    </label>
+                                   
                                 </div>
-                            </li>
+                            </li> -->
                             <li>
                                 <span>Promotions:</span>
                                 <p>Free shipping</p>
@@ -132,12 +133,12 @@
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Specification</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Reviews ( 2 )</a>
-                        </li>
+                        </li> -->
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
@@ -146,7 +147,7 @@
                                 <%=products.product_description%>
                             </p>
                         </div>
-                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                      <!--   <div class="tab-pane" id="tabs-2" role="tabpanel">
                             <h6>Specification</h6>
                             <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed
                                 quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
@@ -171,7 +172,7 @@
                                 dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes,
                                 nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
                                 quis, sem.</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -229,6 +230,14 @@
                 if (cartCount) {
                     document.getElementById('cartCount').innerHTML = cartCount
                 }
+                const toastLiveExample = document.getElementById('toasterMessage')
+                       
+                       document.getElementById('toastMessage').innerHTML="Product has been added to your cart."
+                          const toast = new bootstrap.Toast(toastLiveExample, {
+                              autohide: true,
+                              delay: 3000
+                          })
+                          toast.show()
 
             }
         })
@@ -241,7 +250,6 @@
 
 
     function addToWishlist(id) {
-        console.log(newVal);
         console.log(id);
         $.ajax({
             type: 'get',
@@ -250,6 +258,16 @@
                 if (wishlistCount) {
                     document.getElementById('wishlistCount').innerHTML = wishlistCount
                 }
+
+                const toastLiveExample = document.getElementById('toasterMessage')
+                       
+                       document.getElementById('toastMessage').innerHTML="Product has been added to your wishilist."
+                          const toast = new bootstrap.Toast(toastLiveExample, {
+                              autohide: true,
+                              delay: 3000
+                          })
+                          toast.show()
+
 
 
             }

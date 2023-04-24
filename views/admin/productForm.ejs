@@ -8,7 +8,15 @@
 
 <script type="text/javascript" src="js/bootstrap-multiselect.js"></script>
 <link rel="stylesheet" href="css/bootstrap-multiselect.css" type="text/css" />
-<form action="/admin/products" method="post" enctype="multipart/form-data">
+<style>
+    /* Remove increment and decrement buttons from input type number */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+</style>
+<form action="/admin/products" method="post" enctype="multipart/form-data" class="needs-validation" novalidate="">
     <!-- Modal -->
     <div class="modal fade" id="productAdd" tabindex="-1" aria-labelledby="productAddLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
@@ -32,19 +40,30 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5 class="card-title mb-0">Product Title</h5>
-                                            <input type="text" name="product_name" placeholder="Enter product title"
+                                            <input type="text" class="form-control" name="product_name" placeholder="Enter product title"
                                                 required>
+                                                <div class="valid-feedback">
+                                                    Looks good!
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Enter Product Name!
+                                                </div>
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title mb-0">Description</h5>
-                                            <textarea id="story" name="product_description"
-                                                placeholder="type Description..." rows="5" cols="33"></textarea>
-
+                                            <textarea id="story" class="form-control" name="product_description"
+                                                placeholder="type Description..." rows="5" required cols="33"></textarea>
+                                                <div class="valid-feedback">
+                                                    Looks good!
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Enter Product Description!
+                                                </div>
                                         </div>
 
                                         <div class="card-body">
                                             <h5 class="card-title mb-0">Product Category</h5>
-                                            <section class="ftco-section">
+                                            <section class="ftco-section " >
                                                 <div class="container">
 
                                                     <div class="row ">
@@ -61,14 +80,15 @@
                                                                         data-dropdown="true" data-input-style="outline"
                                                                         data-label-style="stacked" data-tags="true" />
                                                                 </label>
-                                                                <select id="demo-multiple-select"
+                                                                <select class="form-control" required id="demo-multiple-select"
                                                                     name="product_category" multiple>
 
                                                                     <% (categoryView || []).forEach(i=> { %>
-                                                                        <option value="<%=i._id %>">
+                                                                        <option  value="<%=i._id %>">
                                                                             <%=i.category %>
                                                                         </option>
                                                                         <% }) %>
+                                                                        
                                                                 </select>
 
 
@@ -98,28 +118,28 @@
                                                 <img id="imgView" class="pt-3 pb-3" alt=""
                                                     style="width: 100px; height:auto;">
                                                 <input type="file" class="form-control" name="product_image"
-                                                    onchange="viewImage(event,0)"><br>
+                                                    onchange="viewImage(event,0)" required><br>
                                             </div>
                                             <div>
 
                                                 <img id="imgView1" class="pt-3 pb-3" alt=""
                                                     style="width: 100px; height:auto;">
                                                 <input type="file" class="form-control" name="product_image"
-                                                    onchange="viewImage(event,1)"><br>
+                                                    onchange="viewImage(event,1)" required><br>
                                             </div>
                                             <div>
 
                                                 <img id="imgView2" class="pt-3 pb-3" alt=""
                                                     style="width: 100px; height:auto;">
                                                 <input type="file" class="form-control" name="product_image"
-                                                    onchange="viewImage(event,2)"><br>
+                                                    onchange="viewImage(event,2)" required><br>
                                             </div>
                                             <div>
 
                                                 <img id="imgView3" class="pt-3 pb-3" alt=""
                                                     style="width: 100px; height:auto;">
                                                 <input type="file" class="form-control" name="product_image"
-                                                    onchange="viewImage(event,3)"><br>
+                                                    onchange="viewImage(event,3)" required><br>
                                             </div>
                                         </div>
 
@@ -128,9 +148,60 @@
                                 <div class="col-4">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5 class="card-title mb-0">Pricing</h5>
-                                            <input type="number" name="product_price" placeholder="product price"
+                                            <h5 class="card-title mb-0">Stock</h5>
+                                            <input type="number" min="0" class="form-control" name="product_stock" placeholder="product stock"
                                                 required>
+                                                <div class="valid-feedback">
+                                                    Looks good!
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Enter Product Stock!
+                                                </div>
+                                        </div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Pricing</h5>
+                                            <input type="number" class="form-control" min="0" name="product_price" placeholder="product price"
+                                                required>
+                                                <div class="valid-feedback">
+                                                    Looks good!
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Enter Product Price!
+                                                </div>
+                                        </div>
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Size</h5>
+                                            <label>
+                                                <input type="checkbox" class="form-check-input"  name="product_size" value="7">
+                                                Size 7
+                                              </label>
+                                              <label>
+                                                <input type="checkbox" class="form-check-input"  name="product_size" value="8">
+                                                Size 8
+                                              </label>
+                                              <label>
+                                                <input type="checkbox" class="form-check-input"  name="product_size" value="9">
+                                                Size 9
+                                              </label>
+                                              <label>
+                                                <input type="checkbox" class="form-check-input" name="product_size" value="10">
+                                                Size 10
+                                              </label>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                select Product Size!
+                                            </div>
                                         </div>
                                         <div class="card-body">
                                         </div>
@@ -139,7 +210,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title mb-0">Old Pricing</h5>
-                                            <input type="number" name="product_old_price"
+                                            <input type="number" min="0" class="form-control" name="product_old_price"
                                                 placeholder="product old price ">
                                         </div>
                                         <div class="card-body">
@@ -149,11 +220,12 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title mb-0">Badge</h5>
-                                            <input type="text" name="product_badge" placeholder="product badge">
+                                            <input type="text" class="form-control" name="product_badge" placeholder="product badge">
                                         </div>
                                         <div class="card-body">
                                         </div>
                                     </div>
+                                   
                                 </div>
 
 
@@ -171,7 +243,7 @@
                 <div class="modal-footer">
                     <a href="/admin/products"><button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Close</button></a>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </div>

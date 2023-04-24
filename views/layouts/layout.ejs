@@ -31,7 +31,7 @@
 
             <body id="top">
                 <!-- Page Preloder -->
-               <!--  <div id="preloder">
+                <!--  <div id="preloder">
                     <div class="loader"></div>
                 </div> -->
                 <% if (locals.noShow) { %>
@@ -67,10 +67,33 @@
                                                                                     <% } %>
                                                                                         <% } %>
 
-
-            </body>
+                                                                                
+                                                                                            <div
+                                                                                                class="toast-container position-fixed bottom-0  mb-5 end-0 p-3">
+                                                                                                <div  id="toasterMessage"
+                                                                                                    class="toast align-items-center text-bg-primary border-0"
+                                                                                                    role="alert"
+                                                                                                    aria-live="assertive"
+                                                                                                    aria-atomic="true">
+                                                                                                    <div class="d-flex">
+                                                                                                        <div style="font-size: 20px;"
+                                                                                                            class="toast-body">
+                                                                                                            <span id="toastMessage"></span>
+                                                                                                            
+                                                                                                        </div>
+                                                                                                        <button
+                                                                                                            type="button"
+                                                                                                            class="btn-close btn-close-white me-2 m-auto"
+                                                                                                            data-bs-dismiss="toast"
+                                                                                                            aria-label="Close"></button>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
 
             </html>
 
 
             <% } %>
+
+
+           

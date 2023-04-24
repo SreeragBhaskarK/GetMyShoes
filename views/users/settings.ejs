@@ -70,7 +70,7 @@
                         </div>
 
                         <div class="list-group list-group-flush" role="tablist">
-                            <a class="list-group-item list-group-item-action active" data-bs-toggle="list"
+                            <a class="list-group-item list-group-item-action active " data-bs-toggle="list"
                                 href="#account" role="tab">
                                 Account
                             </a>
@@ -78,7 +78,7 @@
                                 role="tab">
                                 Address
                             </a>
-                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#passwords"
+                            <a class="list-group-item list-group-item-action " data-bs-toggle="list" href="#passwords"
                                 role="tab">
                                 Password
                             </a>
@@ -86,24 +86,7 @@
                                 role="tab">
                                 Orders
                             </a>
-                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-                                Privacy and safety
-                            </a>
-                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-                                Email notifications
-                            </a>
-                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-                                Web notifications
-                            </a>
-                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-                                Widgets
-                            </a>
-                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-                                Your data
-                            </a>
-                            <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#" role="tab">
-                                Delete account
-                            </a>
+
                         </div>
                     </div>
                 </div>
@@ -198,17 +181,27 @@
                                                 value=" <%=locals.users?.phone%>" name="phone" id="inputEmail4"
                                                 placeholder="Phone">
                                         </div>
-                                        
+
                                         <div class="mb-3">
+
                                             <label class="form-label" for="">Your Gender</label><br>
-                                            <input type="radio" value=" male" name="gender" id="">
-                                            <label class="form-label" for="">Male</label>
-                                            <input type="radio" value=" female" name="gender" id="">
-                                            <label class="form-label" for="">Female</label><br>
+                                            <% if (locals.users?.gender==='male' ) { %>
+                                                <input checked type="radio" value=" male" name="gender" id="">
+                                                <label class="form-label" for="">Male</label>
+                                                <input type="radio" value=" female" name="gender" id="">
+                                                <label class="form-label" for="">Female</label><br>
+                                                <% }else{ %>
+                                                    <input checked type="radio" value=" male" name="gender" id="">
+                                                    <label class="form-label" for="">Male</label>
+                                                    <input checked type="radio" value=" female" name="gender" id="">
+                                                    <label class="form-label" for="">Female</label><br>
+                                                    <% } %>
+
                                         </div>
                                         <div class="mb-3">
                                             <label for="age">Age:</label>
-                                            <input type="number" id="age" name="age" min="0" max="150">
+                                            <input type="number" id="age" value="<%=locals.users?.age%>" name="age"
+                                                min="0" max="150">
                                         </div>
                                         <!-- <div class="mb-3">
                                             <label class="form-label" for="inputAddress">Address</label>
@@ -640,21 +633,30 @@
                                     <% (locals.orders || []).forEach(order=> { %>
                                         <div>
 
-                                            Order Id : #<%=order._id %>
-                                                <% (order.productInfo || []).forEach(orderPro=> { %>
-                                                    <a style="text-decoration: none; color: black;"
-                                                        href="/order-details/<%= order._id%>/<%= orderPro._id%>">
-                                                        <div class="row"
-                                                            style="border: solid 0.5px; padding: 5px;    margin: 5px;">
-                                                            <div class="col-2">
-                                                                <div class="CXW8mj"
-                                                                    style="height: 75px;width: 75px; margin: auto;"><img
-                                                                        style=" height: 100%;" alt=""
-                                                                        src="/images/products_image/<%= orderPro.product_image[0]%>">
+                                            <span> Order Id : #<%=order._id %></span>
+                                            <% if (order.status==='placed' && order.shipping_status==='Order Placed'  || order.shipping_status==='Shipped' ) { %>
+                                                <span class="text-danger ms-3" style="float: right; "><a style="text-decoration: none; color: red;"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#staticBackdrop<%=order._id%>">Cancel</a> </span>
+                                                <% } %>
+                                            <% if (order.status==='placed' ) { %>
+                                                <span style="float: right;"><a style="text-decoration: none;"
+                                                        href="/invoice/<%=order._id %>">Invoice</a> </span>
+                                                <% } %>
+                                                    <% (order.productInfo || []).forEach(orderPro=> { %>
+                                                        <a style="text-decoration: none; color: black;"
+                                                            href="/order-details/<%= order._id%>/<%= orderPro._id%>">
+                                                            <div class="row"
+                                                                style="border: solid 0.5px; padding: 5px;    margin: 5px;">
+                                                                <div class="col-2">
+                                                                    <div class="CXW8mj"
+                                                                        style="height: 75px;width: 75px; margin: auto;">
+                                                                        <img style=" height: 100%;" alt=""
+                                                                            src="/images/products_image/<%= orderPro.product_image[0]%>">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <span style="box-shadow: none;
+                                                                <div class="col-4">
+                                                                    <span style="box-shadow: none;
                                             padding: 0;
                                             border: none;
                                             font-size: 14px;
@@ -662,44 +664,77 @@
                                             color: #212121;
                                             margin-bottom: 10px;
                                             font-weight: 400;">
-                                                                    <%= orderPro.product_name %>
-                                                                </span>
-                                                                <div><span style="color: #878787;
+                                                                        <%= orderPro.product_name %>
+                                                                    </span>
+                                                                    <div><span style="color: #878787;
                                                 font-size: 12px;
                                                 margin-bottom: 5px;"><span>Color:
-                                                                        </span><span
-                                                                            class="-igymY">Grey</span></span><span
-                                                                        class="_3dOR_a"></span></div>
-                                                            </div>
-                                                            <div style="color: #212121;
+                                                                            </span><span
+                                                                                class="-igymY">Grey</span></span><span
+                                                                            class="_3dOR_a"></span></div>
+                                                                </div>
+                                                                <div style="color: #212121;
                                         text-transform: uppercase;" class="col-2">
-                                                                ₹<%= orderPro.product_price %>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <div>
-                                                                    <% if (order.status==='placed' ) { %>
-                                                                        <div class="me-2 mt-1" style="float: left;
+                                                                    ₹<%= orderPro.product_price %>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <div>
+                                                                        <% if (order.shipping_status==='Order Placed' ||
+                                                                            order.shipping_status==='Shipped' ||
+                                                                            order.shipping_status==='Delivered' ) { %>
+                                                                            <div class="me-2 mt-1" style="float: left;
                                                                 background-color: #6aec87;
                                                                 border: 7px solid #56e251;
                                                                 border-radius: 10px;"></div>
-                                                                        <% }else{ %>
+                                                                            <% }else if (order.shipping_status==='Processing'){ %>
                                                                             <div class="me-2 mt-1" style="float: left;
                                                             background-color: #ff6161;
                                                             border: 7px solid #ff6161;
                                                             border-radius: 10px;"></div>
-                                                                            <% } %>
-                                                                                <span style="font-size: 14px;
+                                                                            <% } else if (order.shipping_status==='In Transit' ||order.shipping_status==='Out for Delivery'  ){ %>
+                                                                               
+                                                                                <div class="me-2 mt-1" style="float: left;
+                                                                background-color: #beec6a;
+                                                                border: 7px solid #beec6a;
+                                                                border-radius: 10px;"></div>
+                                                                                <% } else { %>
+                                                                                    <div class="me-2 mt-1" style="float: left;
+                                                                background-color: #e71818;
+                                                                border: 7px solid #e71818;
+                                                                border-radius: 10px;"></div>
+                                                                                    <% }%> 
+                                                                                    <span style="font-size: 14px;
                                                 font-weight: 500;">
-                                                                                    <%= order.status%>
-                                                                                </span>
-                                                                                <div style="    font-size: 12px;
-                                                margin-top: 8px;">Your Payment was not confirmed by the bank.</div>
+                                                                                        <%= order.shipping_status%>
+                                                                                    </span>
+                                                                                    <div style="    font-size: 12px;
+                                                margin-top: 8px;">Your item has been <%= order.shipping_status%>.</div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </a>
-                                                    <% }) %>
+                                                        </a>
+                                                        <% }) %>
                                         </div>
+
+                                        <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop<%= order._id%>" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class=" modal-dialog modal-sm modal-dialog-centered">
+                                    <div class="modal-content ">
+
+                                        <div class="modal-body">
+                                            Are you want to cancel order  ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <a href="/order_cancel/<%=order._id%>"><button type="button"
+                                                    class="btn btn-danger">Order Cancel</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                                         <% }) %>
 
                                             <!-- 
@@ -769,12 +804,14 @@
 
             const email = formData.get('email');
             const phone = formData.get('phone');
+            const gender = formData.get('gender');
+            const age = formData.get('age');
 
             try {
                 const response = await fetch('/profile_info', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ firstName, lastName, email, phone }),
+                    body: JSON.stringify({ firstName, lastName, email, phone, gender, age }),
                 });
                 const data = await response.text();
                 console.log(data);
@@ -1010,15 +1047,19 @@
 </script>
 
 <script>
-    /*     const addresses = document.querySelectorAll('#editstate-select');
-      
-        addresses.forEach(address => {
-        const data = JSON.parse(address.getAttribute('data-address'));
-        // use the data as needed
-        console.log(data);
-      });
-        let stateSelect = document.getElementById("editstate-select");
-    
-    
-        stateSelect.value = "West Bengal[22.9868, 87.8550]"; */
+    // Get the ID of the last selected tab from localStorage
+    let lastTab = localStorage.getItem('lastTab');
+
+    // Set the active tab based on the lastTab ID, or default to the first tab
+    let activeTab = document.querySelector(lastTab) || document.querySelector('.list-group-item:first-child');
+    activeTab.classList.add('active');
+
+    // Add a click event listener to each tab to update the lastTab value in localStorage
+    document.querySelectorAll('.list-group-item').forEach(tab => {
+        tab.addEventListener('click', function () {
+            localStorage.setItem('lastTab', this.getAttribute('href'));
+        });
+    });
+
+
 </script>

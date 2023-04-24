@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link class="js-stylesheet" href="/admin/css/light.css" rel="stylesheet">
+    <link href="css2.css?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <main class="content">
+        <div class="container-fluid p-0">
+
+            <h1 class="h3 mb-3 InvoiceTitle">Invoice</h1>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card InvoiceCard">
+                        <div class="card-body  ">
+                            <div class="mb-4">
+                                Hello <strong>
+                                    <%=orderDetail[0].deliveryAddress.name%>
+                                </strong>,
+                                <br>
+                                This is the receipt for a payment of <strong>₹ <%=orderDetail[0].totalAmount%></strong>
+                                (IND) you made to GetMyShoe.
+                            </div>
+
+                            <div class="row paymentmain" >
+                                <div class="col-6 payment">
+                                    <% if (orderDetail[0].paymentMethod=='COD' ) { %>
+                                        <div class="text-muted">Order No.</div>
+                                        <strong>
+                                            #<%=orderDetail[0]._id%>
+                                        </strong>
+                                        <% }else{ %>
+                                            <div class="text-muted">Payment No.</div>
+                                            <strong>
+                                                <%=orderDetail[0].payment_details.razorpay_payment_id%>
+                                            </strong>
+                                            <% } %>
+
+                                </div>
+                                <div class="col-6 paymentDate text-md-end">
+                                    <% if (orderDetail[0].paymentMethod=='COD' ) { %>
+                                        <div class="text-muted">Order Date</div>
+                                        <% }else{ %>
+                                            <div class="text-muted">Payment Date</div>
+                                            <% } %>
+                                                <% const createdAt=new Date(orderDetail[0].createdAt); const
+                                                    formattedDate=new Intl.DateTimeFormat('en-US', { month: 'long' ,
+                                                    day: 'numeric' , year: 'numeric' , hour: 'numeric' ,
+                                                    minute: 'numeric' , hour12: true }).format(createdAt); %>
+                                                    <strong>
+                                                        <%=formattedDate%>
+                                                    </strong>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <div class="row mb-4">
+                                <div class="col-6">
+                                    <div class="text-muted">Client</div>
+                                    <strong>
+                                        <%=orderDetail[0].deliveryAddress.name%>
+                                    </strong>
+                                    <p>
+                                        <%=orderDetail[0].deliveryAddress.address%> <br>
+                                            <%=orderDetail[0].deliveryAddress.city%> <br>
+                                                <%=orderDetail[0].deliveryAddress.pincode%> <br>
+                                                    <%=orderDetail[0].deliveryAddress.state%> <br>
+                                                    <% if (locals.userEmail) { %>
+                                                        <a href="mailto:<%=locals.userEmail%>">
+                                                            <%=locals.userEmail%>
+                                                        </a><br>
+                                                    <% } %>
+                                                       
+                                                        <% if (orderDetail[0].paymentMethod=='COD' ) { %>
+                                                            Payment Method : COD
+                                                            <% }else{ %>
+                                                                Payment Method : ONLINE
+                                                                <% } %>
+
+                                    </p>
+                                </div>
+                                <div class="col-6 text-md-end">
+                                    <div class="text-muted">Payment To</div>
+                                    <strong>
+                                        GetMyShoe LLC
+                                    </strong>
+                                    <p>
+                                        354 Roy Alley <br>
+                                        Denver <br>
+                                        80202 <br>
+                                        USA <br>
+                                        <a href="mailto:getmyshoe@hotmail.com">
+                                            getmyshoe@hotmail.com
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Products</th>
+                                        <th>Quantity</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% orderDetail[0].productInfo.forEach(product=> { %>
+                                        <tr>
+                                            <td>
+                                                <%=product.product_name %>
+                                            </td>
+                                            <td>
+                                                <%=product.quantity %>
+                                            </td>
+                                            <td class="text-end">₹ <%= product.quantity * product.product_price %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>Subtotal </th>
+                                                <th class="text-end">₹ <%=orderDetail[0].totalProAmount %>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>Shipping </th>
+                                                <th class="text-end">Free Delivery</th>
+                                            </tr>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>Discount </th>
+                                                <% if (orderDetail[0].discount) { %>
+
+                                                    <th class="text-end">₹ -<%=orderDetail[0].discount%>
+                                                    </th>
+                                                    <% }else{ %>
+                                                        <th class="text-end">0</th>
+                                                        <% } %>
+                                            </tr>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>Total </th>
+                                                <th class="text-end">₹<%=orderDetail[0].totalAmount %>
+                                                </th>
+                                            </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="mb-3">
+                                <% let delcreatedAt=new Date(orderDetail[0].createdAt);
+                                    delcreatedAt.setDate(delcreatedAt.getDate() + 10); const delivery=new
+                                    Intl.DateTimeFormat('en-US', { month: 'long' , day: 'numeric' , year: 'numeric'
+                                    }).format(delcreatedAt); %>
+                                    <span>Delivery Date</span> <br>
+                                    <span>Estimated delivery date: <strong>
+                                            <%= delivery %>
+                                        </strong></span>
+                            </div>
+
+
+
+                            <div class="text-center">
+                                <p class="text-sm">
+                                    <strong>Extra note:</strong>
+                                    Please send all items at the same time to the shipping address.
+                                    Thanks in advance.
+                                </p>
+                                <% if (locals.noButton) { %>
+
+                                    <% }else{ %>
+                                        <a href="/order_invoice_download/<%=orderDetail[0]._id%>"
+                                            class="btn btn-primary">
+                                            Export this receipt
+                                        </a>
+                                        <% } %>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+</body>
+
+</html>

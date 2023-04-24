@@ -1,98 +1,186 @@
 <main class="content">
     <div class="container-fluid p-0">
         <!-- Button trigger modal -->
-        <% if (locals.editView) { %>
-            <%- include('./editProductForm') %>
-                <% } %>
-                    <%- include('./productForm') %>
+        <%- include('./editProductForm') %>
+            <%- include('./productForm') %>
 
-                        <a href="" data-bs-toggle="modal" data-bs-target="#productAdd" id="editbtn"
-                            class="btn btn-primary float-end mt-n1"><i class="fas fa-plus"></i> New products</a>
-                        <div class="mb-3">
-                            <h1 class="h3 d-inline align-middle">Products</h1>
-                        </div>
+                <a href="" data-bs-toggle="modal" data-bs-target="#productAdd" id="editbtn"
+                    class="btn btn-primary float-end mt-n1"><i class="fas fa-plus"></i> New products</a>
+                <div class="mb-3">
+                    <h1 class="h3 d-inline align-middle">Products</h1>
+                </div>
 
-                        <table id="example" class="table table-striped" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Product Details</th>
-                                    <th>Category</th>
-                                    <th>Options</th>
-                                    <th>Price</th>
-                                    <th>Stock</th>
-                                    <th>SKU</th>
-                                    <th>RATE</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Product Details</th>
+                            <th>Category</th>
+                            <th>Size</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>RATE</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
 
 
 
-                            <tbody>
-                                <% (productData || []).forEach(productData=> { %>
-                                    <tr>
-                                        <td>
-                                            <%= productData.product_name %>
-                                        </td>
-                                        <td>
-                                            <% (productData.category_name || []).forEach(i=> { %>
+                    <tbody>
+                        <% (productData || []).forEach(productData=> { %>
+                            <tr>
+                                <td>
+                                    <%= productData.product_name %>
+                                </td>
+                                <td>
+                                    <% (productData.category_name || []).forEach(i=> { %>
 
 
 
-                                                <%= i.category %>
+                                        <%= i.category %>
 
-                                                    <% }) %>
-                                        </td>
-                                        <td>
-                                            <%= productData.product_options %>
-                                        </td>
-                                        <td>
-                                            <%= productData.product_price %>
-                                        </td>
-                                        <td>
-                                            <%= productData.product_stock %>
-                                        </td>
-                                        <td>
-                                            <%= productData.product_sku %>
-                                        </td>
-                                        <td>
-                                            <%= productData.product_rate %>
-                                        </td>
-                                        <td style="display: flex;"><a
-                                                href="/admin/edit-product/<%= productData._id%>"><button type="button"
-                                                    class="btn btn-primary me-2">Edit</button></a>
+                                            <% }) %>
+                                </td>
+                                <td>
+                                    <%= productData.product_size %>
+                                </td>
+                                <td>
+                                    <%= productData.product_price %>
+                                </td>
+                                <td>
+                                    <% if (productData.product_stock>0) { %>
+                                        <%= productData.product_stock %>
+                                            <% }else{ %>
+                                                <span class="text-danger">
+                                                    Out Of Stock
+                                                </span>
 
-                                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                                data-bs-target="#staticBackdrop<%= productData._id%>">Delete</button>
-                                        </td>
-                                    </tr>
+                                                <% } %>
 
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="staticBackdrop<%= productData._id%>" data-bs-backdrop="static"
-                                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                                        aria-hidden="true">
-                                        <div class=" modal-dialog modal-sm modal-dialog-centered">
-                                            <div class="modal-content ">
+                                </td>
 
-                                                <div class="modal-body">
-                                                    Are you want to delete <%= productData.product_name %> ?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary"
-                                                        data-bs-dismiss="modal">Close</button>
-                                                    <a href="/admin/delete-product/<%= productData._id%>"><button
-                                                            type="button" class="btn btn-danger">Delete</button></a>
-                                                </div>
-                                            </div>
+                                <td>
+                                    <%= productData.product_rate %>
+                                </td>
+                                <td style="display: flex;"><button onclick="productEdit('<%= productData._id%>')"
+                                        type="button" class="btn btn-primary me-2">Edit</button>
+
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop<%= productData._id%>">Delete</button>
+                                </td>
+                            </tr>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop<%= productData._id%>" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class=" modal-dialog modal-sm modal-dialog-centered">
+                                    <div class="modal-content ">
+
+                                        <div class="modal-body">
+                                            Are you want to delete <%= productData.product_name %> ?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <a href="/admin/delete-product/<%= productData._id%>"><button type="button"
+                                                    class="btn btn-danger">Delete</button></a>
                                         </div>
                                     </div>
-                                    <% }) %>
+                                </div>
+                            </div>
+                            <% }) %>
 
 
 
-                            </tbody>
+                    </tbody>
 
-                        </table>
+                </table>
 
     </div>
 </main>
+
+<script>
+    function productEdit(productId) {
+
+        $.ajax({
+            type: 'get',
+            url: '/admin/edit-product/' + productId,
+            success: (response) => {
+                console.log(response);
+                document.getElementById('product_name').value = response.product_name
+                document.getElementById('product_description').value = response.product_description
+                document.getElementById('imgView4').src = '/images/products_image/' + response.product_image[0]
+                document.getElementById('imgView5').src = '/images/products_image/' + response.product_image[1]
+                document.getElementById('imgView6').src = '/images/products_image/' + response.product_image[2]
+                document.getElementById('imgView7').src = '/images/products_image/' + response.product_image[3]
+                document.getElementById('product_price').value = response.product_price
+                document.getElementById('product_old_price').value = response.product_old_price
+                document.getElementById('product_badge').value = response.product_badge
+                document.getElementById('product_id').value = response._id
+                document.getElementById('product_stock').value = response.product_stock
+                console.log(response.product_size);
+                (response.product_size || []).forEach(i => {
+                    if (i == '7') {
+                        document.getElementById("size7").setAttribute("checked", "checked");
+                    } else if (i == '8') {
+                        document.getElementById("size8").setAttribute("checked", "checked");
+                    } else if (i == '9') {
+                        document.getElementById("size9").setAttribute("checked", "checked");
+                    } else if (i == '10') {
+                        document.getElementById("size10").setAttribute("checked", "checked");
+                    }
+                });
+
+                /*   response.categories_full.forEach(i => {
+                      let categoryList = `<option value="${i._id}">${i.category}
+                      </option>`
+                      $('#demo-multiple-select categorylist ').append(categoryList)
+                  }); */
+
+                response.categories_full.forEach(i => {
+                    let selected = ''
+                    response.categories.forEach(j => {
+                        if (i._id == j._id) {
+                            selected = 'selected'
+                        }
+
+                    });
+                    console.log(selected);
+                    let categoryList = `<option ${selected} value="${i._id}" >${i.category}</option>`;
+                    $('#demo-multiple-edit-select').append(categoryList);
+                });
+                mobiscroll.setOptions({
+                    locale: mobiscroll.localeEn,
+                    theme: 'ios',
+                    themeVariant: 'light'
+                });
+
+                mobiscroll.select('#demo-multiple-edit-select', {
+                    inputElement: document.getElementById('demo-multiple-edit-select-input')
+                });
+
+                $('#productEdit').modal('show');
+            }
+        })
+
+    }
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    });
+</script>

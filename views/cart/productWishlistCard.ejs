@@ -1,5 +1,5 @@
 <% (wishlistData[0]?.products || [] ).forEach(product=> { %>
-    <li class="product-item">
+    <li class="product-item" id="cardIdWishlist<%=product._id%>">
         <div class="product-card" tabindex="0">
 
             <figure class="card-banner">
@@ -24,11 +24,12 @@
                             </li>
 
                             <li class="card-action-item">
-                                <button onclick="deltPro('<%=wishlistData[0]?._id%>','<%=product._id%>')"  class="card-action-btn" aria-labelledby="card-label-2">
+                                <button onclick="deltPro('<%=wishlistData[0]?._id%>','<%=product._id%>')"
+                                    class="card-action-btn" aria-labelledby="card-label-2">
                                     <ion-icon name="heart-outline"></ion-icon>
                                 </button>
 
-                                <div  class="card-action-tooltip" id="card-label-2">Remove to Whishlist
+                                <div class="card-action-tooltip" id="card-label-2">Remove to Whishlist
                                 </div>
                             </li>
 
@@ -94,26 +95,44 @@
                             document.getElementById('cartCount').innerHTML = cartCount
                         }
 
+                        const toastLiveExample = document.getElementById('toasterMessage')
+
+                        document.getElementById('toastMessage').innerHTML = "Product has been added to your cart."
+                        const toast = new bootstrap.Toast(toastLiveExample, {
+                            autohide: true,
+                            delay: 3000
+                        })
+                        toast.show()
 
                     }
                 })
             }
         </script>
 
-<script>
-    function deltPro(wishlistId,proId){
-         console.log(proId,wishlistId);
-         $.ajax({
-             url:'/delete-wishlist-product',
-             type:'delete',
-             data:{
-                 proId:proId,
-                 wishlistId:wishlistId
-             },
-             success:(Response=>{
-                 location.reload()
-             })
-         })
-     }
- </script>
+        <script>
+            function deltPro(wishlistId, proId) {
+                console.log(proId, wishlistId);
+                $.ajax({
+                    url: '/delete-wishlist-product',
+                    type: 'delete',
+                    data: {
+                        proId: proId,
+                        wishlistId: wishlistId
+                    },
+                    success: (count => {
+                        console.log(count);
+                        document.getElementById('wishlistCount').innerHTML = count
+                        const toastLiveExample = document.getElementById('toasterMessage')
+                        $('#cardIdWishlist' + proId).remove()
+                        document.getElementById('toastMessage').innerHTML = "Product has been deleted in wishlist."
+                        const toast = new bootstrap.Toast(toastLiveExample, {
+                            autohide: true,
+                            delay: 3000
+                        })
+                        toast.show()
 
+
+                    })
+                })
+            }
+        </script>

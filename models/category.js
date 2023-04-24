@@ -5,7 +5,7 @@ const collection = require('../server/config/collections')
 const categorySchema = new Schema({
 
    category:String,
-   parent:Boolean,
+   category_type:String
     
 })
    

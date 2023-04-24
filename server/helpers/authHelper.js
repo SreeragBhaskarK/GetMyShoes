@@ -41,13 +41,13 @@ module.exports = {
                 /* send otp in phone number */
                 phone_number = Number('91' + phone_number)
                 let checkNumber = await module.exports.checkphoneNumber(phone_number)
-             
+
                 if (checkNumber.result) {
-           
+
                     resolve(false)
                 } else {
                     let number = await module.exports.sendOtpPhone(phone_number)
-            
+
                     resolve(phone_number)
                 }
 
@@ -75,7 +75,7 @@ module.exports = {
                 let { otp, phone_number } = OtpData
                 const otpNumber = String(otp.join(''));
                 phone_number = Number(phone_number)
-         
+
                 let userCheck = user.findOne({ phone: phone_number })
                 let validOTP
                 if (userCheck.status === 'active') {
@@ -101,7 +101,7 @@ module.exports = {
 
     userFinding: async (phone_number) => {
         try {
-     
+
             let result = await user.findOne({ phone: phone_number })
 
             if (result) {
@@ -214,9 +214,9 @@ module.exports = {
             /*  let otpData = await phoneOTP.findOne({ phone_number: phone_number })
              let userData = await user.findOne({ phone: phone_number })
   *//* 
-                                                                                                                                                         if (!otpData) {
-                                                                                                                                                             throw Error("Invalid otp.")
-                                                                                                                                                         } */
+                                                                                                                                                                   if (!otpData) {
+                                                                                                                                                                       throw Error("Invalid otp.")
+                                                                                                                                                                   } */
             /* console.log(userData?.phone, "nooooo") */
             let validOTP = await sendSmsChecking(otp, phone_number)
             if (validOTP) {
@@ -252,7 +252,7 @@ module.exports = {
 
         return new Promise(async (resolve, reject) => {
             try {
-             
+
                 let { email, password } = userData
                 email = email.trim()
                 password = password.trim()
@@ -478,16 +478,16 @@ module.exports = {
 
                 }
                 console.log(email, "dkfkdjf");
-                let emailCheck = await user.findOne({email:email})
+                let emailCheck = await user.findOne({ email: email })
                 console.log(emailCheck, "dkfkdjf");
-           
-                if(!emailCheck){
-                   resolve(false)
-                }else{
+
+                if (!emailCheck) {
+                    resolve(false)
+                } else {
                     await module.exports.sendVerificationOTPEmail(email)
-                resolve(true)
+                    resolve(true)
                 }
-                
+
                 /* await sendPasswordResetOTPEmail(email)
                 const existingUser = await user.findOne({ email })
                 const tokenData = { userId: existingUser._id, email }
@@ -502,30 +502,49 @@ module.exports = {
         })
 
     },
-    doChangePassword(pass,oldPass,userId){
-        return new Promise(async(resolve,reject)=>{
-            let {current_password,new_password,confirm_password}=pass
+    doChangePassword(pass, oldPass, userId) {
+        return new Promise(async (resolve, reject) => {
+            let { current_password, new_password, confirm_password } = pass
             const passwordMatch = await verifyHashedData(current_password, oldPass)
-            console.log(passwordMatch,"ppppppassssssssssss");
+            console.log(passwordMatch, "ppppppassssssssssss");
             if (!passwordMatch) {
-               resolve({result:false})
-            }else{
-                if(new_password===confirm_password){
+                resolve({ result: false })
+            } else {
+                if (new_password === confirm_password) {
                     let hashedPass = await hashData(new_password)
-                    console.log(hashedPass,'hassssssssssss');
-                    await user.updateOne({_id:new ObjectId(userId)},{
-                        $set:{password:hashedPass}
+                    console.log(hashedPass, 'hassssssssssss');
+                    await user.updateOne({ _id: new ObjectId(userId) }, {
+                        $set: { password: hashedPass }
                     })
-                    let userView = await user.findOne({_id:new ObjectId(userId)})
-                    console.log(userView,'checkkkkkkkkkkk');
-                    resolve({result:true,users:userView})
-                }else{
-                    resolve({result:true})
+                    let userView = await user.findOne({ _id: new ObjectId(userId) })
+                    console.log(userView, 'checkkkkkkkkkkk');
+                    resolve({ result: true, users: userView })
+                } else {
+                    resolve({ result: true })
                 }
 
             }
         })
     }
+    ,
+    doContactMessage(data) {
+        console.log(data);
+        return new Promise(async (resolve, reject) => {
+            const mailOptions = {
+
+                from: AUTH_EMAIL,
+                to: AUTH_EMAIL,
+                subject:'contact message',
+                html: `<p>contact message</p><p style="color:tomato;
+                font-size:25px;letter-spacing:2px;"><b>contact message</b></p><p>Contact information <b><br>name : ${data.name}<br>email : ${data.email}<br>website : ${data.website}<br>message : ${data.message} </b>.</p>`
+            }
+
+
+            await sendEmail(mailOptions)
+            resolve()
+        })
+    }
+
 
 
 }

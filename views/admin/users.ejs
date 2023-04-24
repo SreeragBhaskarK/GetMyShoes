@@ -15,7 +15,7 @@
                                 <th>Age</th>
                                 <th>Gender</th>
                                 <th>Phone</th>
-                                <th>City</th>
+                              
                                 <th>User Status</th>
                                 <th>Actions</th>
                                 <!-- <th>B</th> -->
@@ -65,9 +65,7 @@
                                     <td>
                                         +<%= userData.phone %>
                                     </td>
-                                    <td>
-                                        <%= userData.city %>
-                                    </td>
+                                  
                                     <% if (userData.status==='process' ) { %>
                                         <td><input type="button" class="btn btn btn-warning"
                                                 value="<%= userData.status %>" disabled></input></td>

@@ -5,6 +5,11 @@ const product = require("../../models/products")
 const order = require("../../models/order")
 const coupon = require("../../models/coupon")
 const { ObjectId } = require("mongodb")
+const fs = require('fs');
+const xlsx = require('xlsx');
+
+var path = require('path');
+let ejs = require('ejs')
 module.exports = {
 
     doLogIn(userData) {
@@ -108,13 +113,21 @@ module.exports = {
             })
         }, */
     doCategory(categoryData) {
+        console.log(categoryData);
         return new Promise(async (resolve, reject) => {
             try {
-                let { category } = categoryData
+                let { category_type } = categoryData
+                let categoryName = categoryData.category
 
                 if (!category) throw Error("Empty category")
+                let addCategory = new category({
+                    category: categoryName,
+                    category_type: category_type
 
-                await addCategory(category)
+                })
+
+                await addCategory.save()
+
                 resolve({ port: 200 })
 
             } catch (error) {
@@ -139,18 +152,17 @@ module.exports = {
             }
         })
 
-    }, doCategoryDelete(proId) {
+    }, doCategoryDelete(categoryId) {
         return new Promise(async (resolve, reject) => {
 
             try {
-                let productId = await category.find({ _id: proId })
+                let productId = await category.find({ _id: categoryId })
 
                 if (!productId) throw Error("Empty products")
 
-
-
-                if (!productId[0].parent === true) {
-                    await deleteCategory(proId)
+                console.log(productId, "jnnnnnnnnnnnnn");
+                if (productId[0].category_type != 'parent') {
+                    await category.deleteOne({ _id: new ObjectId(categoryId) })
                 }
 
                 resolve()
@@ -161,15 +173,15 @@ module.exports = {
             }
         })
     },
-    doCategoryEdit(proId) {
+    doCategoryEdit(categoryId) {
         return new Promise(async (resolve, reject) => {
             try {
-                let categoryId = await category.find({ _id: proId })
+                let categoryData = await category.find({ _id: new ObjectId(categoryId) })
 
-                if (!categoryId) throw Error("Empty products")
+                if (!categoryData) throw Error("Empty products")
 
 
-                resolve(categoryId)
+                resolve(categoryData)
             }
             catch (error) {
                 let err = { port: 400, message: error.message }
@@ -177,19 +189,20 @@ module.exports = {
             }
         })
     },
-    doCategoryUpdate(proId, categoryData) {
+    doCategoryUpdate(categoryId, categoryUpdate) {
         return new Promise(async (resolve, reject) => {
 
             try {
-                let categoryId = await category.find({ _id: proId })
+                let categoryData = await category.find({ _id: new ObjectId(categoryId) })
 
-                if (!categoryId) throw Error("Empty user")
-
-                let status = await category.updateOne({ _id: proId },
+                if (!categoryData) throw Error("Empty user")
+                console.log(categoryData);
+                let status = await category.updateOne({ _id: new ObjectId(categoryId) },
                     {
                         $set: {
 
-                            category: categoryData.category
+                            category: categoryUpdate.category,
+                            category_type: categoryUpdate.category_type
                         }
                     })
                 resolve({ status })
@@ -374,7 +387,7 @@ module.exports = {
             /* weekRevenue */
             let weekRevenueData = await weekRevenue()
             console.log(weekRevenueData, 'return');
-            let revenueWeek = weekRevenueData.weekRevenue[0].totalAmount
+            let revenueWeek = weekRevenueData.weekRevenue[0]?.totalAmount ?? 0
             let revenuepercentage = weekRevenueData.RevenueChangeFormatted
 
             /* totalRevenueinMonth */
@@ -383,7 +396,7 @@ module.exports = {
             /* weekIncome */
             let weekIncome = await weekIncomes()
             console.log(weekIncome);
-            let incomeWeek = weekIncome.weekIncome[0].totalAmount
+            let incomeWeek = weekIncome.weekIncome[0]?.totalAmount ?? 0
             let incomepercentage = weekIncome.incomeChangeFormatted
 
             /* totalMonthOrder */
@@ -393,7 +406,10 @@ module.exports = {
             /* totalIncomeMonth */
             let totalIncomeByMonth = await totalIncomeMonth()
 
-            resolve({ States, orderCount: weekOrders[0].orderCount, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth, incomeWeek, incomepercentage, totalMonthOrder,totalIncomeByMonth })
+            /* Category Sales */
+            let cateagorySalesMonth = await totalcategorySalesMonth()
+
+            resolve({ States, orderCount: weekOrders[0]?.orderCount ?? 0, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth, incomeWeek, incomepercentage, totalMonthOrder, totalIncomeByMonth })
         })
     }, getOrder() {
         return new Promise(async (resolve, reject) => {
@@ -424,7 +440,7 @@ module.exports = {
     },
     generateCoupon(couponData) {
         return new Promise(async (resolve, reject) => {
-            let { couponName, discount, expiryDate, minPurchase } = couponData
+            let { couponName, discount, expiryDate, minPurchase, coupon_description } = couponData
             let couponCode = await generateCouponCode(expiryDate + couponName)
             console.log(couponCode);
             let couponAdd = new coupon({
@@ -432,7 +448,9 @@ module.exports = {
                 discount: discount,
                 expiryDate: expiryDate,
                 minPurchase: minPurchase,
-                code: couponCode
+                code: couponCode,
+                coupon_description: coupon_description,
+                status: 'active'
             })
             couponAdd.save()
             resolve()
@@ -487,6 +505,199 @@ module.exports = {
             resolve(States)
         })
     },
+    dototalRevenue(totalRevenue) {
+        return new Promise(async (resolve, reject) => {
+            if (totalRevenue.totalFilter == 'year') {
+                let totalRevenue = await totalRevenueYear()
+                resolve({ totalRevenue, name: 'year' })
+            } else if (totalRevenue.totalFilter == 'month') {
+                let totalRevenue = await totalRevenueMonth()
+                resolve({ totalRevenue, name: 'month' })
+            } else if (totalRevenue.totalFilter == 'week') {
+                let totalRevenue = await totalRevenueWeek()
+                resolve({ totalRevenue, name: 'week' })
+
+            }
+
+        })
+    },
+    totalCategorySales(CategorySales) {
+        return new Promise(async (resolve, reject) => {
+            if (CategorySales.categorySales == 'year') {
+                let categorySales = await totalcategorySalesYear()
+                resolve({ categorySales, name: 'year' })
+            } else if (CategorySales.categorySales == 'month') {
+                let categorySales = await totalcategorySalesMonth()
+                resolve({ categorySales, name: 'month' })
+            } else if (CategorySales.categorySales == 'week') {
+                let categorySales = await totalcategorySalesWeek()
+                resolve({ categorySales, name: 'week' })
+
+            }
+
+        })
+    },
+    doCouponUpdate(couponData) {
+        return new Promise(async (resolve, reject) => {
+
+            let { couponName, discount, expiryDate, minPurchase, coupon_description, couponId } = couponData
+            await coupon.updateOne({ _id: new ObjectId(couponId) }, {
+                $set: {
+                    couponName: couponName,
+                    discount: discount,
+                    expiryDate: expiryDate,
+                    minPurchase: minPurchase,
+                    coupon_description: coupon_description,
+                }
+
+            })
+            console.log(couponData);
+            resolve()
+        })
+    },
+    updateShippingStatus(orderData) {
+        return new Promise(async (resolve, reject) => {
+
+            let { orderId, shippingStatus } = orderData
+            let result = await order.updateOne({ _id: new ObjectId(orderId), status: 'placed' },
+                {
+                    $set: {
+                        shipping_status: shippingStatus
+                    }
+
+                })
+            console.log(result);
+            resolve()
+        })
+    }
+    ,
+    getSalesData() {
+        return new Promise(async (resolve, reject) => {
+
+            let salesReport = await order.aggregate([{
+                $match: {
+                    status: 'placed'
+                }
+            }, {
+                $unwind: '$products.products'
+            }, {
+                $lookup: {
+                    from: 'products',
+                    localField: 'products.products.item',
+                    foreignField: '_id',
+                    as: 'productsData'
+                }
+            }, {
+                $addFields: {
+                    productTotal: {
+                        $multiply: [
+                            '$products.products.quantity',
+                            { $arrayElemAt: ['$productsData.product_price', 0] }
+                        ]
+                    }
+                }
+            }])
+
+
+            resolve(salesReport)
+        })
+    },
+
+    getSalesReportPDF() {
+        return new Promise(async (resolve, reject) => {
+            let salesReport = await module.exports.getSalesData()
+            let salesData = await salesReportPDF(salesReport)
+            resolve(salesData)
+        })
+    },
+    getSalesReportExcel() {
+        return new Promise(async (resolve, reject) => {
+            let salesReport = await module.exports.getSalesData()
+            let salesData = await salesReportExcel(salesReport)
+            resolve(salesData)
+        })
+    }
+}
+
+function salesReportPDF(salesReport) {
+
+    let filePathName = path.resolve(__dirname, '../../views/admin/sales_report.ejs')
+    let htmlString = fs.readFileSync(filePathName).toString()
+    htmlString += `
+    <style>
+        body {
+            text-align: center;
+            font-size: 50%;
+        }
+        td{
+            font-size: 70%;  
+        }
+        th{
+            font-size: 70%;  
+        }
+        .table {
+            margin: 0 auto;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+`
+    let options = {
+        format: 'A4',
+        orientation: "portrait",
+        border: '10mm',
+        /* margins: {
+            top: 150,
+            bottom: 60,
+            left: 40,
+            right: 40,
+            width: 800
+        } */
+    }
+    let ejsData = ejs.render(htmlString, { salesReport, noButton: true })
+
+    return { options, ejsData }
+
+
+}
+function salesReportExcel(salesReport) {
+
+
+
+    const salesSheet = xlsx.utils.json_to_sheet(
+        salesReport.map(({ createdAt, products: { products }, productTotal, paymentMethod, status, shipping_status }) => ({
+          createdAt,
+          item: products.item,
+          quantity: products.quantity,
+          productTotal,
+          tax: (productTotal / 100) * 10,
+          paymentMethod,
+          status,
+          shipping_status
+        }))
+      );
+console.log(salesReport[0].products);
+    // Add table header
+    const header = ['Date of Order', 'Order Item Id', 'Quantity', 'Amount', 'Tax', 'Mode of Payment', 'Payment Status', 'Order Status'];
+    xlsx.utils.sheet_add_aoa(salesSheet, [header], { origin: 'A1' });
+    salesSheet['!cols'] = [    { width: 12 },    { width: 25 },    { width: 8 },    { width: 10 },    { width: 15 },    { width: 15 },    { width: 15 },    { width: 22 }];
+    // Add table body rows
+
+    const rows = salesReport.map(sale => [
+        sale.createdAt,'#'+ sale.products.products.item.toString(), sale.products.products.quantity,'₹ '+ sale.productTotal,'₹ '+ (tax = (sale.productTotal / 100) * 10).toFixed(2), sale.paymentMethod, sale.status, sale.shipping_status]);
+    xlsx.utils.sheet_add_aoa(salesSheet, rows, { origin: 'A2' });
+
+    // Create a new workbook and add the sales sheet to it
+    const workbook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(workbook, salesSheet, 'Sales Report');
+
+    // Write the workbook to a file
+    xlsx.writeFile(workbook, 'sales_report.xlsx');
+
+
 }
 
 function generateCouponCode(data) {
@@ -560,6 +771,9 @@ async function weekRevenue() {
     const RevenueChangeFormatted = RevenueChange.toFixed(2);
     console.log(weekRevenue, RevenueChangeFormatted);
     return ({ weekRevenue, RevenueChangeFormatted })
+
+
+
 }
 
 async function totalRevenueMonth() {
@@ -587,7 +801,74 @@ async function totalRevenueMonth() {
         }
     ]);
     return totalAmountByMonth
-    console.log(totalAmountByMonth);
+
+}
+async function totalRevenueYear() {
+    let totalAmountByYear = await order.aggregate([
+        {
+            $match: {
+                status: 'placed'
+            }
+        }, {
+            $group: {
+                _id: null,
+                2021: { $sum: { $cond: [{ $eq: [{ $year: '$createdAt' }, 2021] }, '$totalAmount', 0] } },
+                2022: { $sum: { $cond: [{ $eq: [{ $year: '$createdAt' }, 2022] }, '$totalAmount', 0] } },
+                2023: { $sum: { $cond: [{ $eq: [{ $year: '$createdAt' }, 2023] }, '$totalAmount', 0] } },
+                2024: { $sum: { $cond: [{ $eq: [{ $year: '$createdAt' }, 2024] }, '$totalAmount', 0] } },
+                2025: { $sum: { $cond: [{ $eq: [{ $year: '$createdAt' }, 2025] }, '$totalAmount', 0] } },
+
+            }
+        }
+    ]);
+
+    let totalYearAmount = totalAmountByYear.length > 0 ? totalAmountByYear : [
+        {
+            '2021': 0,
+            '2022': 0,
+            '2023': 0,
+            '2024': 0,
+            '2025': 0,
+            _id: null
+        }
+    ];
+    console.log(totalYearAmount);
+    return totalYearAmount
+
+}
+async function totalRevenueWeek() {
+    const now = new Date();
+    const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+    const endOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() + (6 - now.getDay()), 23, 59, 59, 999);
+
+
+    let totalAmountByWeek = await order.aggregate([
+        {
+            $match: {
+
+                status: 'placed',
+                createdAt: {
+                    $gte: startOfWeek,
+                    $lt: endOfWeek
+                }
+            }
+        }, {
+            $group: {
+                _id: null,
+                mon: { $sum: { $cond: [{ $eq: [{ $dayOfWeek: '$createdAt' }, 1] }, '$totalAmount', 0] } },
+                tue: { $sum: { $cond: [{ $eq: [{ $dayOfWeek: '$createdAt' }, 2] }, '$totalAmount', 0] } },
+                wed: { $sum: { $cond: [{ $eq: [{ $dayOfWeek: '$createdAt' }, 3] }, '$totalAmount', 0] } },
+                thu: { $sum: { $cond: [{ $eq: [{ $dayOfWeek: '$createdAt' }, 4] }, '$totalAmount', 0] } },
+                fri: { $sum: { $cond: [{ $eq: [{ $dayOfWeek: '$createdAt' }, 5] }, '$totalAmount', 0] } },
+                sat: { $sum: { $cond: [{ $eq: [{ $dayOfWeek: '$createdAt' }, 6] }, '$totalAmount', 0] } },
+                sun: { $sum: { $cond: [{ $eq: [{ $dayOfWeek: '$createdAt' }, 7] }, '$totalAmount', 0] } },
+
+            }
+        }
+    ]);
+    console.log(totalAmountByWeek);
+    return totalAmountByWeek
+
 }
 
 
@@ -647,6 +928,8 @@ async function weekIncomes() {
     const incomeChangeFormatted = incomeChange.toFixed(2);
     console.log(weekIncome, incomeChangeFormatted);
     return ({ weekIncome, incomeChangeFormatted })
+
+
 }
 
 async function monthTotalOrder() {
@@ -717,5 +1000,15 @@ async function totalIncomeMonth() {
         }
     ]);
     return totalIncomeByMonth
-    console.log(totalIncomeByMonth);
+
+}
+
+async function totalcategorySalesMonth() {
+    let totalCateagorySales = await order.aggregate([{
+        $match: {
+            status: 'placed'
+        }
+    }])
+
+    console.log(totalCateagorySales);
 }

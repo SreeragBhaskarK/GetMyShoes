@@ -9,18 +9,12 @@
 <link rel="stylesheet" href="/users/product_details/css/owl.carousel.min.css" type="text/css">
 <link rel="stylesheet" href="/users/product_details/css/slicknav.min.css" type="text/css">
 <link rel="stylesheet" href="/users/product_details/css/style.css" type="text/css">
-<link class="js-stylesheet" href="/admin/css/light.css" rel="stylesheet">
+<!-- <link class="js-stylesheet" href="/admin/css/light.css" rel="stylesheet"> -->
 <!-- Shop Section Begin -->
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h6 class="coupon__link"><span class="icon_tag_alt"></span> <a href="#">Have a coupon?</a> Click
-                    here to enter your code.</h6>
-            </div>
-        </div>
-
+       
         <div class="row">
             <div class="col-lg-8">
 
@@ -144,10 +138,10 @@
 
 
                 </div>
-                <form id="checkout_form">
-                    <input type="text" hidden name="user_id" value="<%=users._id  %>">
+
+           
                 <% (users?.address || []).forEach(address=> { %>
-                  <!--   <div id="editAds<%=address?._id%>" style="display: none;" class="card">
+                    <div id="editAds<%=address?._id%>" style="display: none;" class="card">
 
                         <div class="card-body" style="border: solid 0.5px currentColor;">
                             <div>
@@ -158,19 +152,20 @@
                                 <input hidden type="text" value="<%=address?._id%>" name="id">
                                 <div class="mb-3 ">
                                     <label class="form-label" for="">Name</label>
-                                    <input type="text" class="form-control" name="name" value="<%=address?.name%>"
-                                        required placeholder="Name">
+                                    <input type="text" class="form-control" name="name"
+                                        value="<%=address?.name%>" required placeholder="Name">
                                 </div>
                                 <div class="mb-3 ">
                                     <label class="form-label" for="">phone</label>
-                                    <input type="tel" class="form-control" name="phone" value="<%=address?.phone%>"
-                                        required placeholder="10-digit mobile number">
+                                    <input type="tel" class="form-control" name="phone"
+                                        value="<%=address?.phone%>" required
+                                        placeholder="10-digit mobile number">
                                 </div>
 
                                 <div class="mb-3 ">
                                     <label class="form-label" for="">pincode</label>
-                                    <input type="text" class="form-control" name="pincode" value="<%=address?.pincode%>"
-                                        required placeholder="Pincode">
+                                    <input type="text" class="form-control" name="pincode"
+                                        value="<%=address?.pincode%>" required placeholder="Pincode">
                                 </div>
 
                                 <div class="mb-3 ">
@@ -181,8 +176,8 @@
 
                                 <div class="mb-3 ">
                                     <label class="form-label" for="inputLastName">Address</label>
-                                    <textarea name="address" id="" cols="10" rows="4" tabindex="5" value="" required
-                                        class="form-control"
+                                    <textarea name="address" id="" cols="10" rows="4" tabindex="5" value=""
+                                        required class="form-control"
                                         placeholder="Address (Area and Street)"><%=address?.address%></textarea>
 
                                 </div>
@@ -196,8 +191,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="inputEmail4">State</label>
-                                    <select id="editstate-select" required data-address='<%=address?.state%>'
-                                        class="form-control" name="state">
+                                    <select id="editstate-select" required
+                                        data-address='<%=address?.state%>' class="form-control"
+                                        name="state">
                                         <option value="">--Select State--</option>
                                         <option value="Andhra Pradesh[16.5062, 80.6480]">Andhra Pradesh
                                         </option>
@@ -240,8 +236,9 @@
 
                                 <div class="mb-3 ">
                                     <label class="form-label" for="inputLastName">Landmark</label>
-                                    <input type="text" value="<%=address?.landmark%>" required class="form-control"
-                                        name="landmark" placeholder="Landmark (Optional)">
+                                    <input type="text" value="<%=address?.landmark%>" required
+                                        class="form-control" name="landmark"
+                                        placeholder="Landmark (Optional)">
                                 </div>
 
                                 <div class="mb-3 ">
@@ -254,15 +251,19 @@
                                 <div class="mb-3 ">
                                     <% if (address?.address_type==='home' ) { %>
 
-                                        <label class="form-label" for="inputLastName">Address Type</label><br>
-                                        <input type="radio" id="home-radio" checked name="address_type" value="home">
+                                        <label class="form-label" for="inputLastName">Address
+                                            Type</label><br>
+                                        <input type="radio" id="home-radio" checked name="address_type"
+                                            value="home">
                                         <label for="home-radio">Home</label>
-                                        <input type="radio" id="work-radio" name="address_type" value="work">
+                                        <input type="radio" id="work-radio" name="address_type"
+                                            value="work">
                                         <label for="work-radio">Work</label>
                                         <% }else{%>
                                             <label class="form-label" for="inputLastName">Address
                                                 Type</label><br>
-                                            <input type="radio" id="home-radio" name="address_type" value="home">
+                                            <input type="radio" id="home-radio" name="address_type"
+                                                value="home">
                                             <label for="home-radio">Home</label>
                                             <input type="radio" id="work-radio" checked name="address_type"
                                                 value="work">
@@ -276,20 +277,10 @@
                             </form>
 
                         </div>
-                    </div> -->
-             
+                    </div>
 
-                        <!--                <style>
-                                .dropstart:hover>.dropdown-menu {
-                                    display: block;
-                                }
 
-                                .dropstart>.dropdown-toggle:active {
-                                    /*Without this, clicking will make it sticky*/
-                                    pointer-events: none;
-                                }
-                            </style> -->
- 
+                    <div id="addressCard">
                         <input style="width: fit-content;" type="radio" id="" required name="delevery_address"
                             value="<%=address._id%>">
                         <div class="card" id="adrsCard<%=address?._id%>">
@@ -300,29 +291,19 @@
                                     max-width: 35px;
                                     float: right; ">
                                     <div class="dropstart">
-                                        <!-- <button class="btn btn-primary dropdown-toggle" type="button"
-                                                id="dropdownMenuButton" data-mdb-toggle="dropdown"
-                                                aria-expanded="false">
-                                                Dropdown button
-                                            </button> -->
+
                                         <img class=" dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                             aria-expanded="false"
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
                                         <ul class="dropdown-menu  ">
-                                            <!-- <li><a class="dropdown-item"
-                                                    onclick="editAddress('<%=address?._id%>')">Edit</a></li> -->
+                                            <li><a class="dropdown-item"
+                                                onclick="editAddress('<%=address?._id%>')">Edit</a></li>
                                             <li><a onclick="deleteAddress('<%=address?._id%>')"
                                                     class="dropdown-item">Delete</a></li>
 
                                         </ul>
                                     </div>
-                                    <!-- <div class="dropdown"><img class="dropbtn"
-                                                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
-                                            <div class="dropdown-content">
-                                                <div class="_16FXBY"><span>Edit</span></div>
-                                                <div class="_16FXBY"><span>Delete</span></div>
-                                            </div>
-                                        </div> -->
+
                                 </div>
                                 <div style=" margin-bottom: 10px; "><span style="
                                         text-transform: uppercase;
@@ -354,149 +335,71 @@
                                 </span>
                             </div>
                         </div>
+                    </div>
 
-                        <% }) %>
+                    <% }) %>
 
             </div>
 
 
-            <!-- <div class="col-lg-8">
-                    <h5>Billing detail</h5>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>First Name <span>*</span></p>
-                                <input type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Last Name <span>*</span></p>
-                                <input type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="checkout__form__input">
-                                <p>Country <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Address <span>*</span></p>
-                                <input type="text" placeholder="Street Address">
-                                <input type="text" placeholder="Apartment. suite, unite ect ( optinal )">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Town/City <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Country/State <span>*</span></p>
-                                <input type="text">
-                            </div>
-                            <div class="checkout__form__input">
-                                <p>Postcode/Zip <span>*</span></p>
-                                <input type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Phone <span>*</span></p>
-                                <input type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="checkout__form__input">
-                                <p>Email <span>*</span></p>
-                                <input type="text">
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="checkout__form__checkbox">
-                                <label for="acc">
-                                    Create an acount?
-                                    <input type="checkbox" id="acc">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <p>Create am acount by entering the information below. If you are a returing
-                                    customer login at the <br />top of the page</p>
-                                </div>
-                                <div class="checkout__form__input">
-                                    <p>Account Password <span>*</span></p>
-                                    <input type="text">
-                                </div>
-                                <div class="checkout__form__checkbox">
-                                    <label for="note">
-                                        Note about your order, e.g, special noe for delivery
-                                        <input type="checkbox" id="note">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="checkout__form__input">
-                                    <p>Oder notes <span>*</span></p>
-                                    <input type="text"
-                                    placeholder="Note about your order, e.g, special noe for delivery">
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
             <div class="col-lg-4">
-                <div class="checkout__order">
-                    <h5>Your order</h5>
-                    <div class="checkout__order__product">
-                        <ul>
-                            <li>
-                                <span class="top__text">Product</span>
-                                <span class="top__text__right">Total</span>
-                            </li>
-                            <% let i=1 %>
-                                <% userCart.forEach(pro=> { %>
+                <form id="checkout_form">
+                    <input type="text" hidden name="user_id" value="<%=users._id  %>">
+                    <div class="checkout__order">
+                        <h5>Your order</h5>
+                        <div class="checkout__order__product">
+                            <ul>
+                                <li>
+                                    <span class="top__text">Product</span>
+                                    <span class="top__text__right">Total</span>
+                                </li>
+                                <% let i=1 %>
+                                    <% userCart.forEach(pro=> { %>
 
 
-                                    <li>
-                                        <%= i.toString().padStart(2, '0' ) %>. <%=pro.products.product_name%>
-                                                <span>₹ <%=pro.products.product_price%></span>
-                                    </li>
-                                    <% i++ %>
-                                        <% }) %>
-                        </ul>
-                    </div>
-                    <div class="checkout__order__total">
-                        <ul>
-                            <li>Subtotal <span>₹ <%=subTotal%></span></li>
-                            <li>Total <span>₹ <%=totalPrice%></span></li>
-                        </ul>
-                    </div>
-                    <div class="checkout__order__widget">
-                        <!-- <label for="o-acc">
-                                Create an acount?
-                                <input type="checkbox" id="o-acc">
+                                        <li>
+                                            <%= i.toString().padStart(2, '0' ) %>. <%=pro.products.product_name%>
+                                                    <span>₹ <%=pro.products.product_price%></span>
+                                        </li>
+                                        <% i++ %>
+                                            <% }) %>
+                            </ul>
+                        </div>
+                        <div class="checkout__order__total">
+                            <ul>
+                                <li>Subtotal <span>₹ <%=subTotal%></span></li>
+                                <li>Discount <span>₹ <%=discount%></span></li>
+                                <li>Shipping <span> Free Delivery</span></li>
+                                <li>Total <span>₹ <%=totalPrice%></span></li>
+                            </ul>
+                        </div>
+
+                        <div class="checkout__order__widget">
+                            <label for="cash-and-delivery">
+                                Cash On Delivery
+                                <input type="radio" name="payment_method" value="COD" id="cash-and-delivery" required>
                                 <span class="checkmark"></span>
                             </label>
-                            <p>Create am acount by entering the information below. If you are a returing customer
-                                login at the top of the page.</p> -->
-                        <label for="cash-and-delivery">
-                            Cash On Delivery
-                            <input type="radio" name="payment_method" value="COD" id="cash-and-delivery">
-                            <span class="checkmark"></span>
-                        </label>
-                        <label for="online-payment">
-                            Online payment
-                            <input type="radio" name="payment_method" value="ONLINE" id="online-payment">
-                            <span class="checkmark"></span>
-                        </label>
-                        <!--  <label for="paypal">
+                            <label for="online-payment">
+                                Online payment
+                                <input type="radio" name="payment_method" value="ONLINE" id="online-payment" required>
+                                <span class="checkmark"></span>
+                            </label>
+                            <!--  <label for="paypal">
                                 PayPal
                                 <input type="radio" name="payment_method" value="COD" id="paypal">
                                 <span class="checkmark"></span>
                             </label> -->
+                        </div>
+                        <button type="submit" class="site-btn">Place oder</button>
                     </div>
-                    <button type="submit" class="site-btn">Place oder</button>
-                </div>
+                </form>
             </div>
         </div>
-        </form>
     </div>
 </section>
+
+
 <!-- Checkout Section End -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
@@ -521,9 +424,86 @@
             url: '/profile_info_adrs',
             data: formData,
             success: function (data) {
-                document.getElementById('perInfoAdrs').style.display = 'none'
-                document.getElementById('perInfoAdrs').reset();
+                console.log(data);
+
+                if (data.status) {
+
+                    let newAddress = data.newAddress
+                    document.getElementById('perInfoAdrs').style.display = 'none'
+                    document.getElementById('perInfoAdrs').reset();
+                    let addressAdd = $('#addressCard')
+
+                    let addressCard = `<input style="width: fit-content;" type="radio" id="" required name="delevery_address"
+                            value="${newAddress._id}">
+                        <div class="card" id="adrsCard${newAddress._id}">
+                            <div style=" 
+                                overflow: hidden;
+                                padding: 20px; ">
+                                <div style="
+                                    max-width: 35px;
+                                    float: right; ">
+                                    <div class="dropstart">
+                                        <!-- <button class="btn btn-primary dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-mdb-toggle="dropdown"
+                                                aria-expanded="false">
+                                                Dropdown button
+                                            </button> -->
+                                        <img class=" dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
+                                        <ul class="dropdown-menu  ">
+                                            <!-- <li><a class="dropdown-item"
+                                                    onclick="editAddress('${newAddress._id}')">Edit</a></li> -->
+                                            <li><a onclick="deleteAddress('${newAddress._id}')"
+                                                    class="dropdown-item">Delete</a></li>
+
+                                        </ul>
+                                    </div>
+                                    <!-- < div class="dropdown" > <img class="dropbtn"
+             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
+             <div class="dropdown-content">
+                 <div class="_16FXBY"><span>Edit</span></div>
+                 <div class="_16FXBY"><span>Delete</span></div>
+             </div>
+         </div> -->
+                                </div >
+                                <div style=" margin-bottom: 10px; "><span style="
+                                        text-transform: uppercase;
+                                        font-size: 11px;
+                                        color: #878787;
+                                        vertical-align: middle;
+                                        padding: 4px 7px;
+                                        border-radius: 2px;
+                                        background-color: #f0f0f0;
+                                        font-weight: 500;
+                                        margin-right: 15px;
+                                    ">
+                                    ${newAddress.address_type}
+                                    </span></div>
+                                <p style="line-height: 1.5;">
+                                    <span style=" font-weight: 500;">
+                                        ${newAddress.name}
+                                    </span>
+                                    <span style="margin: 0 0 0 15px; font-weight: 500;">
+                                        ${newAddress.phone}
+                                    </span>
+
+                                </p>
+                                <span style=" margin-top: 10px;display: block; max-width: 523px; ">
+                                    ${newAddress.address}, ${newAddress.locality},
+                                    ${newAddress.city}, ${newAddress.state} - <span style=" font-weight: 500; ">
+                                        ${newAddress.pincode}
+                                                    </span>
+                                </span>
+                            </div >
+                        </div >`
+                    addressAdd.append(addressCard)
+                } else {
+
+                }
+
                 console.log('Success:', data);
+
             },
             error: function (err) {
                 console.log('Error:', err);
@@ -591,22 +571,54 @@
     }
 </script>
 <script>
-    $('#checkout_form').submit((e) => {
 
+    $('#checkout_form').submit((e) => {
         e.preventDefault()
-        $.ajax({
-            url: '/place-order',
-            type: 'post',
-            data: $('#checkout_form').serialize(),
-            success: (response) => {
-                if (response.codsuccess) {
-                    window.location.href = '/order-successfull'
-                } else {
-                    razorpayPayment(response)
-                }
+
+        let addressSelectCheck = { delevery_address: $('input[name=delevery_address]').val() }
+        console.log(addressSelectCheck);
+        if (addressSelectCheck.delevery_address) {
+            console.log('nooooooooo');
+            let result = radioButtonValidation()
+            console.log(result);
+            if (result) {
+                $.ajax({
+                    url: '/place-order/'+addressSelectCheck.delevery_address,
+                    type: 'post',
+                    data: $('#checkout_form').serialize(),
+                    success: (response) => {
+                        if (response.codsuccess) {
+                            window.location.href = '/order-successfull'
+                        } else {
+                            razorpayPayment(response)
+                        }
+                    }
+                })
             }
-        })
+
+        } else {
+
+            console.log("nnnnnnnnnnnnnnnnnj");
+
+        }
+
     })
+
+    function radioButtonValidation() {
+        var deliveryAddress = document.getElementsByName('delevery_address');
+        var isChecked = false;
+        for (var i = 0; i < deliveryAddress.length; i++) {
+            if (deliveryAddress[i].checked) {
+                isChecked = true;
+                break;
+            }
+        }
+        if (!isChecked) {
+            alert("Please select a delivery address");
+            return false;
+        }
+        return isChecked
+    }
 
 
 

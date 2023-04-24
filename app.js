@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const couponExpire = require('./server/middleware/couponCheck')
+
 /* ejs view engine layout  */
 var expressLayouts = require('express-ejs-layouts');
 /* mongodb */
@@ -36,6 +38,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 /* ejs layout  */
 app.use(expressLayouts);
+app.use(couponExpire);
 /* db.connect((err) => {
   if (err)
     console.log("Connection Error" + err)
@@ -43,7 +46,6 @@ app.use(expressLayouts);
     console.log("Database Connected to port 27017")
 
 }) */
-
 
 
 app.use(nocache());

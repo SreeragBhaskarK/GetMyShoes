@@ -8,13 +8,9 @@ const { PHONE_NUMBER_OTP } = require("../config/collections")
 const { hashData, verifyHashedData } = require('../../server/util/hashData')
 const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
-const Razorpay = require('razorpay')
-var crypto = require("crypto");
+
 const order = require("../../models/order")
-var instance = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+
 
 /* const { phoneOtp, verifyPhoneOTP } = require('../controller/user_controller/phone_otp')
 const { userFinding,checkphoneNumber,userStatus} = require('../controller/user_controller/user') */
@@ -367,7 +363,8 @@ module.exports = {
 
         return new Promise(async (resolve, reject) => {
             try {
-                let { firstName, lastName, email, phone,gender,age } = userData
+                console.log(userData);
+                let { firstName, lastName, email, phone, gender, age } = userData
                 let name = firstName + " " + lastName
 
                 if (firstName || lastName || email || phone || gender || age) {
@@ -377,8 +374,8 @@ module.exports = {
                             email: email,
                             first_name: firstName,
                             last_name: lastName,
-                            gender:gender,
-                            age:age
+                            gender: gender,
+                            age: age
                         }
                     })
                     let users = await user.findOne({ phone: phoneNumber })
@@ -406,7 +403,7 @@ module.exports = {
 
 
 
-                    await user.updateOne({ phone: phoneNumber }, {
+                    let newAddress = await user.findOneAndUpdate({ phone: phoneNumber }, {
                         $push: {
                             address: [
                                 {
@@ -425,10 +422,16 @@ module.exports = {
                             ]
 
                         }
-                    })
+                    }, { new: true })
+                    console.log(newAddress);
+                    const Address = newAddress.address[newAddress.address.length - 1];
+                    console.log(Address);
+                    resolve({ status: true, Address })
+                } else {
 
+                    resolve({ status: false })
                 }
-                resolve()
+
 
 
 
@@ -497,7 +500,7 @@ module.exports = {
 
         }
     },
-    
+
     getWomenProduct(pageNum) {
         try {
             pageNum = pageNum ? pageNum : 1
@@ -547,15 +550,15 @@ module.exports = {
                         'products.createdAt': -1
                     }
                 }
-            ])
-            
+                ])
+
                 let totalPages = Math.ceil(womenProduct[0].women_products_count / perPage);
 
                 console.log(womenProduct, "noooooooooooooo");
                 resolve({ womenProduct, totalPages })
             })
         } catch (error) {
-            
+
         }
     },
     getSportsProduct(pageNum) {
@@ -607,161 +610,190 @@ module.exports = {
                         'products.createdAt': -1
                     }
                 }
-            ])
-            let totalPages = Math.ceil(sportsProduct[0].sports_products_count / perPage);
-            
-            console.log(sportsProduct, "noooooooooooooo");
-            resolve({ sportsProduct, totalPages })
-        })
-    } catch (error) {
-        
-    }
-},
+                ])
+                let totalPages = Math.ceil(sportsProduct[0].sports_products_count / perPage);
 
-doAddressUpdate(AddressData, userId) {
-    
-    
-    return new Promise(async (resolve, reject) => {
-        let addresId = AddressData.id
-        const str = AddressData.state
-        const stateName = str.split('[')[0]; // state = "Kerala"
-        const coords = str.substring(str.indexOf('[') + 1, str.indexOf(']')).split(',').map(Number); // coords = [10.8505, 76.2711]
-        let data = await user.findOneAndUpdate({
-            
-            _id: new ObjectId(userId),
-            'address._id': addresId,
-            
-        }, {
-            $set: {
-                'address.$.name': AddressData.name,
-                'address.$.phone': AddressData.phone,
-                'address.$.pincode': AddressData.pincode,
-                'address.$.locality': AddressData.locality,
-                'address.$.address': AddressData.address,
-                'address.$.city': AddressData.city,
-                'address.$.state': stateName,
-                'address.$.landmark': AddressData.landmark,
-                'address.$.alternate_phone': AddressData.alternate_phone,
-                'address.$.address_type': AddressData.address_type,
-                'address.$.coords': coords,
-            },
-        },
-        { new: true }
-        )
-        resolve(true)
-        
-    })
-}
-
-,
-generateRazorpay(orders) {
-    return new Promise((resolve, reject) => {
-        var options = {
-            amount: orders.totalAmount * 100,  // amount in the smallest currency unit
-            currency: "INR",
-            receipt: String(orders._id)
-        };
-        instance.orders.create(options, function (err, order) {
-            console.log(order);
-            resolve(order)
-        });
-    })
-    
-}
-,
-verifyPayment(details) {
-    return new Promise((resolve, reject) => {
-        var expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-            expectedSignature.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
-            expectedSignature = expectedSignature.digest('hex')
-            if (expectedSignature === details['payment[razorpay_signature]']) {
-                resolve()
-            } else {
-                reject()
-            }
-        })
-        
-    },
-    changePaymentStatus(orderId) {
-        return new Promise((resolve, reject) => {
-            order.updateOne({ _id: new ObjectId(orderId) }, {
-                $set: { status: 'placed' }
-            }).then(() => {
-                resolve()
+                console.log(sportsProduct, "noooooooooooooo");
+                resolve({ sportsProduct, totalPages })
             })
-        })
-        
+        } catch (error) {
+
+        }
     },
+
+    doAddressUpdate(AddressData, userId) {
+
+
+        return new Promise(async (resolve, reject) => {
+            let addresId = AddressData.id
+            const str = AddressData.state
+            const stateName = str.split('[')[0]; // state = "Kerala"
+            const coords = str.substring(str.indexOf('[') + 1, str.indexOf(']')).split(',').map(Number); // coords = [10.8505, 76.2711]
+            let data = await user.findOneAndUpdate({
+
+                _id: new ObjectId(userId),
+                'address._id': addresId,
+
+            }, {
+                $set: {
+                    'address.$.name': AddressData.name,
+                    'address.$.phone': AddressData.phone,
+                    'address.$.pincode': AddressData.pincode,
+                    'address.$.locality': AddressData.locality,
+                    'address.$.address': AddressData.address,
+                    'address.$.city': AddressData.city,
+                    'address.$.state': stateName,
+                    'address.$.landmark': AddressData.landmark,
+                    'address.$.alternate_phone': AddressData.alternate_phone,
+                    'address.$.address_type': AddressData.address_type,
+                    'address.$.coords': coords,
+                },
+            },
+                { new: true }
+            )
+            resolve(true)
+
+        })
+    }
+
+    ,
+
     deleteAddress(addressId, userId) {
         return new Promise(async (resolve, reject) => {
             let address = await user.updateOne(
                 { _id: new ObjectId(userId) },
                 { $pull: { address: { _id: new ObjectId(addressId) } } }
-                );
-                resolve(true)
-            })
-            
-        },
-        
-        getCategoryProduct(pageNum,categorys) {
-            try {
-        
-                return new Promise(async (resolve, reject) => {
-                    pageNum = pageNum ? pageNum : 1
-                    const perPage = 2;
-                    const skipCount = (pageNum - 1) * perPage;
-                    let categoryProduct = await category.aggregate([{
-                        $match: {
-                            category: categorys
-                        },
-                    }, {
-                        $lookup: {
-                            from: 'products',
-                            localField: '_id',
-                            foreignField: 'product_category',
-                            as: 'products'
-                        }
-                    }, {
-                        $match: {
-                            'products.delete_status': false
-                        }
-                    }, {
-                        $project: {
-                            products: {
-                                $filter: {
-                                    input: '$products',
-                                    as: 'product',
-                                    cond: {
-                                        $eq: ['$$product.delete_status', false]
-                                    }
+            );
+            resolve(true)
+        })
+
+    },
+
+    getCategoryProduct(pageNum, categorys) {
+        try {
+
+            return new Promise(async (resolve, reject) => {
+                pageNum = pageNum ? pageNum : 1
+                const perPage = 2;
+                const skipCount = (pageNum - 1) * perPage;
+                let categoryProduct = await category.aggregate([{
+                    $match: {
+                        category: categorys
+                    },
+                }, {
+                    $lookup: {
+                        from: 'products',
+                        localField: '_id',
+                        foreignField: 'product_category',
+                        as: 'products'
+                    }
+                }, {
+                    $match: {
+                        'products.delete_status': false
+                    }
+                }, {
+                    $project: {
+                        products: {
+                            $filter: {
+                                input: '$products',
+                                as: 'product',
+                                cond: {
+                                    $eq: ['$$product.delete_status', false]
                                 }
                             }
                         }
-                    }, {
-                        $addFields: {
-                            category_products_count: { $size: "$products" }
-                        }
-                    }, {
-                        $project: {
-                            products: {
-                                $slice: ['$products', skipCount, perPage]
-                            },
-                            category_products_count: 1
-                        }
-                    }, {
-                        $sort: {
-                            'products.createdAt': -1
-                        }
                     }
-                    ])
-        
-                    let totalPages = Math.ceil(categoryProduct[0].category_products_count / perPage);
-        
-                    console.log(categoryProduct, "noooooooooooooo");
-                    resolve({ categoryProduct, totalPages })
-                })
-            } catch (error) {
-        
-            }
-        },
+                }, {
+                    $addFields: {
+                        category_products_count: { $size: "$products" }
+                    }
+                }, {
+                    $project: {
+                        products: {
+                            $slice: ['$products', skipCount, perPage]
+                        },
+                        category_products_count: 1
+                    }
+                }, {
+                    $sort: {
+                        'products.createdAt': -1
+                    }
+                }
+                ])
+
+                let totalPages = Math.ceil(categoryProduct[0]?.category_products_count / perPage);
+
+                console.log(categoryProduct, "noooooooooooooo");
+                resolve({ categoryProduct, totalPages })
+            })
+        } catch (error) {
+
+        }
+    }, getBrandProducts() {
+        return new Promise(async (resolve, reject) => {
+            let brandProducts = await category.aggregate([{
+                $match: {
+
+                    category_type: 'brand'
+                }
+            }, {
+                $lookup: {
+                    from: 'products',
+                    localField: '_id',
+                    foreignField: 'product_category',
+                    as: 'brandProducts'
+                }
+            }, {
+                $match: {
+                    'brandProducts.delete_status': false
+                }
+            }, {
+                $sort: {
+                    'brandProducts.created_at': -1
+                }
+            }, {
+                $unwind:
+                    '$brandProducts'
+
+            }, {
+                $project: {
+                    brandProducts: '$brandProducts'
+                }
+            },
+            {
+                $limit: 8
+            }])
+           
+            resolve(brandProducts)
+        })
+    },
+    getBrands() {
+        return new Promise(async(resolve, reject) => {
+            let brands = await category.aggregate([{
+                $match:{
+                    category_type:'brand'
+                }
+            }])
+
+            resolve(brands)
+        })
+    }, 
+    GetParentCategory(){
+        return new Promise(async (resolve,reject)=>{
+            let parentCateagory = await category.find({category_type:'parent'})
+            resolve(parentCateagory)
+        })
+    },
+    GetBrandCategory(){
+        return new Promise(async (resolve,reject)=>{
+            let brandCateagory = await category.find({category_type:'brand'})
+            resolve(brandCateagory)
+        })
+    },
+    GetSubCategory(){
+        return new Promise(async (resolve,reject)=>{
+            let subCateagory = await category.find({category_type:'sub'})
+            resolve(subCateagory)
+        })
+    }
 }

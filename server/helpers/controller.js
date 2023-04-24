@@ -310,7 +310,7 @@ const resetUserPassword = async ({ email, otp, newPassword }) => {
     }
 }
 
-const addCategory = async (categorys) => {
+/* const addCategory = async (categorys) => {
     console.log(categorys, "kdfk");
     try {
         let category = categorys
@@ -325,8 +325,8 @@ const addCategory = async (categorys) => {
     catch {
 
     }
-}
-const deleteCategory = async (proId) => {
+} */
+/* const deleteCategory = async (proId) => {
     try {
         await categoryAdd.deleteOne({ _id: proId })
         return
@@ -335,8 +335,8 @@ const deleteCategory = async (proId) => {
     catch {
 
     }
-}
+} */
 
 /* const upload = multer({ storage: storage }) */
 
-module.exports = { createNewUser, deleteOTP, deleteCategory, verifyUserEmail, authenticateAdmin, deleteUser, statusUser, statusUserUnblock, resetUserPassword, addCategory }
+module.exports = { createNewUser, deleteOTP, verifyUserEmail, authenticateAdmin, deleteUser, statusUser, statusUserUnblock, resetUserPassword }

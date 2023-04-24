@@ -11,11 +11,10 @@ const orderSchema = new Schema({
    products:Object,
    status:String,
    totalAmount:Number,
+   discount:Number,
+   payment_details:Object,
+   shipping_status:String
 
-
-     
- 
-    
 },{ timestamps: true })
    
 const order = mongoose.model(collection.ORDER_COLLECTITON, orderSchema)

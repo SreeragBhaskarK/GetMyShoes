@@ -9,7 +9,7 @@ const cartSchema = new Schema({
    products:[
       {
          item:ObjectId,
-         quantity:Number
+         quantity:Number,
       }
    ]
     

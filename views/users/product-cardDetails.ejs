@@ -75,10 +75,19 @@
                             <%= product.product_name %>
                         </a>
                     </h3>
-
-                    <data class="card-price" value="14799">₹<%=product.product_price %><del>
+                    <% if (product.product_stock>0) { %>
+                   
+                        <data class="card-price" value="14799">₹<%=product.product_price %><del>
                                 <%=product.product_old_price %>
                             </del></data>
+                            <% }else{ %>
+                                <span class="text-danger">
+                                    Out Of Stock
+                                </span>
+                               
+                                <% } %>
+                    
+                    
 
                 </div>
 
@@ -100,6 +109,14 @@
                             document.getElementById('cartCount').innerHTML = cartCount
                         }
 
+                        const toastLiveExample = document.getElementById('toasterMessage')
+                       
+                       document.getElementById('toastMessage').innerHTML="Product has been added to your cart."
+                          const toast = new bootstrap.Toast(toastLiveExample, {
+                              autohide: true,
+                              delay: 3000
+                          })
+                          toast.show()
 
                     }
                 })
@@ -117,6 +134,14 @@
                             document.getElementById('wishlistCount').innerHTML = wishlistCount
                         }
 
+                        const toastLiveExample = document.getElementById('toasterMessage')
+                       
+                       document.getElementById('toastMessage').innerHTML="Product has been added to your wishlist."
+                          const toast = new bootstrap.Toast(toastLiveExample, {
+                              autohide: true,
+                              delay: 3000
+                          })
+                          toast.show()
 
                     }
                 })

@@ -19,11 +19,11 @@
                     expanded array of leadership.
                 </p>
 
-                <button class="btn btn-primary">
-                    <span>Shop Now</span>
+                <a href="/shop"> <button class="btn btn-primary">
+                        <span>Shop Now</span>
 
-                    <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-                </button>
+                        <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                    </button></a>
 
             </div>
         </section>
@@ -93,542 +93,130 @@
         <section class="section product">
             <div class="container">
 
-                <h2 class="h2 section-title">Bestsellers Products</h2>
+                <h2 class="h2 section-title">Bestbrand Products</h2>
 
                 <ul class="filter-list">
 
                     <li>
-                        <button class="filter-btn  active">All</button>
+                        <button class="filter-btn" onclick="(allBrandProduct())" >All</button>
                     </li>
+                    <% brands.forEach(i=> { %>
+                        <li>
+                            <button class="filter-btn" onclick="(brandProduct('<%= i.category %>'))">
+                                <%= i.category %>
+                            </button>
+                        </li>
 
-                    <li>
-                        <button class="filter-btn">Nike</button>
-                    </li>
+                        <% }) %>
 
-                    <li>
-                        <button class="filter-btn">Adidas</button>
-                    </li>
-
-                    <li>
-                        <button class="filter-btn">Puma</button>
-                    </li>
-
-                    <li>
-                        <button class="filter-btn">Bata</button>
-                    </li>
-
-                    <li>
-                        <button class="filter-btn">Apex</button>
-                    </li>
 
                 </ul>
 
-                <ul class="product-list">
+                <ul class="product-list" id="productBrand">
+                    <% (locals.brandProducts||[]).forEach(product=> { %>
 
-                    <li class="product-item">
-                        <div class="product-card" tabindex="0">
 
-                            <figure class="card-banner">
-                                <img src="/users/images/product-1.jpg" width="312" height="350" loading="lazy"
-                                    alt="Running Sneaker Shoes" class="image-contain">
+                        <li class="product-item">
+                            <div class="product-card" tabindex="0">
 
-                                <div class="card-badge">New</div>
+                                <figure class="card-banner">
+                                    <a href="/product/<%=product.brandProducts._id%>"><img
+                                            src="/images/products_image/<%=product.brandProducts.product_image[0]%>"
+                                            width="312" height="350" loading="lazy" alt="Running Sneaker Shoes"
+                                            class="image-contain"></a>
 
-                                <ul class="card-action-list">
+                                    <% if (product.brandProducts.product_badge) { %>
 
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-1">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
+                                        <div class="card-badge">
+                                            <%=product.brandProducts.product_badge%>
+                                        </div>
+                                        <% } %>
+                                            <ul class="card-action-list">
 
-                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                    </li>
+                                                <li class="card-action-item">
+                                                    <button onclick="cartCount('<%=product.brandProducts._id%>')"
+                                                        class="card-action-btn" aria-labelledby="card-label-1">
+                                                        <ion-icon name="cart-outline"></ion-icon>
+                                                    </button>
 
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
+                                                    <div class="card-action-tooltip" id="card-label-1">Add to Cart
+                                                    </div>
+                                                </li>
 
-                                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                    </li>
+                                                <li class="card-action-item">
+                                                    <button class="card-action-btn"
+                                                        onclick="addToWishlist('<%=product.brandProducts._id%>')"
+                                                        aria-labelledby="card-label-2">
+                                                        <ion-icon name="heart-outline"></ion-icon>
+                                                    </button>
 
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                            <ion-icon name="eye-outline"></ion-icon>
-                                        </button>
+                                                    <div class="card-action-tooltip" id="card-label-2">Add to
+                                                        Whishlist
+                                                    </div>
+                                                </li>
 
-                                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                    </li>
+                                                <li class="card-action-item">
+                                                    <button class="card-action-btn" aria-labelledby="card-label-3">
+                                                        <ion-icon name="eye-outline"></ion-icon>
+                                                    </button>
 
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                            <ion-icon name="repeat-outline"></ion-icon>
-                                        </button>
+                                                    <div class="card-action-tooltip" id="card-label-3">Quick View
+                                                    </div>
+                                                </li>
 
-                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                    </li>
+                                                <li class="card-action-item">
+                                                    <button class="card-action-btn" aria-labelledby="card-label-4">
+                                                        <ion-icon name="repeat-outline"></ion-icon>
+                                                    </button>
 
-                                </ul>
-                            </figure>
+                                                    <div class="card-action-tooltip" id="card-label-4">Compare</div>
+                                                </li>
 
-                            <div class="card-content">
+                                            </ul>
+                                </figure>
 
-                                <div class="card-cat">
-                                    <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Women</a>
+                                <div class="card-content">
+
+                                    <div class="card-cat">
+                                        <% (product.product_categoryName || []).forEach(i=> { %>
+
+
+                                            <a href="/<%= i.category %>" class="card-cat-link">
+                                                <%= i.category %>
+
+                                            </a>
+                                            <% }) %>
+                                                <!--   <a href="#" class="card-cat-link">Men</a> /
+                                    <a href="#" class="card-cat-link">Women</a> -->
+                                    </div>
+
+                                    <h3 class="h3 card-title">
+                                        <!--  <a href="#">Running Sneaker Shoes</a> -->
+                                        <a href="/product/<%=product.brandProducts._id%>">
+                                            <%= product.brandProducts.product_name %>
+                                        </a>
+                                    </h3>
+                                    <% if (product.brandProducts.product_stock>0) { %>
+
+                                        <data class="card-price" value="14799">₹<%=product.brandProducts.product_price %><del>
+                                                    <%=product.brandProducts.product_old_price %>
+                                                </del></data>
+                                        <% }else{ %>
+                                            <span class="text-danger">
+                                                Out Of Stock
+                                            </span>
+
+                                            <% } %>
+
+
+
+
                                 </div>
 
-                                <h3 class="h3 card-title">
-                                    <a href="#">Running Sneaker Shoes</a>
-                                </h3>
-
-                                <data class="card-price" value="14799">₹14,799</data>
-
                             </div>
+                        </li>
 
-                        </div>
-                    </li>
-
-                    <li class="product-item">
-                        <div class="product-card" tabindex="0">
-
-                            <figure class="card-banner">
-                                <img src="/users/images/product-2.jpg" width="312" height="350" loading="lazy"
-                                    alt="Leather Mens Slipper" class="image-contain">
-
-                                <ul class="card-action-list">
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-1">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                            <ion-icon name="eye-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                            <ion-icon name="repeat-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                    </li>
-
-                                </ul>
-                            </figure>
-
-                            <div class="card-content">
-
-                                <div class="card-cat">
-                                    <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Sports</a>
-                                </div>
-
-                                <h3 class="h3 card-title">
-                                    <a href="#">Leather Mens Slipper</a>
-                                </h3>
-
-                                <data class="card-price" value="15599">₹15,599</data>
-
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="product-item">
-                        <div class="product-card" tabindex="0">
-
-                            <figure class="card-banner">
-                                <img src="/users/images/product-3.jpg" width="312" height="350" loading="lazy"
-                                    alt="Simple Fabric Shoe" class="image-contain">
-
-                                <div class="card-badge">New</div>
-
-                                <ul class="card-action-list">
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-1">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                            <ion-icon name="eye-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                            <ion-icon name="repeat-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                    </li>
-
-                                </ul>
-                            </figure>
-
-                            <div class="card-content">
-
-                                <div class="card-cat">
-                                    <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Women</a>
-                                </div>
-
-                                <h3 class="h3 card-title">
-                                    <a href="#">Simple Fabric Shoe</a>
-                                </h3>
-
-                                <data class="card-price" value="13099">₹13,099</data>
-
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="product-item">
-                        <div class="product-card" tabindex="0">
-
-                            <figure class="card-banner">
-                                <img src="/users/images/product-4.jpg" width="312" height="350" loading="lazy"
-                                    alt="Air Jordan 7 Retro " class="image-contain">
-
-                                <div class="card-badge"> -25%</div>
-
-                                <ul class="card-action-list">
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-1">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                            <ion-icon name="eye-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                            <ion-icon name="repeat-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                    </li>
-
-                                </ul>
-                            </figure>
-
-                            <div class="card-content">
-
-                                <div class="card-cat">
-                                    <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Sports</a>
-                                </div>
-
-                                <h3 class="h3 card-title">
-                                    <a href="#">Air Jordan 7 Retro </a>
-                                </h3>
-
-                                <data class="card-price" value="13999">₹13,999 <del>₹16,399</del></data>
-
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="product-item">
-                        <div class="product-card" tabindex="0">
-
-                            <figure class="card-banner">
-                                <img src="/users/images/product-5.jpg" width="312" height="350" loading="lazy"
-                                    alt="Nike Air Max 270 SE" class="image-contain">
-
-                                <div class="card-badge">New</div>
-
-                                <ul class="card-action-list">
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-1">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                            <ion-icon name="eye-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                            <ion-icon name="repeat-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                    </li>
-
-                                </ul>
-                            </figure>
-
-                            <div class="card-content">
-
-                                <div class="card-cat">
-                                    <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Women</a>
-                                </div>
-
-                                <h3 class="h3 card-title">
-                                    <a href="#">Nike Air Max 270 SE</a>
-                                </h3>
-
-                                <data class="card-price" value="9899">₹9,899</data>
-
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="product-item">
-                        <div class="product-card" tabindex="0">
-
-                            <figure class="card-banner">
-                                <img src="/users/images/product-6.jpg" width="312" height="350" loading="lazy"
-                                    alt="Adidas Sneakers Shoes" class="image-contain">
-
-                                <ul class="card-action-list">
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-1">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                            <ion-icon name="eye-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                            <ion-icon name="repeat-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                    </li>
-
-                                </ul>
-                            </figure>
-
-                            <div class="card-content">
-
-                                <div class="card-cat">
-                                    <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Women</a>
-                                </div>
-
-                                <h3 class="h3 card-title">
-                                    <a href="#">Adidas Sneakers Shoes</a>
-                                </h3>
-
-                                <data class="card-price" value="8199">₹8,199</data>
-
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="product-item">
-                        <div class="product-card" tabindex="0">
-
-                            <figure class="card-banner">
-                                <img src="/users/images/product-7.jpg" width="312" height="350" loading="lazy"
-                                    alt="Nike Basketball shoes" class="image-contain">
-
-                                <ul class="card-action-list">
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-1">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                            <ion-icon name="eye-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                            <ion-icon name="repeat-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                    </li>
-
-                                </ul>
-                            </figure>
-
-                            <div class="card-content">
-
-                                <div class="card-cat">
-                                    <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Sports</a>
-                                </div>
-
-                                <h3 class="h3 card-title">
-                                    <a href="#">Nike Basketball shoes</a>
-                                </h3>
-
-                                <data class="card-price" value="9899">₹9,899</data>
-
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="product-item">
-                        <div class="product-card" tabindex="0">
-
-                            <figure class="card-banner">
-                                <img src="/users/images/product-8.jpg" width="312" height="350" loading="lazy"
-                                    alt="Simple Fabric Shoe" class="image-contain">
-
-                                <ul class="card-action-list">
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-1">
-                                            <ion-icon name="cart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-2">
-                                            <ion-icon name="heart-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                            <ion-icon name="eye-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                    </li>
-
-                                    <li class="card-action-item">
-                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                            <ion-icon name="repeat-outline"></ion-icon>
-                                        </button>
-
-                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                    </li>
-
-                                </ul>
-                            </figure>
-
-                            <div class="card-content">
-
-                                <div class="card-cat">
-                                    <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Women</a>
-                                </div>
-
-                                <h3 class="h3 card-title">
-                                    <a href="#">Simple Fabric Shoe</a>
-                                </h3>
-
-                                <data class="card-price" value="8199">₹8,199</data>
-
-                            </div>
-
-                        </div>
-                    </li>
-
+                        <% }) %>
                 </ul>
 
             </div>
@@ -683,18 +271,20 @@
 
 
 
-
         <!-- 
         - #SPECIAL
       -->
 
-        <section class="section special">
+    
+
+<% if (newSpecial[0]) { %>
+     <section class="section special">
             <div class="container">
 
                 <div class="special-banner" style="background-image: url('/users/images/special-banner.jpg')">
                     <h2 class="h3 banner-title">New Trend Edition</h2>
 
-                    <a href="#" class="btn btn-link">
+                    <a href="/shop" class="btn btn-link">
                         <span>Explore All</span>
 
                         <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
@@ -704,266 +294,117 @@
                 <div class="special-product">
 
                     <h2 class="h2 section-title">
-                        <span class="text">Nike Special</span>
+                        <span class="text">New Special</span>
 
                         <span class="line"></span>
                     </h2>
 
                     <ul class="has-scrollbar">
+                        
+                        <% (locals.newSpecial||[]).forEach(product=> { %>
 
-                        <li class="product-item">
-                            <div class="product-card" tabindex="0">
 
-                                <figure class="card-banner">
-                                    <img src="/users/images/product-1.jpg" width="312" height="350" loading="lazy"
-                                        alt="Running Sneaker Shoes" class="image-contain">
-
-                                    <div class="card-badge">New</div>
-
-                                    <ul class="card-action-list">
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-1">
-                                                <ion-icon name="cart-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-2">
-                                                <ion-icon name="heart-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-3">
-                                                <ion-icon name="eye-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-4">
-                                                <ion-icon name="repeat-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                        </li>
-
-                                    </ul>
-                                </figure>
-
-                                <div class="card-content">
-
-                                    <div class="card-cat">
-                                        <a href="#" class="card-cat-link">Men</a> /
-                                        <a href="#" class="card-cat-link">Women</a>
+                            <li class="product-item">
+                                <div class="product-card" tabindex="0">
+    
+                                    <figure class="card-banner">
+                                        <a href="/product/<%=product._id%>"><img
+                                                src="/images/products_image/<%=product.product_image[0]%>"
+                                                width="312" height="350" loading="lazy" alt="Running Sneaker Shoes"
+                                                class="image-contain"></a>
+    
+                                        <% if (product.product_badge) { %>
+    
+                                            <div class="card-badge">
+                                                <%=product.product_badge%>
+                                            </div>
+                                            <% } %>
+                                                <ul class="card-action-list">
+    
+                                                    <li class="card-action-item">
+                                                        <button onclick="cartCount('<%=product._id%>')"
+                                                            class="card-action-btn" aria-labelledby="card-label-1">
+                                                            <ion-icon name="cart-outline"></ion-icon>
+                                                        </button>
+    
+                                                        <div class="card-action-tooltip" id="card-label-1">Add to Cart
+                                                        </div>
+                                                    </li>
+    
+                                                    <li class="card-action-item">
+                                                        <button class="card-action-btn"
+                                                            onclick="addToWishlist('<%=product._id%>')"
+                                                            aria-labelledby="card-label-2">
+                                                            <ion-icon name="heart-outline"></ion-icon>
+                                                        </button>
+    
+                                                        <div class="card-action-tooltip" id="card-label-2">Add to
+                                                            Whishlist
+                                                        </div>
+                                                    </li>
+    
+                                                    <li class="card-action-item">
+                                                        <button class="card-action-btn" aria-labelledby="card-label-3">
+                                                            <ion-icon name="eye-outline"></ion-icon>
+                                                        </button>
+    
+                                                        <div class="card-action-tooltip" id="card-label-3">Quick View
+                                                        </div>
+                                                    </li>
+    
+                                                    <li class="card-action-item">
+                                                        <button class="card-action-btn" aria-labelledby="card-label-4">
+                                                            <ion-icon name="repeat-outline"></ion-icon>
+                                                        </button>
+    
+                                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
+                                                    </li>
+    
+                                                </ul>
+                                    </figure>
+    
+                                    <div class="card-content">
+    
+                                        <div class="card-cat">
+                                            <% (product.product_categoryName || []).forEach(i=> { %>
+    
+    
+                                                <a href="/<%= i.category %>" class="card-cat-link">
+                                                    <%= i.category %>
+    
+                                                </a>
+                                                <% }) %>
+                                                    <!--   <a href="#" class="card-cat-link">Men</a> /
+                                        <a href="#" class="card-cat-link">Women</a> -->
+                                        </div>
+    
+                                        <h3 class="h3 card-title">
+                                            <!--  <a href="#">Running Sneaker Shoes</a> -->
+                                            <a href="/product/<%=product._id%>">
+                                                <%= product.product_name %>
+                                            </a>
+                                        </h3>
+                                        <% if (product.product_stock>0) { %>
+    
+                                            <data class="card-price" value="14799">₹<%=product.product_price %><del>
+                                                        <%=product.product_old_price %>
+                                                    </del></data>
+                                            <% }else{ %>
+                                                <span class="text-danger">
+                                                    Out Of Stock
+                                                </span>
+    
+                                                <% } %>
+    
+    
+    
+    
                                     </div>
-
-                                    <h3 class="h3 card-title">
-                                        <a href="#">Running Sneaker Shoes</a>
-                                    </h3>
-
-                                    <data class="card-price" value="14799">₹14,799</data>
-
+    
                                 </div>
-
-                            </div>
-                        </li>
-
-                        <li class="product-item">
-                            <div class="product-card" tabindex="0">
-
-                                <figure class="card-banner">
-                                    <img src="/users/images/product-2.jpg" width="312" height="350" loading="lazy"
-                                        alt="Leather Mens Slipper" class="image-contain">
-
-                                    <ul class="card-action-list">
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-1">
-                                                <ion-icon name="cart-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-2">
-                                                <ion-icon name="heart-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-3">
-                                                <ion-icon name="eye-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-4">
-                                                <ion-icon name="repeat-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                        </li>
-
-                                    </ul>
-                                </figure>
-
-                                <div class="card-content">
-
-                                    <div class="card-cat">
-                                        <a href="#" class="card-cat-link">Men</a> /
-                                        <a href="#" class="card-cat-link">Sports</a>
-                                    </div>
-
-                                    <h3 class="h3 card-title">
-                                        <a href="#">Leather Mens Slipper</a>
-                                    </h3>
-
-                                    <data class="card-price" value="15599">₹15,599</data>
-
-                                </div>
-
-                            </div>
-                        </li>
-
-                        <li class="product-item">
-                            <div class="product-card" tabindex="0">
-
-                                <figure class="card-banner">
-                                    <img src="/users/images/product-3.jpg" width="312" height="350" loading="lazy"
-                                        alt="Simple Fabric Shoe" class="image-contain">
-
-                                    <div class="card-badge">New</div>
-
-                                    <ul class="card-action-list">
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-1">
-                                                <ion-icon name="cart-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-2">
-                                                <ion-icon name="heart-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-3">
-                                                <ion-icon name="eye-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-4">
-                                                <ion-icon name="repeat-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                        </li>
-
-                                    </ul>
-                                </figure>
-
-                                <div class="card-content">
-
-                                    <div class="card-cat">
-                                        <a href="#" class="card-cat-link">Men</a> /
-                                        <a href="#" class="card-cat-link">Women</a>
-                                    </div>
-
-                                    <h3 class="h3 card-title">
-                                        <a href="#">Simple Fabric Shoe</a>
-                                    </h3>
-
-                                    <data class="card-price" value="13099">₹13,099</data>
-
-                                </div>
-
-                            </div>
-                        </li>
-
-                        <li class="product-item">
-                            <div class="product-card" tabindex="0">
-
-                                <figure class="card-banner">
-                                    <img src="/users/images/product-4.jpg" width="312" height="350" loading="lazy"
-                                        alt="Air Jordan 7 Retro " class="image-contain">
-
-                                    <div class="card-badge"> -25%</div>
-
-                                    <ul class="card-action-list">
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-1">
-                                                <ion-icon name="cart-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-2">
-                                                <ion-icon name="heart-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-3">
-                                                <ion-icon name="eye-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                        </li>
-
-                                        <li class="card-action-item">
-                                            <button class="card-action-btn" aria-labelledby="card-label-4">
-                                                <ion-icon name="repeat-outline"></ion-icon>
-                                            </button>
-
-                                            <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                        </li>
-
-                                    </ul>
-                                </figure>
-
-                                <div class="card-content">
-
-                                    <div class="card-cat">
-                                        <a href="#" class="card-cat-link">Men</a> /
-                                        <a href="#" class="card-cat-link">Sports</a>
-                                    </div>
-
-                                    <h3 class="h3 card-title">
-                                        <a href="#">Air Jordan 7 Retro </a>
-                                    </h3>
-
-                                    <data class="card-price" value="13999">₹13,999 <del>₹16,399</del></data>
-
-                                </div>
-
-                            </div>
-                        </li>
+                            </li>
+    
+                            <% }) %>
 
                     </ul>
 
@@ -972,7 +413,7 @@
             </div>
         </section>
 
-
+<% } %>
 
 
 
@@ -997,7 +438,7 @@
                                 <h3 class="h4 card-title">Free Shiping</h3>
 
                                 <p class="card-text">
-                                    All orders over <span>₹12,299</span>
+                                    All orders over <span>₹1,099</span>
                                 </p>
                             </div>
 
@@ -1156,3 +597,197 @@
 
     </article>
 </main>
+
+
+
+<script>
+    function brandProduct(brand) {
+        $.ajax({
+            url: '/brand_product',
+            type: 'post',
+            data: { brand: brand },
+            success: (response) => {
+              
+                $('#productBrand').empty()
+                response.brandProducts.forEach(i => {
+
+
+                    let productsBrand = `
+                    <li class="product-item">
+                <div class="product-card" tabindex="0">
+                  <figure class="card-banner">
+                    <a href="/product/${i._id}">
+                      <img src="/images/products_image/${i.product_image[0]}" width="312" height="350" loading="lazy" alt="${i.product_name}" class="image-contain">
+                    </a>
+                    ${i.product_badge ? `<div class="card-badge">${i.product_badge}</div>` : ''}
+                    <ul class="card-action-list">
+                      <li class="card-action-item">
+                        <button onclick="cartCount('${i._id}')" class="card-action-btn" aria-labelledby="card-label-1">
+                          <ion-icon name="cart-outline"></ion-icon>
+                        </button>
+                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
+                      </li>
+                      <li class="card-action-item">
+                        <button class="card-action-btn" onclick="addToWishlist('${i._id}')" aria-labelledby="card-label-2">
+                          <ion-icon name="heart-outline"></ion-icon>
+                        </button>
+                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
+                      </li>
+                      <li class="card-action-item">
+                        <button class="card-action-btn" aria-labelledby="card-label-3">
+                          <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
+                      </li>
+                      <li class="card-action-item">
+                        <button class="card-action-btn" aria-labelledby="card-label-4">
+                          <ion-icon name="repeat-outline"></ion-icon>
+                        </button>
+                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
+                      </li>
+                    </ul>
+                  </figure>
+                  <div class="card-content">
+                   
+                    <h3 class="h3 card-title">
+                      <a href="/product/${i._id}">
+                        ${i.product_name}
+                      </a>
+                    </h3>
+                    ${i.product_stock > 0 ? `<data class="card-price" value="${i.product_price}">₹${i.product_price}` : `<span class="text-danger">Out Of Stock</span>`}
+                    
+                   
+                      
+                        ${i.product_old_price ? `<del>${i.product_old_price}</del></data>` : ``}
+                      
+                            
+                  </div>
+                </div>
+              </li>`
+
+                    $('#productBrand').append(productsBrand)
+                });
+            }
+
+        })
+    }
+
+    function allBrandProduct() {
+        $('#productBrand').empty()
+        $.ajax({
+            url: '/all_brand_product',
+            type: 'post',
+            success: (response) => {
+                console.log(response);
+          
+                (response||[]).forEach(i => {
+                    let productsBrand = `
+                    <li class="product-item">
+                <div class="product-card" tabindex="0">
+                  <figure class="card-banner">
+                    <a href="/product/${i.brandProducts._id}">
+                      <img src="/images/products_image/${i.brandProducts.product_image[0]}" width="312" height="350" loading="lazy" alt="${i.brandProducts.product_name}" class="image-contain">
+                    </a>
+                    ${i.brandProducts.product_badge ? `<div class="card-badge">${i.brandProducts.product_badge}</div>` : ''}
+                    <ul class="card-action-list">
+                      <li class="card-action-item">
+                        <button onclick="cartCount('${i.brandProducts._id}')" class="card-action-btn" aria-labelledby="card-label-1">
+                          <ion-icon name="cart-outline"></ion-icon>
+                        </button>
+                        <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
+                      </li>
+                      <li class="card-action-item">
+                        <button class="card-action-btn" onclick="addToWishlist('${i.brandProducts._id}')" aria-labelledby="card-label-2">
+                          <ion-icon name="heart-outline"></ion-icon>
+                        </button>
+                        <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
+                      </li>
+                      <li class="card-action-item">
+                        <button class="card-action-btn" aria-labelledby="card-label-3">
+                          <ion-icon name="eye-outline"></ion-icon>
+                        </button>
+                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
+                      </li>
+                      <li class="card-action-item">
+                        <button class="card-action-btn" aria-labelledby="card-label-4">
+                          <ion-icon name="repeat-outline"></ion-icon>
+                        </button>
+                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
+                      </li>
+                    </ul>
+                  </figure>
+                  <div class="card-content">
+                   
+                    <h3 class="h3 card-title">
+                      <a href="/product/${i.brandProducts._id}">
+                        ${i.brandProducts.product_name}
+                      </a>
+                    </h3>
+                    ${i.brandProducts.product_stock > 0 ? `<data class="card-price" value="${i.brandProducts.product_price}">₹${i.brandProducts.product_price}` : `<span class="text-danger">Out Of Stock</span>`}
+                    
+                   
+                      
+                        ${i.brandProducts.product_old_price ? `<del>${i.brandProducts.product_old_price}</del></data>` : ``}
+                      
+                            
+                  </div>
+                </div>
+              </li>`
+
+                    $('#productBrand').append(productsBrand)
+                });
+            }
+
+        })
+    }
+</script>
+
+<script>
+    function addToWishlist(id) {
+        console.log(id);
+        $.ajax({
+            type: 'get',
+            url: '/add-toWishlist/' + id,
+            success: (wishlistCount) => {
+                if (wishlistCount) {
+                    document.getElementById('wishlistCount').innerHTML = wishlistCount
+                }
+                const toastLiveExample = document.getElementById('toasterMessage')
+                       
+                       document.getElementById('toastMessage').innerHTML="Product has been added to your wishlist."
+                          const toast = new bootstrap.Toast(toastLiveExample, {
+                              autohide: true,
+                              delay: 3000
+                          })
+                          toast.show()
+
+
+            }
+        })
+    }
+</script>
+
+
+<script>
+    function cartCount(id) {
+        console.log(id);
+        $.ajax({
+            type: 'post',
+            url: '/add-toCart/' + id,
+            success: (cartCounts) => {
+                if (cartCounts) {
+                    document.getElementById('cartCount').innerHTML = cartCounts
+                }
+                const toastLiveExample = document.getElementById('toasterMessage')
+                       
+                       document.getElementById('toastMessage').innerHTML="Product has been added to your cart."
+                          const toast = new bootstrap.Toast(toastLiveExample, {
+                              autohide: true,
+                              delay: 3000
+                          })
+                          toast.show()
+
+            }
+        })
+    }
+</script>

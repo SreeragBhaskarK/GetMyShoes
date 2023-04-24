@@ -1,7 +1,7 @@
 const { response } = require('express');
 const product = require('../models/products');
 var userHelper = require('../server/helpers/user-helpers');
-let shopCategory
+var productHelper = require('../server/helpers/product-helper');
 
 exports.productView = (req, res) => {
     let pageNum = req.query.page
@@ -27,23 +27,18 @@ exports.productDetail = (req, res) => {
 }
 exports.shopView = async (req, res) => {
 
-    console.log(shopCategory, '................');
-    if (shopCategory) {
-        console.log(shopCategory, '......if.........');
-        let productData = shopCategory
-        console.log(productData, '11111111111111111111111111');
-        res.render('users/shop', { productData })
-        shopCategory = undefined
 
-    } {
-        let pageNum = req.query.page
-        userHelper.doViewProducts(pageNum).then((response) => {
-            productData = response.productsView
-            totalPages = response.totalPages
-            console.log(productData, '222222222222222222222222');
-            res.render('users/shop', { productData, totalPages })
-        })
-    }
+    let pageNum = req.query.page
+    userHelper.doViewProducts(pageNum).then(async(response) => {
+        productData = response.productsView
+        totalPages = response.totalPages
+        let parentCateagory = await userHelper.GetParentCategory()
+        let brandCateagory = await userHelper.GetBrandCategory()
+        let subCateagory = await userHelper.GetSubCategory()
+        console.log(productData, '222222222222222222222222');
+        res.render('users/shop', { productData, totalPages,parentCateagory,brandCateagory,subCateagory })
+    })
+
 
 
 }
@@ -54,13 +49,46 @@ exports.shopCategory = (req, res) => {
     console.log(categorys);
     let pageNum
     userHelper.getCategoryProduct(pageNum, categorys).then(response => {
-
-
-
         res.send(response)
 
 
     })
 
 
+}
+exports.shopPriceFilter = (req, res) => {
+    try {
+        productHelper.priceFilter(req.body).then(response => {
+            let priceFilter = response.filterProducts
+            res.send(priceFilter)
+        })
+
+    }
+    catch (e) {
+        console.log(e);
+    }
+
+}
+
+exports.brandProducts = (req, res) => {
+    try {
+        productHelper.brandProducts(req.body).then(response => {
+            let brandProducts = response[0]
+            res.send(brandProducts)
+
+        })
+    } catch (e) {
+        console.log(e);
+    }
+}
+exports.allBrandProducts = (req, res) => {
+    try {
+        productHelper.allBrandProducts().then(response => {
+            let brandProducts = response
+            res.send(brandProducts)
+
+        })
+    } catch (e) {
+        console.log(e);
+    }
 }

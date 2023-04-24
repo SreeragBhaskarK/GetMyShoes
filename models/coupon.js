@@ -25,9 +25,13 @@ const couponSchema = new Schema({
     couponName: {
         type: String,
         required: true
+    },
+    coupon_description:String,
+    status:{
+        type:String,
     }
 
-})
+},{ timestamps: true })
 
 const coupon = mongoose.model(collection.COUPON_COLLECTITON, couponSchema)
 
