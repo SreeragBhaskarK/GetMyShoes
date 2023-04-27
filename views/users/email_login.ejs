@@ -3,7 +3,7 @@
 
 <head>
 	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="/login/images/icons/favicon.ico" />
+
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="/login/vendor/bootstrap/css/bootstrap.min.css">
 	<!--===============================================================================================-->
@@ -37,14 +37,14 @@
 		
 
 				 
-				<form  id="email-login" class="login100-form validate-form" method="post"
-					action="/login" >
+				<form  id="email-login "  class="login100-form formSubmit validate-form" novalidate="" 
+					 >
 					<span class="login100-form-title">
 						Member Login
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-						<input class="input100" type="text" name="email" placeholder="Email">
+						<input class="input100" id="email" type="text" required name="email" placeholder="Email">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-envelope" aria-hidden="true"></i>
@@ -52,21 +52,19 @@
 					</div>
 
 					<div class="wrap-input100 validate-input" data-validate = "Password is required">
-						<input class="input100" type="password" name="password" placeholder="Password">
+						<input class="input100" id="password" type="password" required name="password" placeholder="Password">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-lock" aria-hidden="true"></i>
 						</span>
 					</div>
 
-					<% if (locals.message) { %>
+				
 						<div id="message" class="text-center  p-t-12">
-							<span class="txt1 text-danger">
-								<%=locals.message%>
+							<span id="messageDisplay" class="txt1 text-danger">
 							</span>
 
 						</div>
-						<% } %>
 							<div style="float: right;">
 								<a href="/login" class="txt1 text-primary">instead of an phone</a>
 							</div>
@@ -158,6 +156,51 @@
 		}
 	</script>
  -->
+
+ <script>
+	const form = document.querySelector('.formSubmit')
+	form.addEventListener('submit', (event) => {
+		event.preventDefault()
+
+		const email = $('#email').val()
+		const password = $('#password').val()
+		if (!form.checkValidity()) {
+			return
+		}
+		fetch('/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				email,password
+			})
+
+		})
+			.then(response => {
+				return response.json()
+
+			}).then(data => {
+				if (data.status === true) {
+					window.location.href = "/"
+				} else {
+					$('#messageDisplay').html(data.message)
+					$('#message').attr('hidden',false)
+					
+					setTimeout(function () {
+					
+						$('#message').attr('hidden',true)
+					}, 5000);
+				}
+
+			})
+			.catch(error=>{
+				console.log(error);
+			})
+
+	})
+</script>
+
 </body>
 
 </html>

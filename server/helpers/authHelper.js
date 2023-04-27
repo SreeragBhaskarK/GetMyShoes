@@ -214,9 +214,9 @@ module.exports = {
             /*  let otpData = await phoneOTP.findOne({ phone_number: phone_number })
              let userData = await user.findOne({ phone: phone_number })
   *//* 
-                                                                                                                                                                   if (!otpData) {
-                                                                                                                                                                       throw Error("Invalid otp.")
-                                                                                                                                                                   } */
+                                                                                                                                                                                                                                                                                 if (!otpData) {
+                                                                                                                                                                                                                                                                                     throw Error("Invalid otp.")
+                                                                                                                                                                                                                                                                                 } */
             /* console.log(userData?.phone, "nooooo") */
             let validOTP = await sendSmsChecking(otp, phone_number)
             if (validOTP) {
@@ -248,34 +248,29 @@ module.exports = {
         }
 
     },
-    doLogIn(userData) {
+    doLogIn(userData, res) {
 
         return new Promise(async (resolve, reject) => {
-            try {
 
-                let { email, password } = userData
-                email = email.trim()
-                password = password.trim()
-
-                if (!(email && password)) {
-                    throw Error("Empty credentials supplied!")
-                }
-                console.log('//');
-                const authenticateUsers = await module.exports.authenticateUser({ email, password })
-                console.log(authenticateUsers);
-                let userView = authenticateUsers
-                if (userView) {
-                    resolve({ result: true, userView })
-                } else {
-                    resolve({ result: false, message: "This mail is not Verified!" })
-                }
-
-
-            } catch (error) {
-                let err = { message: error.message }
-                resolve(err)
-
+            let { email, password } = userData
+            email = email.trim()
+            password = password.trim()
+            let test
+            if (!(email && password && test)) {
+                reject(new Error("Empty email & password!"))
             }
+            const authenticateUsers = await module.exports.authenticateUser({ email, password })
+            console.log(authenticateUsers);
+            let userView = authenticateUsers
+            if (userView) {
+                resolve({ status: true, userView })
+            } else {
+                resolve({ status: false })
+            }
+
+        }).catch(error => {
+            console.log(error.message);
+            throw error
         })
     },
 
@@ -286,18 +281,26 @@ module.exports = {
             const { email, password } = data
             const fetchedUser = await user.findOne({ email })
             if (!fetchedUser) {
-                throw Error("Invalid credentials entered!")
+                throw new Error("don't have an account sign up!")
             }
 
             if (fetchedUser.email_status === 'notVerified') {
 
-                return false
+                throw new Error("not verified Email!")
+            }
+            if (fetchedUser.email_status === 'notVerified') {
+
+                throw new Error("not verified Email!")
+            }
+            if (fetchedUser.status === 'block') {
+
+                throw new Error("this account is blocked!")
             }
 
             const hashedPassword = fetchedUser.password
             const passwordMatch = await verifyHashedData(password, hashedPassword)
             if (!passwordMatch) {
-                throw Error("Invalid password entered!")
+                throw new Error("Invalid password entered!")
             }
 
 
@@ -318,6 +321,7 @@ module.exports = {
 
 
         } catch (error) {
+            console.log(error, 'nnnnnnnnn');
             throw error
         }
     },
@@ -534,7 +538,7 @@ module.exports = {
 
                 from: AUTH_EMAIL,
                 to: AUTH_EMAIL,
-                subject:'contact message',
+                subject: 'contact message',
                 html: `<p>contact message</p><p style="color:tomato;
                 font-size:25px;letter-spacing:2px;"><b>contact message</b></p><p>Contact information <b><br>name : ${data.name}<br>email : ${data.email}<br>website : ${data.website}<br>message : ${data.message} </b>.</p>`
             }

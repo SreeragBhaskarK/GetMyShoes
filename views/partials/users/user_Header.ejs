@@ -103,14 +103,14 @@
 
                     <% if (locals.person) { %>
 
-                        <a class="nav-link  d-none d-sm-inline-block nav-action-btn" href="#" data-bs-toggle="dropdown">
+                        <a class="nav-link  nav-action-btn"  data-bs-toggle="dropdown">
                             <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
-                            <span class="nav-action-text">Login / Register</span>
+                            <span class="nav-action-text">Profile</span>
 
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end">
-                            <a class="dropdown-item" href="/settings"><i class="align-middle me-1"
+                            <a class=" dropdown-item" href="/settings"><i class="align-middle me-1"
                                     data-feather="user"></i>
                                 Profile</a>
                             <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i>
@@ -133,6 +133,7 @@
 
                         </div>
                         <% }else{ %>
+                         
 
                             <a class="nav-link   nav-action-btn" href="/login">
                                 <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
@@ -165,7 +166,7 @@
                     <a href="/cart"><button class="nav-action-btn">
                             <ion-icon name="cart-outline" aria-hidden="true"></ion-icon>
 
-                            <data class="nav-action-text" value="26099">Cart: <strong>₹26,099</strong></data>
+                            <data class="nav-action-text" value="26099">Cart</data>
 
 
 

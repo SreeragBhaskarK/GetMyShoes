@@ -31,31 +31,41 @@ exports.logInEmailView = (req, res) => {
 }
 
 exports.logInData = (req, res) => {
-    if (req.body.email) {
+    console.log(req.body,'.............');
+    try{
+        if (req.body.email) {
 
-        authHelper.doLogIn(req.body).then(response => {
-            if (response.result) {
-                req.session.user = response.userView
-                req.session.userLoggedIn = true
-                res.redirect('/')
-            } else {
-                res.redirect('/loginemail?message=' + response.message)
-            }
-        })
-    } else {
-        authHelper.doPhoneNumberLogin(req.body).then(response => {
-
-            if (response.result === 0) {
-                let message = "don't have an account sign up"
-                res.redirect('/login?message=' + message)
-            } else if (response.result === -1) {
-                let message = "this account is blocked"
-                res.redirect('/login?message=' + message)
-            } else if (response.result === 1) {
-                res.redirect('/verify?number=' + response.phone_number)
-            }
-        })
+            authHelper.doLogIn(req.body).then(response => {
+                if (response.status) {
+                    req.session.user = response.userView
+                    req.session.userLoggedIn = true
+                    res.send({status:response.status})
+                } else {
+                    res.status(400).send({status:false,message:'not found'})
+                }
+            }).catch(error=>{
+                console.log(error);
+            })
+        } else {
+            authHelper.doPhoneNumberLogin(req.body).then(response => {
+    
+                if (response.result === 0) {
+                    let message = "don't have an account sign up"
+                    res.send({message,status:false})
+                } else if (response.result === -1) {
+                    let message = "this account is blocked"
+                    res.send({message,status:false})
+                } else if (response.result === 1) {
+                    res.send({status:true})
+                }
+            })
+        }
     }
+    catch(error){
+        console.log(error,'///////////');
+        res.status(400).send({message:error.message})
+    }
+   
 
 
 }
