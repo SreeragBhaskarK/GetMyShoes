@@ -3,7 +3,7 @@
     <!-- Button trigger modal -->
 
 
-    <a href="/admin/category" data-bs-toggle="modal" data-bs-target="#exampleModal" id="editbtn"
+    <a href="/admin/category" data-bs-toggle="modal" data-bs-target="#exampleModal"
       class="btn btn-primary float-end mt-n1"><i class="fas fa-plus"></i> New Category</a>
     <div class="mb-3">
       <h1 class="h3 d-inline align-middle">Category</h1>
@@ -13,6 +13,7 @@
       <thead>
         <tr>
 
+          <th>Sl. No </th>
           <th>Category </th>
           <th>Category Type </th>
           <th>Options </th>
@@ -24,9 +25,12 @@
 
       <tbody>
 
-        <% (categorys || []).forEach(i=> { %>
+        <% (categorys || []).forEach((i,index)=> { %>
 
           <tr>
+            <td>
+              <%= (index + 1).toString().padStart(2, '0' ) %>
+            </td>
 
             <td>
               <%= i.category %>
@@ -55,7 +59,7 @@
               <div class="modal-content ">
 
                 <div class="modal-body">
-                  Are you want to delete <%= i.product_name %> ?
+                  Are you want to delete <%= i.category %> ?
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -81,7 +85,7 @@
 <div class="modal fade" id="exampleModalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/admin/category_update" class="needs-validation" novalidate="" method="post">
+      <form action="/admin/category_update" class="needs-validation-edit" novalidate="" method="post">
         <input type="text" hidden value="" id="category_id" name="category_id" id="">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Category Edit</h5>
@@ -92,12 +96,14 @@
 
 
           <label for="">Category Name</label><br>
-          <input type="text" placeholder="category " class="form-control" id="categoryName" value="" name="category" required>
-          <div class="valid-feedback">
+          <input type="text" placeholder="category " class="form-control " id="categoryName" value=""
+            name="category" required="">
+          <input hidden type="text" id="categoryNameCheck">
+          <div id="categoryVaildEdit" class="valid-feedback">
             Looks good!
           </div>
-          <div class="invalid-feedback">
-            Enter Coupon Name!
+          <div id="invalidCategoryEdit" class="invalid-feedback">
+            Enter Category Name!
           </div>
           <label for="" class="form-check-label">Category Type</label><br>
           <label for="">Parent</label>
@@ -118,7 +124,6 @@
 </div>
 
 
-
 <form action="/admin/category" class="needs-validation" novalidate="" method="post">
 
   <!-- Modal -->
@@ -132,21 +137,22 @@
         </div>
         <div class="modal-body">
           <label for="">Category Name</label><br>
-          <input type="text" placeholder="category" class="form-control" name="category" required>
-          <div class="valid-feedback">
+          <input type="text" placeholder="category" id="categoryAdded" class="form-control is-invalid " name="category"
+            required="">
+          <div id="categoryVaild" class="valid-feedback">
             Looks good!
           </div>
-          <div class="invalid-feedback">
-            Enter Coupon Name!
+          <div id="invalidCategory" class="invalid-feedback">
+            Enter Category Name!
           </div>
           <label for="invalidCheck" class="form-check-label">Category Type</label><br>
-          <label for="" >Parent</label>
+          <label for="">Parent</label>
           <input name="category_type" class="form-check-input" value="parent" type="radio" required><br>
           <label for="">Sub</label>
-          <input name="category_type"  class="form-check-input" value="sub" type="radio" required><br>
+          <input name="category_type" class="form-check-input" value="sub" type="radio" required><br>
           <label for="">Brand</label>
           <input name="category_type" class="form-check-input" value="brand" type="radio" required><br>
-          
+
 
 
 
@@ -161,6 +167,94 @@
   </div>
 </form>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  const categoryName = $('#categoryAdded');
+  console.log(categoryName.val());
+  let timeout = null;
+  categoryName.on('input', () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      const categoryValue = categoryName.val();
+      console.log(categoryValue, 'dd');
+      if (categoryValue.trim() === "") {
+        categoryName.removeClass('is-valid').addClass('is-invalid');
+        $('#invalidCategory').html("Enter Category Name!")
+      } else {
+        fetch('/admin/category_name_check', {
+          method: 'post',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ category: categoryValue })
+        }).then(response => {
+          return response.json()
+        }).then(data => {
+          console.log(data);
+          if (data.status) {
+            $('#categoryVaild').attr('hidden', false)
+            categoryName.removeClass('is-invalid').addClass('is-valid');
+          } else {
+            $('#categoryVaild').attr('hidden', true)
+
+            categoryName.removeClass('is-valid').addClass('is-invalid');
+            $('#invalidCategory').html(data.message)
+
+
+          }
+        })
+
+      }
+    }, 500);
+  });
+</script>
+<script>
+  const categoryNameEdit = $('#categoryName');
+  console.log(categoryNameEdit.val());
+  let timeoutedit = null;
+  categoryNameEdit.on('input', () => {
+    clearTimeout(timeoutedit);
+    timeoutedit = setTimeout(() => {
+      const categoryValue = categoryNameEdit.val();
+      const checkName = $('#categoryNameCheck').val()
+      if (checkName != categoryValue) {
+        if (categoryValue.trim() === "") {
+          $('#categoryVaildEdit').attr('hidden', true)
+          categoryNameEdit.removeClass('is-valid').addClass('is-invalid');
+          $('#invalidCategoryEdit').html("Enter Category Name!")
+        } else {
+
+
+          fetch('/admin/category_name_check', {
+            method: 'post',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ category: categoryValue })
+          }).then(response => {
+            return response.json()
+          }).then(data => {
+            console.log(data);
+            if (data.status) {
+              $('#categoryVaildEdit').attr('hidden', false)
+              categoryNameEdit.removeClass('is-invalid').addClass('is-valid');
+            } else {
+              $('#categoryVaildEdit').attr('hidden', true)
+
+              categoryNameEdit.removeClass('is-valid').addClass('is-invalid');
+              $('#invalidCategoryEdit').html(data.message)
+
+
+            }
+          })
+        }
+      }else{
+        $('#categoryVaildEdit').attr('hidden', false)
+              categoryNameEdit.removeClass('is-invalid').addClass('is-valid');
+      }
+
+    }, 500);
+  });
+</script>
+
+
 
 <script>
   function categoryEdit(categoryId) {
@@ -171,6 +265,7 @@
       success: (response) => {
         console.log(response);
         document.getElementById('categoryName').value = response.category
+        document.getElementById('categoryNameCheck').value = response.category
         if (response.category_type == 'parent') {
           document.getElementById("parent").setAttribute("checked", "checked");
         } else if (response.category_type == 'brand') {
@@ -195,11 +290,34 @@
     Array.prototype.slice.call(forms)
       .forEach(function (form) {
         form.addEventListener('submit', function (event) {
-          if (!form.checkValidity()) {
+          const categoryName = $('#categoryAdded');
+
+          form.classList.add('was-validated')
+          if (!form.checkValidity() || categoryName.hasClass('is-invalid')) {
             event.preventDefault()
             event.stopPropagation()
+            form.classList.remove('was-validated')
           }
+        }, false)
+      })
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation-edit')
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          const categoryNameEdt = $('#categoryName');
+
           form.classList.add('was-validated')
+          if (!form.checkValidity() || categoryNameEdt.hasClass('is-invalid')) {
+            event.preventDefault()
+            event.stopPropagation()
+            form.classList.remove('was-validated')
+          }
         }, false)
       })
   });

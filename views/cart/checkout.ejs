@@ -14,7 +14,7 @@
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
     <div class="container">
-       
+
         <div class="row">
             <div class="col-lg-8">
 
@@ -139,7 +139,7 @@
 
                 </div>
 
-           
+
                 <% (users?.address || []).forEach(address=> { %>
                     <div id="editAds<%=address?._id%>" style="display: none;" class="card">
 
@@ -152,20 +152,19 @@
                                 <input hidden type="text" value="<%=address?._id%>" name="id">
                                 <div class="mb-3 ">
                                     <label class="form-label" for="">Name</label>
-                                    <input type="text" class="form-control" name="name"
-                                        value="<%=address?.name%>" required placeholder="Name">
+                                    <input type="text" class="form-control" name="name" value="<%=address?.name%>"
+                                        required placeholder="Name">
                                 </div>
                                 <div class="mb-3 ">
                                     <label class="form-label" for="">phone</label>
-                                    <input type="tel" class="form-control" name="phone"
-                                        value="<%=address?.phone%>" required
-                                        placeholder="10-digit mobile number">
+                                    <input type="tel" class="form-control" name="phone" value="<%=address?.phone%>"
+                                        required placeholder="10-digit mobile number">
                                 </div>
 
                                 <div class="mb-3 ">
                                     <label class="form-label" for="">pincode</label>
-                                    <input type="text" class="form-control" name="pincode"
-                                        value="<%=address?.pincode%>" required placeholder="Pincode">
+                                    <input type="text" class="form-control" name="pincode" value="<%=address?.pincode%>"
+                                        required placeholder="Pincode">
                                 </div>
 
                                 <div class="mb-3 ">
@@ -176,8 +175,8 @@
 
                                 <div class="mb-3 ">
                                     <label class="form-label" for="inputLastName">Address</label>
-                                    <textarea name="address" id="" cols="10" rows="4" tabindex="5" value=""
-                                        required class="form-control"
+                                    <textarea name="address" id="" cols="10" rows="4" tabindex="5" value="" required
+                                        class="form-control"
                                         placeholder="Address (Area and Street)"><%=address?.address%></textarea>
 
                                 </div>
@@ -191,9 +190,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="inputEmail4">State</label>
-                                    <select id="editstate-select" required
-                                        data-address='<%=address?.state%>' class="form-control"
-                                        name="state">
+                                    <select id="editstate-select" required data-address='<%=address?.state%>'
+                                        class="form-control" name="state">
                                         <option value="">--Select State--</option>
                                         <option value="Andhra Pradesh[16.5062, 80.6480]">Andhra Pradesh
                                         </option>
@@ -236,9 +234,8 @@
 
                                 <div class="mb-3 ">
                                     <label class="form-label" for="inputLastName">Landmark</label>
-                                    <input type="text" value="<%=address?.landmark%>" required
-                                        class="form-control" name="landmark"
-                                        placeholder="Landmark (Optional)">
+                                    <input type="text" value="<%=address?.landmark%>" required class="form-control"
+                                        name="landmark" placeholder="Landmark (Optional)">
                                 </div>
 
                                 <div class="mb-3 ">
@@ -253,17 +250,14 @@
 
                                         <label class="form-label" for="inputLastName">Address
                                             Type</label><br>
-                                        <input type="radio" id="home-radio" checked name="address_type"
-                                            value="home">
+                                        <input type="radio" id="home-radio" checked name="address_type" value="home">
                                         <label for="home-radio">Home</label>
-                                        <input type="radio" id="work-radio" name="address_type"
-                                            value="work">
+                                        <input type="radio" id="work-radio" name="address_type" value="work">
                                         <label for="work-radio">Work</label>
                                         <% }else{%>
                                             <label class="form-label" for="inputLastName">Address
                                                 Type</label><br>
-                                            <input type="radio" id="home-radio" name="address_type"
-                                                value="home">
+                                            <input type="radio" id="home-radio" name="address_type" value="home">
                                             <label for="home-radio">Home</label>
                                             <input type="radio" id="work-radio" checked name="address_type"
                                                 value="work">
@@ -297,7 +291,7 @@
                                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjE2IiB2aWV3Qm94PSIwIDAgNCAxNiI+CiAgICA8ZyBmaWxsPSIjODc4Nzg3IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxjaXJjbGUgY3g9IjIiIGN5PSIyIiByPSIyIi8+CiAgICAgICAgPGNpcmNsZSBjeD0iMiIgY3k9IjgiIHI9IjIiLz4KICAgICAgICA8Y2lyY2xlIGN4PSIyIiBjeT0iMTQiIHI9IjIiLz4KICAgIDwvZz4KPC9zdmc+Cg==">
                                         <ul class="dropdown-menu  ">
                                             <li><a class="dropdown-item"
-                                                onclick="editAddress('<%=address?._id%>')">Edit</a></li>
+                                                    onclick="editAddress('<%=address?._id%>')">Edit</a></li>
                                             <li><a onclick="deleteAddress('<%=address?._id%>')"
                                                     class="dropdown-item">Delete</a></li>
 
@@ -377,7 +371,7 @@
                         <div class="checkout__order__widget">
                             <label for="cash-and-delivery">
                                 Cash On Delivery
-                                <input type="radio" name="payment_method" value="COD" id="cash-and-delivery" required>
+                                <input type="radio" checked name="payment_method" value="COD" id="cash-and-delivery" required>
                                 <span class="checkmark"></span>
                             </label>
                             <label for="online-payment">
@@ -578,12 +572,10 @@
         let addressSelectCheck = { delevery_address: $('input[name=delevery_address]').val() }
         console.log(addressSelectCheck);
         if (addressSelectCheck.delevery_address) {
-            console.log('nooooooooo');
             let result = radioButtonValidation()
-            console.log(result);
             if (result) {
                 $.ajax({
-                    url: '/place-order/'+addressSelectCheck.delevery_address,
+                    url: '/place-order/' + addressSelectCheck.delevery_address,
                     type: 'post',
                     data: $('#checkout_form').serialize(),
                     success: (response) => {
@@ -598,7 +590,14 @@
 
         } else {
 
-            console.log("nnnnnnnnnnnnnnnnnj");
+            const toastLiveExample = document.getElementById('toasterMessage')
+
+            document.getElementById('toastMessage').innerHTML = "Please add to address...."
+            const toast = new bootstrap.Toast(toastLiveExample, {
+                autohide: true,
+                delay: 3000
+            })
+            toast.show()
 
         }
 
@@ -614,7 +613,14 @@
             }
         }
         if (!isChecked) {
-            alert("Please select a delivery address");
+            const toastLiveExample = document.getElementById('toasterMessage')
+
+            document.getElementById('toastMessage').innerHTML = "Please add to address...."
+            const toast = new bootstrap.Toast(toastLiveExample, {
+                autohide: true,
+                delay: 3000
+            })
+            toast.show()
             return false;
         }
         return isChecked
@@ -651,6 +657,9 @@
         };
 
         var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+            window.location.href = '/order-failed'
+        });
         rzp1.open();
 
     }

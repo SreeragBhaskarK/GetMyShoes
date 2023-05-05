@@ -1,12 +1,17 @@
 <link rel="stylesheet" href="/users/product_details/css/style.css" type="text/css">
+<link rel="stylesheet" href="/users/magiczoomplus/magiczoomplus.css">
 
 <!-- Product Details Section Begin -->
+
+
+
 <section class="product-details spad">
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
                 <div class="product__details__pic  ">
-                    <div class="product__details__pic__left product__thumb nice-scroll">
+                    <div class="product__details__pic__left product__thumb nice-scroll ">
+
                         <a class="pt active" href="#product-1">
                             <img class="" src="\images\products_image\<%=products.product_image[0]%>" alt=""
                                 data-options="zoomPosition: inner">
@@ -17,25 +22,35 @@
                         <a class="pt" href="#product-3">
                             <img src="\images\products_image\<%=products.product_image[2]%>" alt="">
                         </a>
-                        <a class="pt" href="#product-4">    
+                        <a class="pt" href="#product-4">
                             <img src="\images\products_image\<%=products.product_image[3]%>" alt="">
                         </a>
+
                     </div>
                     <div class="product__details__slider__content">
-                        <div class="product__details__pic__slider owl-carousel">
-                            <img data-hash="product-1" class="product__big__img product_details_imagestest"
-                                src="\images\products_image\<%=products.product_image[0]%>" alt="">
-                            <img data-hash="product-2" class="product__big__img"
-                                src="\images\products_image\<%=products.product_image[1]%>" alt="">
-                            <img data-hash="product-3" class="product__big__img"
-                                src="\images\products_image\<%=products.product_image[2]%>" alt="">
-                            <img data-hash="product-4" class="product__big__img"
-                                src="\images\products_image\<%=products.product_image[3]%>" alt="">
+                        <div class="">
+                            <figure class="image-holder product__details__pic__slider owl-carousel">
+                                <img data-hash="product-1" id="imagePro"
+                                    class="product__big__img   product_details_imagestest"
+                                    src="\images\products_image\<%=products.product_image[0]%>" alt="">
+                                <img data-hash="product-2" class="product__big__img"
+                                    src="\images\products_image\<%=products.product_image[1]%>" alt="">
+                                <img data-hash="product-3" class="product__big__img"
+                                    src="\images\products_image\<%=products.product_image[2]%>" alt="">
+                                <img data-hash="product-4" class="product__big__img"
+                                    src="\images\products_image\<%=products.product_image[3]%>" alt="">
+                            </figure>
                         </div>
                     </div>
+
+
                 </div>
             </div>
             <div class="col-lg-6">
+                <figure class="image-preview d-none">
+                    <!--   <img src="https://images.unsplash.com/photo-1556912172-45b7abe8b7e1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80" id="image-preview"> -->
+                    <img src="\images\products_image\<%=products.product_image[3]%>" id="image-preview">
+                </figure>
                 <div class="product__details__text">
                     <h3>
                         <%=products.product_name%> <span>Brand: SKMEIMore Men Watches from SKMEI</span>
@@ -60,13 +75,35 @@
                                 <input type="text" value="1">
                             </div>
                         </div>
-                        <a onclick="cartCount('<%=products._id%>')" class="cart-btn"><span class="icon_bag_alt"></span>
-                            Add to cart</a>
-                        <ul>
-                            <li onclick="addToWishlist('<%=products._id%>')"><a><span class="icon_heart_alt"></span></a>
-                            </li>
-                           <!--  <li><a href="#"><span class="icon_adjust-horiz"></span></a></li> -->
-                        </ul>
+
+                        <% if (locals.productcartCheck) { %>
+                            <a href="/cart" class="cart-btn"><span style="margin: auto;
+                                width: fit-content;" class="icon_bag_alt"></span>
+                                Go to cart</a>
+                            <% }else{ %>
+                                <div id="addToCartChange">
+                                    <a <% if (locals.userActive) { %>
+                                        onclick="cartCount('<%=products._id%>')"
+                                            <% }else{ %>
+                                                onclick="goToLoginPage()"
+                                                <% } %> class="cart-btn"><span style="margin: auto;
+                                        width: fit-content;" class="icon_bag_alt"></span>
+                                                    Add to cart</a>
+                                </div>
+
+                                <% } %>
+                                    
+                                                <ul>
+                                                    <li <% if (locals.userActive) { %>
+                                                        onclick="addToWishlist('<%=products._id%>')"
+                                                            <% }else{ %>
+                                                                onclick="goToLoginPage()"
+                                                                <% } %> ><a><span
+                                                                style="   margin-top: 12px;"
+                                                                class="icon_heart_alt"></span></a>
+                                                    </li>
+                                                    <!--  <li><a href="#"><span class="icon_adjust-horiz"></span></a></li> -->
+                                                </ul>
                     </div>
                     <div class="product__details__widget">
                         <ul>
@@ -97,7 +134,7 @@
                                         </label>
                                     </div>
                                 </li> -->
-                           <!--  <li>
+                            <!--  <li>
                                 <span>Available size:</span>
                                 <div class="size__btn">
                                     <label for="xs-btn" class="active">
@@ -147,7 +184,7 @@
                                 <%=products.product_description%>
                             </p>
                         </div>
-                      <!--   <div class="tab-pane" id="tabs-2" role="tabpanel">
+                        <!--   <div class="tab-pane" id="tabs-2" role="tabpanel">
                             <h6>Specification</h6>
                             <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut loret fugit, sed
                                 quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt loret.
@@ -225,19 +262,24 @@
         $.ajax({
             type: 'post',
             url: '/add-toCart/' + id,
-            data:({quantity:quantity}),
+            data: ({ quantity: quantity }),
             success: (cartCount) => {
                 if (cartCount) {
                     document.getElementById('cartCount').innerHTML = cartCount
                 }
+                let goToCart = `<a href="/cart" class="cart-btn"><span style="margin: auto;
+                                width: fit-content;" class="icon_bag_alt"></span>
+                                Go to cart</a>`
+                $('#addToCartChange').empty()
+                $('#addToCartChange').append(goToCart)
                 const toastLiveExample = document.getElementById('toasterMessage')
-                       
-                       document.getElementById('toastMessage').innerHTML="Product has been added to your cart."
-                          const toast = new bootstrap.Toast(toastLiveExample, {
-                              autohide: true,
-                              delay: 3000
-                          })
-                          toast.show()
+
+                document.getElementById('toastMessage').innerHTML = "Product has been added to your cart."
+                const toast = new bootstrap.Toast(toastLiveExample, {
+                    autohide: true,
+                    delay: 3000
+                })
+                toast.show()
 
             }
         })
@@ -260,13 +302,13 @@
                 }
 
                 const toastLiveExample = document.getElementById('toasterMessage')
-                       
-                       document.getElementById('toastMessage').innerHTML="Product has been added to your wishilist."
-                          const toast = new bootstrap.Toast(toastLiveExample, {
-                              autohide: true,
-                              delay: 3000
-                          })
-                          toast.show()
+
+                document.getElementById('toastMessage').innerHTML = "Product has been added to your wishilist."
+                const toast = new bootstrap.Toast(toastLiveExample, {
+                    autohide: true,
+                    delay: 3000
+                })
+                toast.show()
 
 
 
@@ -274,3 +316,30 @@
         })
     }
 </script>
+
+<script>
+    const previewImage = document.getElementById('image-preview');
+
+    document.querySelectorAll('a.pt').forEach(link => {
+        link.addEventListener('click', (event) => {
+            // Prevent the default link behavior
+            /* event.preventDefault(); */
+
+            // Remove the "active" class from all anchor tags
+            document.querySelectorAll('a.pt').forEach(link => link.classList.remove('active'));
+
+            // Add the "active" class to the clicked anchor tag
+            event.currentTarget.classList.add('active');
+
+            // Update the preview image src based on the clicked anchor tag
+            previewImage.src = event.currentTarget.querySelector('img').src;
+
+
+
+            // Log the href value of the clicked anchor tag
+            console.log(event.currentTarget.href);
+        });
+    });
+
+</script>
+<script src="/users/magiczoomplus/magiczoomplus.js"></script>

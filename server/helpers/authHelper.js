@@ -18,14 +18,13 @@ module.exports = {
             try {
 
                 let { phone_number } = userData
-                phone_number = Number('91' + phone_number)
 
                 let result = await module.exports.userFinding(phone_number)
                 if (result === 1) {
                     await sendSms(phone_number)
                 }
 
-                resolve({ result, phone_number })
+                resolve({ result })
             }
             catch (error) {
                 console.log(error);
@@ -35,53 +34,42 @@ module.exports = {
     /* signUp */
     doPhoneNumberSignUp(userData) {
         return new Promise(async (resolve, reject) => {
-            try {
 
-                let { phone_number } = userData
-                /* send otp in phone number */
-                phone_number = Number('91' + phone_number)
-                let checkNumber = await module.exports.checkphoneNumber(phone_number)
+            let { phone_number } = userData
+            /* send otp in phone number */
 
-                if (checkNumber.result) {
+            module.exports.checkphoneNumber(phone_number).then(async() => {
+                await module.exports.sendOtpPhone(phone_number)
+                resolve(true)
+            }).catch(error => {
+                console.log(error.message);
+                reject(error)
+                return
+            })
 
-                    resolve(false)
-                } else {
-                    let number = await module.exports.sendOtpPhone(phone_number)
-
-                    resolve(phone_number)
-                }
-
-            } catch (error) {
-                if (error.status === 400) {
-                    console.log("hello")
-                } else {
-
-                    console.log(error);
-                }
-            }
-
-
+        }).catch(error => {
+            throw error
         })
     },
 
     /* verify otp */
 
-    doVerifyOtp(OtpData) {
+    doVerifyOtp(OtpData, phoneNumber) {
 
         console.log(OtpData, "/////////////////////otp");
         return new Promise(async (resolve, reject) => {
             try {
 
-                let { otp, phone_number } = OtpData
+                let { otp } = OtpData
                 const otpNumber = String(otp.join(''));
-                phone_number = Number(phone_number)
-
+                phone_number = Number(phoneNumber)
+                console.log(phone_number, "nnnd");
                 let userCheck = user.findOne({ phone: phone_number })
                 let validOTP
                 if (userCheck.status === 'active') {
                     validOTP = await sendSmsChecking(otpNumber, phone_number)
 
-                } else {
+                } else if (userCheck.status !== 'active' || userCheck.status !== 'block') {
                     validOTP = await sendSmsChecking(otpNumber, phone_number)
                     if (validOTP) {
                         await user.updateOne({ phone: phone_number }, { status: "active" })
@@ -143,7 +131,7 @@ module.exports = {
             /* let hashedOTP = await hashData(otp) */
             let userCheck = await user.findOne({ phone: phone_number })
 
-            sendSms(phone_number)
+            await sendSms(phone_number)
 
             return saveUser()
 
@@ -167,8 +155,8 @@ module.exports = {
                 if (userCheck == null) {
                     console.log(userCheck, "zzzzzzzzzyyyyyyyyyyyyy");
                     const newUser = new user({
-                        status: "process",
-                        phone: phoneNumber
+                        status:"process",
+                        phone:phoneNumber
 
                     })
                     newUser.save()
@@ -181,12 +169,9 @@ module.exports = {
 
         }
         catch (error) {
-            if (error.status === 400) {
-                console.log("hello")
-            } else {
+            console.log("error singnjdkfjdk");
                 throw error
 
-            }
 
         }
     },
@@ -194,16 +179,17 @@ module.exports = {
         try {
             console.log(phone_number, "nokkkkkkkkkkkkkkkkkkk");
             let result = await user.findOne({ phone: phone_number })
-            console.log(result);
-            if (result?.status !== "active") {
-                return { result: false }
+            console.log(result?.status);
+            if (result?.status !== 'process' && result ) {
+                console.log('1');
+                throw new Error('An account is already registered')
             } else {
-
+                console.log('2');
                 return { result: true }
             }
         }
         catch (error) {
-
+            throw error
         }
     },
 
@@ -214,9 +200,9 @@ module.exports = {
             /*  let otpData = await phoneOTP.findOne({ phone_number: phone_number })
              let userData = await user.findOne({ phone: phone_number })
   *//* 
-                                                                                                                                                                                                                                                                                 if (!otpData) {
-                                                                                                                                                                                                                                                                                     throw Error("Invalid otp.")
-                                                                                                                                                                                                                                                                                 } */
+                                                                                                                                                                                                                                                                                                                         if (!otpData) {
+                                                                                                                                                                                                                                                                                                                             throw Error("Invalid otp.")
+                                                                                                                                                                                                                                                                                                                         } */
             /* console.log(userData?.phone, "nooooo") */
             let validOTP = await sendSmsChecking(otp, phone_number)
             if (validOTP) {
@@ -256,10 +242,14 @@ module.exports = {
             email = email.trim()
             password = password.trim()
             let test
-            if (!(email && password && test)) {
+            if (!(email && password)) {
                 reject(new Error("Empty email & password!"))
+                return
             }
-            const authenticateUsers = await module.exports.authenticateUser({ email, password })
+            const authenticateUsers = await module.exports.authenticateUser({ email, password }).catch(error => {
+                reject(error)
+                return
+            })
             console.log(authenticateUsers);
             let userView = authenticateUsers
             if (userView) {
@@ -269,7 +259,7 @@ module.exports = {
             }
 
         }).catch(error => {
-            console.log(error.message);
+            console.log("nnnnnnnnnnnnnn", error.message);
             throw error
         })
     },
@@ -282,6 +272,7 @@ module.exports = {
             const fetchedUser = await user.findOne({ email })
             if (!fetchedUser) {
                 throw new Error("don't have an account sign up!")
+
             }
 
             if (fetchedUser.email_status === 'notVerified') {
@@ -321,7 +312,7 @@ module.exports = {
 
 
         } catch (error) {
-            console.log(error, 'nnnnnnnnn');
+            console.log(error.message, 'nnnnnnnnn');
             throw error
         }
     },

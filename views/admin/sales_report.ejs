@@ -14,6 +14,7 @@
         <table id="example" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
+                    <th>Sl. No</th>
                     <th>Date of Order</th>
                     <th>Order Item Id</th>
                     <th>Quantity</th>
@@ -28,8 +29,9 @@
 
 
             <tbody>
-                <% (salesReport || []).forEach(i=> { %>
+                <% (salesReport || []).forEach((i,index)=> { %>
                     <tr>
+                        <td><%= (index + 1).toString().padStart(2, '0') %></td>
                         <td>
                             <% const date=new Date(i.createdAt); %>
                                 <%= `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}` %>

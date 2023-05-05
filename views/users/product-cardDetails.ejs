@@ -17,8 +17,13 @@
                         <% } %>
                             <ul class="card-action-list">
 
+                                
                                 <li class="card-action-item">
-                                    <button onclick="cartCount('<%=product._id%>')" class="card-action-btn"
+                                    <button <% if (locals.userActive) { %>
+                                        onclick="cartCount('<%=product._id%>')"
+                                            <% }else{ %>
+                                                onclick="goToLoginPage()"
+                                                <% } %> class="card-action-btn"
                                         aria-labelledby="card-label-1">
                                         <ion-icon name="cart-outline"></ion-icon>
                                     </button>
@@ -27,7 +32,11 @@
                                 </li>
 
                                 <li class="card-action-item">
-                                    <button class="card-action-btn" onclick="addToWishlist('<%=product._id%>')" aria-labelledby="card-label-2">
+                                    <button <% if (locals.userActive) { %>
+                                        onclick="addToWishlist('<%=product._id%>')"
+                                            <% }else{ %>
+                                                onclick="goToLoginPage()"
+                                                <% } %> class="card-action-btn"  aria-labelledby="card-label-2">
                                         <ion-icon name="heart-outline"></ion-icon>
                                     </button>
 
@@ -35,21 +44,7 @@
                                     </div>
                                 </li>
 
-                                <li class="card-action-item">
-                                    <button class="card-action-btn" aria-labelledby="card-label-3">
-                                        <ion-icon name="eye-outline"></ion-icon>
-                                    </button>
-
-                                    <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                                </li>
-
-                                <li class="card-action-item">
-                                    <button class="card-action-btn" aria-labelledby="card-label-4">
-                                        <ion-icon name="repeat-outline"></ion-icon>
-                                    </button>
-
-                                    <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                </li>
+                            
 
                             </ul>
                 </figure>
@@ -147,3 +142,4 @@
                 })
             }
         </script>
+

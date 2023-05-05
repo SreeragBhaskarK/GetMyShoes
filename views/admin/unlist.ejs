@@ -10,6 +10,7 @@
         <table id="example" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
+                    <th>Sl. No</th>
                     <th>Product Details</th>
                     <th>Category</th>
                     <th>Options</th>
@@ -24,8 +25,9 @@
 
 
             <tbody>
-                <% (unListProduct || []).forEach(productData=> { %>
+                <% (unListProduct || []).forEach((productData,index)=> { %>
                     <tr>
+                        <td><%= (index + 1).toString().padStart(2, '0') %></td>
                         <td>
                             <%= productData.product_name %>
                         </td>

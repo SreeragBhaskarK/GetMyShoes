@@ -6,6 +6,7 @@ let coupon = require('../../models/coupon')
 const mongoose = require('mongoose');
 const objectId = mongoose.Types.ObjectId;
 const Razorpay = require('razorpay')
+const { ObjectId } = require('mongodb')
 var instance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -124,8 +125,8 @@ module.exports = {
         })
     }
     ,
-    getTotalAmount(userId, discount,minPurchase) {
-        console.log(userId, discount,minPurchase);
+    getTotalAmount(userId, discount, minPurchase) {
+        console.log(userId, discount, minPurchase);
         return new Promise(async (resolve, reject) => {
 
             let totalPrice = await cart.aggregate([{
@@ -273,12 +274,12 @@ module.exports = {
         })
     },
 
-    placeOrder(orders, products, total,discount,address) {
-        console.log(orders,products,total,'mmmmm');
+    placeOrder(orders, products, total, discount, address) {
+        console.log(orders, products, total, 'mmmmm');
         return new Promise(async (resolve, reject) => {
             let status = orders.payment_method === 'COD' ? 'placed' : 'pending'
             let ShippingStatus = orders.payment_method === 'COD' ? 'Order Placed' : 'Processing'
-            
+
             /* let deliveryAddressId = orders.delevery_address */
             let userId = orders.user_id
             let paymentMethod = orders.payment_method
@@ -303,8 +304,8 @@ module.exports = {
                 products: products,
                 status: status,
                 totalAmount: total,
-                discount:discount,
-                shipping_status:ShippingStatus
+                discount: discount,
+                shipping_status: ShippingStatus
             })
             orderData.save()
             console.log(orderData, 'checkingorder');
@@ -313,10 +314,14 @@ module.exports = {
 
         })
     },
-    getOrders() {
+    getOrders(user_id) {
 
         return new Promise(async (resolve, reject) => {
             let orders = await order.aggregate([{
+                $match: {
+                    userId: new objectId(user_id)
+                }
+            }, {
                 $addFields: {
                     productsData: '$products.products'
                 }
@@ -335,10 +340,42 @@ module.exports = {
                     ],
                     as: 'productInfo'
                 }
-            }])
-            console.log(orders,"orrrrrrrrrrdseeeeeeeeeeerrrrrr");
+            }, {
+                $addFields: {
+                    productInfo: {
+                        $map: {
+                            input: "$productInfo",
+                            as: "p",
+                            in: {
+                                $mergeObjects: [
+                                    "$$p",
+                                    {
+                                        quantity: {
+                                            $arrayElemAt: [
+                                                "$productsData.quantity",
+                                                {
+                                                    $indexOfArray: [
+                                                        "$productsData.item",
+                                                        "$$p._id"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+            ]).catch(error => {
+                console.log(error.message);
+            })
+
             resolve(orders)
 
+        }).catch(error => {
+            console.log(error.message);
         })
     },
     generateRazorpay(orders) {
@@ -355,7 +392,7 @@ module.exports = {
         })
 
     }
-   ,
+    ,
     getWishList(userId) {
         return new Promise(async (resolve, reject) => {
             let wishlistData = await wishlist.aggregate([{
@@ -446,37 +483,48 @@ module.exports = {
                     products: { item: new objectId(proId) }
                 }
             })
-            
 
-            let wishlistCount = deleteStatus.products.length-1
+
+            let wishlistCount = deleteStatus.products.length - 1
             console.log(wishlistCount);
             resolve(wishlistCount)
         })
     },
-    couponCheck(Coupon,total) {
+    couponCheck(Coupon, total, userId) {
         return new Promise(async (resolve, reject) => {
             let { appliedCoupon } = Coupon
-            let couponCheck = await coupon.find({ code: appliedCoupon,status:'active' })
+            let checkCoupon = await user.find({ _id: new ObjectId(userId) })
+            console.log(checkCoupon);
+            let result = checkCoupon[0].used_coupon.findIndex(coupon => coupon.code == appliedCoupon)
+            console.log(result);
+            if (result == -1) {
+                reject(new Error('already using coupon'))
+                return
+            }
+            let couponCheck = await coupon.find({ code: appliedCoupon, status: 'active' })
             console.log(couponCheck);
             if (couponCheck.length === 1) {
-                 console.log(total);
-                if(couponCheck[0].minPurchase<=total){
-                    resolve({ status: true, code: appliedCoupon, discount: couponCheck[0].discount,minPurchase: couponCheck[0].minPurchase,coupon:couponCheck })
-                }else{
-                    resolve({status:false,message:'minimum purchase ₹ '+couponCheck[0].minPurchase})
+                console.log(total);
+                if (couponCheck[0].minPurchase <= total) {
+                    resolve({ status: true, code: appliedCoupon, discount: couponCheck[0].discount, minPurchase: couponCheck[0].minPurchase, coupon: couponCheck })
+                } else {
+                    resolve({ status: false, message: 'minimum purchase ₹ ' + couponCheck[0].minPurchase })
                 }
-                
+
             } else {
 
-                resolve({status:false,message:'invaild coupon'})
+                reject(new Error('invaild coupon'))
+                return
             }
+        }).catch(error => {
+            throw error
         })
     },
     getCoupons() {
         return new Promise(async (resolve, reject) => {
-            let coupons = await coupon.find({status:'active'}).sort({$natural:-1}).limit(4)
-                
-           resolve(coupons)
+            let coupons = await coupon.find({ status: 'active' }).sort({ $natural: -1 }).limit(4)
+
+            resolve(coupons)
         })
     },
 }

@@ -10,13 +10,14 @@
                     <table id="example" class="table table-striped" style="width:100%">
                         <thead>
                             <tr>
+                                <th>Sl. No</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Age</th>
                                 <th>Gender</th>
                                 <th>Phone</th>
                               
-                                <th>User Status</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                                 <!-- <th>B</th> -->
                             </tr>
@@ -25,8 +26,9 @@
 
 
                         <tbody>
-                            <% ( userData || []).forEach(userData=> { %>
+                            <% ( userData || []).forEach((userData,index)=> { %>
                                 <tr>
+                                    <td><%= (index + 1).toString().padStart(2, '0') %></td>
                                     <td>
                                         <%= userData.name %>
                                     </td>
@@ -63,7 +65,7 @@
                                         <%= userData.gender %>
                                     </td>
                                     <td>
-                                        +<%= userData.phone %>
+                                        <%= userData.phone %>
                                     </td>
                                   
                                     <% if (userData.status==='process' ) { %>

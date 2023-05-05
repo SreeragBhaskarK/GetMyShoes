@@ -4,10 +4,10 @@ const category = require("../../models/category")
 const product = require("../../models/products")
 const order = require("../../models/order")
 const coupon = require("../../models/coupon")
+const banner = require("../../models/banner")
 const { ObjectId } = require("mongodb")
 const fs = require('fs');
 const xlsx = require('xlsx');
-
 var path = require('path');
 let ejs = require('ejs')
 module.exports = {
@@ -383,7 +383,8 @@ module.exports = {
             const currentCount = weekOrders.length > 0 ? weekOrders[0].orderCount : 0;
             const previousCount = previousWeekOrders.length > 0 ? previousWeekOrders[0].orderCount : 0;
 
-            const percentageChange = ((currentCount - previousCount) / previousCount) * 100;
+            let percentageChange = ((currentCount - previousCount) / previousCount) * 100;
+            percentageChange = percentageChange.toFixed(2)
             /* weekRevenue */
             let weekRevenueData = await weekRevenue()
             console.log(weekRevenueData, 'return');
@@ -409,7 +410,10 @@ module.exports = {
             /* Category Sales */
             let cateagorySalesMonth = await totalcategorySalesMonth()
 
-            resolve({ States, orderCount: weekOrders[0]?.orderCount ?? 0, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth, incomeWeek, incomepercentage, totalMonthOrder, totalIncomeByMonth })
+            /* Users */
+            let weekUsers = await totalWeekUsers()
+
+            resolve({ States, orderCount: weekOrders[0]?.orderCount ?? 0, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth, incomeWeek, incomepercentage, totalMonthOrder, totalIncomeByMonth, weekUsers })
         })
     }, getOrder() {
         return new Promise(async (resolve, reject) => {
@@ -616,6 +620,91 @@ module.exports = {
             let salesData = await salesReportExcel(salesReport)
             resolve(salesData)
         })
+    },
+    /* checking categoriey */
+    checkCategory(categoryNameData) {
+        return new Promise(async (resolve, reject) => {
+            let categoryName = categoryNameData.category
+            let categoryData = await category.find({ category: categoryName })
+            console.log(categoryData.length);
+            if (categoryData.length == 1) {
+                console.log("nfgfgkfkgj");
+                reject(new Error('already declare category!'));
+                return
+            }
+            resolve({ status: true })
+        }).catch(error => {
+            console.log(error);
+            throw error
+        })
+    },
+    getBanner() {
+        return new Promise(async (resolve, reject) => {
+            let bannerHeader = await banner.find()
+            console.log(bannerHeader);
+            resolve(bannerHeader)
+        })
+    },
+    updateBanner(headerData) {
+        return new Promise(async (resolve, reject) => {
+            const { header_title, header_title_strong, header_description, header_link } = headerData
+            let updateBannerHeader = await banner.updateOne({
+                header: [
+                    {
+                        title: header_title,
+                        title_strong: header_title_strong,
+                        description: header_description,
+                        shop_link: header_link
+                    }
+                ]
+
+            })
+            console.log(updateBannerHeader);
+            resolve({ status: true })
+        }).catch(error => {
+            throw error
+        })
+    },
+    updateBannerMain(mainData) {
+        return new Promise(async (resolve, reject) => {
+            const { main_left_title, main_left_description, main_left_link, main_right_title, main_right_description, main_right_link } = mainData
+            let updateBannerMain = await banner.updateOne({
+                main: [
+                    {
+                        left_title: main_left_title,
+                        left_description: main_left_description,
+                        shop_link_left: main_left_link,
+
+                        right_title: main_right_title,
+                        right_description: main_right_description,
+                        shop_link_right: main_right_link
+                    }
+                ]
+
+            })
+            console.log(updateBannerMain);
+            resolve({ status: true })
+        }).catch(error => {
+            throw error
+        })
+    },
+    updateBannerSpecial(specialData) {
+        return new Promise(async (resolve, reject) => {
+            const { special_title, special_link } = specialData
+            let updateBannerSpecial = await banner.updateOne({
+                special: [
+                    {
+                        title: special_title,
+                        shop_link: special_link
+                    }
+                ]
+
+            })
+            console.log(updateBannerSpecial);
+            resolve({ status: true })
+        }).catch(error => {
+            throw error
+        })
     }
 }
 
@@ -669,25 +758,25 @@ function salesReportExcel(salesReport) {
 
     const salesSheet = xlsx.utils.json_to_sheet(
         salesReport.map(({ createdAt, products: { products }, productTotal, paymentMethod, status, shipping_status }) => ({
-          createdAt,
-          item: products.item,
-          quantity: products.quantity,
-          productTotal,
-          tax: (productTotal / 100) * 10,
-          paymentMethod,
-          status,
-          shipping_status
+            createdAt,
+            item: products.item,
+            quantity: products.quantity,
+            productTotal,
+            tax: (productTotal / 100) * 10,
+            paymentMethod,
+            status,
+            shipping_status
         }))
-      );
-console.log(salesReport[0].products);
+    );
+    console.log(salesReport[0].products);
     // Add table header
     const header = ['Date of Order', 'Order Item Id', 'Quantity', 'Amount', 'Tax', 'Mode of Payment', 'Payment Status', 'Order Status'];
     xlsx.utils.sheet_add_aoa(salesSheet, [header], { origin: 'A1' });
-    salesSheet['!cols'] = [    { width: 12 },    { width: 25 },    { width: 8 },    { width: 10 },    { width: 15 },    { width: 15 },    { width: 15 },    { width: 22 }];
+    salesSheet['!cols'] = [{ width: 12 }, { width: 25 }, { width: 8 }, { width: 10 }, { width: 15 }, { width: 15 }, { width: 15 }, { width: 22 }];
     // Add table body rows
 
     const rows = salesReport.map(sale => [
-        sale.createdAt,'#'+ sale.products.products.item.toString(), sale.products.products.quantity,'₹ '+ sale.productTotal,'₹ '+ (tax = (sale.productTotal / 100) * 10).toFixed(2), sale.paymentMethod, sale.status, sale.shipping_status]);
+        sale.createdAt, '#' + sale.products.products.item.toString(), sale.products.products.quantity, '₹ ' + sale.productTotal, '₹ ' + (tax = (sale.productTotal / 100) * 10).toFixed(2), sale.paymentMethod, sale.status, sale.shipping_status]);
     xlsx.utils.sheet_add_aoa(salesSheet, rows, { origin: 'A2' });
 
     // Create a new workbook and add the sales sheet to it
@@ -771,6 +860,66 @@ async function weekRevenue() {
     const RevenueChangeFormatted = RevenueChange.toFixed(2);
     console.log(weekRevenue, RevenueChangeFormatted);
     return ({ weekRevenue, RevenueChangeFormatted })
+
+
+
+}
+async function totalWeekUsers() {
+
+    const startOfWeek = new Date();
+    startOfWeek.setHours(0, 0, 0, 0);
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 7);
+
+    let weekUsers = await users.aggregate([{
+        $match: {
+            status: {
+
+                $ne: 'process'
+            },
+            createdAt: {
+                $gte: startOfWeek,
+                $lt: endOfWeek
+            }
+
+        }
+    },
+    {
+        $count: 'userCount'
+    }])
+
+
+    // Get the start and end dates for the previous week
+    const startOfLastWeek = new Date(startOfWeek);
+    startOfLastWeek.setDate(startOfLastWeek.getDate() - 7);
+
+    const endOfLastWeek = new Date(endOfWeek);
+    endOfLastWeek.setDate(endOfLastWeek.getDate() - 7);
+    // Use the aggregation framework to count orders placed in the previous week
+    let previousWeekUsers = await users.aggregate([{
+        $match: {
+            status: {
+
+                $ne: 'process'
+            },
+            createdAt: {
+                $gte: startOfLastWeek,
+                $lt: endOfLastWeek
+            }
+        }
+    },
+    {
+        $count: 'userCount'
+    }])
+
+    // Calculate the percentage change in users count
+    const usersChange = ((weekUsers[0]?.userCount ?? 0 - previousWeekUsers[0]?.userCount ?? 0) / previousWeekUsers[0]?.userCount ?? 0) * 100;
+    const usersChangeFormatted = usersChange.toFixed(2);
+    console.log(usersChange, usersChangeFormatted);
+    let weekUsersCount = weekUsers[0]?.userCount ?? 0
+    return ({ weekUsersCount, usersChangeFormatted })
 
 
 

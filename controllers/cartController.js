@@ -1,4 +1,5 @@
 
+const { ObjectId } = require('mongodb')
 const cart = require('../models/cart')
 const user = require('../models/user')
 let cartHelper = require('../server/helpers/cart-helper')
@@ -127,9 +128,15 @@ exports.placeOrder = async (req, res) => {
     let totalPrice = await cartHelper.getTotalAmount(userId, discount, minPurchase)
     totalPrice = totalPrice[0]?.total
 
-    cartHelper.placeOrder(req.body, cartProducts, totalPrice, discount, req.params.adrsid).then(response => {
+    cartHelper.placeOrder(req.body, cartProducts, totalPrice, discount, req.params.adrsid).then(async(response) => {
         if (req.body.payment_method === 'COD') {
-            req.session.appliedCoupon = null
+            let userId = req.session.user._id
+            let couponCode =req.session.appliedCoupon.code
+            let coupon_id =req.session.appliedCoupon.coupon[0]._id
+            console.log('///////////////////////////',couponCode);
+            await user.updateOne({_id:new ObjectId(userId)},{$push:{used_coupon:[{code:couponCode,id:coupon_id}]}
+            })
+            couponCode = null
             res.send({ codsuccess: true })
         } else {
             order = response
@@ -173,8 +180,9 @@ exports.deleteWishListProduct = (req, res) => {
 
 exports.couponCheck = (req, res) => {
     let total = Number(req.params.price)
+    let userId = req.session.user._id
     console.log(req.body, '//////////////');
-    cartHelper.couponCheck(req.body, total).then(async (response) => {
+    cartHelper.couponCheck(req.body, total,userId).then(async (response) => {
         req.session.appliedCoupon = response
         console.log(response.status);
         if (response.status) {
@@ -184,10 +192,12 @@ exports.couponCheck = (req, res) => {
             let minPurchase = appliedminPurchase ? appliedminPurchase : 0
             let totalPrice = await cartHelper.getTotalAmount(userId, discount, minPurchase)
             res.json({ discount: appliedDiscount, total: totalPrice[0].total, status: true })
-        } else {
+        } else{
             res.send(response)
         }
 
+    }).catch(error=>{
+        res.json( {status:false,message:error.message})
     })
 
 

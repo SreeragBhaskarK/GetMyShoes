@@ -17,9 +17,21 @@ exports.productView = (req, res) => {
 exports.productDetail = (req, res) => {
     const mongoose = require('mongoose');
     let id = new mongoose.Types.ObjectId(req.params.id.trim());
-    userHelper.doProductDetails(id).then(({ productdata, allProduct }) => {
+    let userId =0
+    if (req.session.userLoggedIn) {
+         userId = req.session?.user._id
+    }else{
+         userId =1
+    }
+    userHelper.doProductDetails(id,userId).then(({ productdata, allProduct, productcartCheck }) => {
         let products = productdata
-        res.render("users/product_details", { products, allProduct })
+        console.log(productcartCheck);
+        if (productcartCheck) {
+            res.render("users/product_details", { products, allProduct ,productcartCheck})
+        } else {
+
+            res.render("users/product_details", { products, allProduct })
+        }
     }).catch((error) => {
         console.log(error), '////////////';
     })
@@ -29,14 +41,14 @@ exports.shopView = async (req, res) => {
 
 
     let pageNum = req.query.page
-    userHelper.doViewProducts(pageNum).then(async(response) => {
+    userHelper.doViewProducts(pageNum).then(async (response) => {
         productData = response.productsView
         totalPages = response.totalPages
         let parentCateagory = await userHelper.GetParentCategory()
         let brandCateagory = await userHelper.GetBrandCategory()
         let subCateagory = await userHelper.GetSubCategory()
         console.log(productData, '222222222222222222222222');
-        res.render('users/shop', { productData, totalPages,parentCateagory,brandCateagory,subCateagory })
+        res.render('users/shop', { productData, totalPages, parentCateagory, brandCateagory, subCateagory })
     })
 
 

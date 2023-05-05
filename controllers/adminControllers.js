@@ -8,6 +8,7 @@ var path = require('path');
 const fs = require('fs');
 exports.admin = (req, res, next) => {
     res.locals.admin = true
+
     next()
 }
 exports.adminView = (req, res) => {
@@ -23,7 +24,9 @@ exports.adminView = (req, res) => {
         let incomepercentage = response.incomepercentage
         let totalMonthOrder = response.totalMonthOrder
         let totalIncomeByMonth = response.totalIncomeByMonth
-        res.render('admin/admin_Dashboard', { activeDashboard: 'active', States, orderCount, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth, incomeWeek, incomepercentage, totalMonthOrder, totalIncomeByMonth })
+        let totalUsersByWeek = response.weekUsers
+        console.log(totalUsersByWeek);
+        res.render('admin/admin_Dashboard', { activeDashboard: 'active', States, orderCount, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth, incomeWeek, incomepercentage, totalMonthOrder, totalIncomeByMonth, totalUsersByWeek })
     })
 
 
@@ -65,9 +68,9 @@ exports.logoutView = (req, res) => {
 }
 
 
-exports.layoutView = (req, res) => {
-
-    res.render('admin/layout', { activeLayout: 'active' })
+exports.bannersView =async (req, res) => {
+    let banners = await adminHelper.getBanner()
+    res.render('admin/banners', { activeBanners: 'active' ,banners})
 
 }
 exports.productsView = (req, res) => {
@@ -355,6 +358,54 @@ exports.salesReportExport = (req, res) => {
     catch (e) {
         console.log(e);
     }
+}
+
+exports.categoryNameCheck = (req, res) => {
+    console.log(req.body);
+    adminHelper.checkCategory(req.body).then(response => {
+        res.status(200).json({status:response.status})
+    })
+    .catch(error=>{
+        res.status(404).json({status:false,message:error.message})
+    })
+}
+
+exports.banner = (req,res)=>{
+    console.log(req.body);
+    adminHelper.getBanner().then(response=>{
+        console.log(response);
+        res.status(200).send(response)
+    }).catch(error=>{
+        res.status(404).send(error.message)
+    })
+}
+
+exports.updataBannerHeader = (req,res)=>{
+    console.log(req.body,req.file);
+    adminHelper.updateBanner(req.body).then(response=>{
+        console.log(response);
+        res.status(200).send(response)
+    }).catch(error=>{
+        res.status(404).send(error.message)
+    })
+}
+exports.updataBannerMain = (req,res)=>{
+    console.log(req.body,req.file);
+    adminHelper.updateBannerMain(req.body).then(response=>{
+        console.log(response);
+        res.status(200).send(response)
+    }).catch(error=>{
+        res.status(404).send(error.message)
+    })
+}
+exports.updataBannerSpecial = (req,res)=>{
+    console.log(req.body,req.file);
+    adminHelper.updateBannerSpecial(req.body).then(response=>{
+        console.log(response);
+        res.status(200).send(response)
+    }).catch(error=>{
+        res.status(404).send(error.message)
+    })
 }
 
 

@@ -1,6 +1,7 @@
 const { createNewUser, authenticateUser, sendOTP, verifyOTP, sendVerificationOTPEmail, verifyUserEmail, sendPasswordResetOTPEmail, resetUserPassword } = require("./controller")
 const product = require("../../models/products")
 const user = require("../../models/user")
+const cart = require("../../models/cart")
 const category = require("../../models/category")
 const { resolveContent } = require("nodemailer/lib/shared")
 const createToken = require("../util/createToken")
@@ -253,14 +254,24 @@ module.exports = {
             }
         })
     },
-    doProductDetails(proId) {
+    doProductDetails(proId, userId) {
         return new Promise(async (resolve, reject) => {
             console.log(typeof id, "nnnnnnnnnnn");
-
-
             try {
                 let productdata = await product.findOne({ _id: proId })
-                console.log(productdata, "nnnnnnnnnnn");
+                let productcartCheck = false
+                console.log(userId);
+                if (userId !== 1) {
+                    let cartItem = await cart.findOne({ userId:new ObjectId(userId) })
+                    console.log(cartItem,proId);
+                    proId= String(proId)
+                    let proExist = cartItem.products.findIndex(product => product.item == proId )
+                    console.log(proExist);
+                    if (proExist != -1) {
+                        productcartCheck = true
+                    }
+                }
+
                 let allProduct = await product.aggregate([{
                     $match: {
                         delete_status: {
@@ -277,7 +288,7 @@ module.exports = {
                     $limit: 4
                 }])
 
-                resolve({ productdata, allProduct })
+                resolve({ productdata, allProduct, productcartCheck })
             }
             catch (error) {
                 console.log(error, "error");
@@ -364,10 +375,15 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             try {
                 console.log(userData);
-                let { firstName, lastName, email, phone, gender, age } = userData
+                let { firstName, lastName, email, gender, age } = userData
                 let name = firstName + " " + lastName
-
-                if (firstName || lastName || email || phone || gender || age) {
+                let users = await user.find({ email: email, phone: { $ne: phoneNumber } })
+                console.log(users);
+                if (users.length > 0) {
+                    reject(Error('already using email!'))
+                    return
+                }
+                if (firstName || lastName || email || gender || age) {
                     await user.updateOne({ phone: phoneNumber }, {
                         $set: {
                             name: name,
@@ -378,15 +394,12 @@ module.exports = {
                             age: age
                         }
                     })
-                    let users = await user.findOne({ phone: phoneNumber })
-
-                    if (users) {
-                        resolve(user)
-                    }
+                    resolve({ status: true })
 
                 }
             } catch (error) {
-
+                console.log(error.message);
+                throw error
             }
         })
     },
@@ -763,36 +776,36 @@ module.exports = {
             {
                 $limit: 8
             }])
-           
+
             resolve(brandProducts)
         })
     },
     getBrands() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             let brands = await category.aggregate([{
-                $match:{
-                    category_type:'brand'
+                $match: {
+                    category_type: 'brand'
                 }
             }])
 
             resolve(brands)
         })
-    }, 
-    GetParentCategory(){
-        return new Promise(async (resolve,reject)=>{
-            let parentCateagory = await category.find({category_type:'parent'})
+    },
+    GetParentCategory() {
+        return new Promise(async (resolve, reject) => {
+            let parentCateagory = await category.find({ category_type: 'parent' })
             resolve(parentCateagory)
         })
     },
-    GetBrandCategory(){
-        return new Promise(async (resolve,reject)=>{
-            let brandCateagory = await category.find({category_type:'brand'})
+    GetBrandCategory() {
+        return new Promise(async (resolve, reject) => {
+            let brandCateagory = await category.find({ category_type: 'brand' })
             resolve(brandCateagory)
         })
     },
-    GetSubCategory(){
-        return new Promise(async (resolve,reject)=>{
-            let subCateagory = await category.find({category_type:'sub'})
+    GetSubCategory() {
+        return new Promise(async (resolve, reject) => {
+            let subCateagory = await category.find({ category_type: 'sub' })
             resolve(subCateagory)
         })
     }

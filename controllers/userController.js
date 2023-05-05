@@ -7,15 +7,19 @@ const product = require('../models/products');
 const cartHelper = require('../server/helpers/cart-helper');
 const { hashData } = require('../server/util/hashData');
 const productHelper = require('../server/helpers/product-helper');
+const { FactorListInstance } = require('twilio/lib/rest/verify/v2/service/entity/factor');
+const adminHelpers = require('../server/helpers/admin-helpers');
+const { read } = require('fs');
 
 exports.userView = (req, res) => {
-    userHelper.getBrandProducts().then(async(response) => {
+    userHelper.getBrandProducts().then(async (response) => {
         let brandProducts = response
-       
-       let brands = await userHelper.getBrands()
-       let newSpecial = await productHelper.getNewSpecial()
-       console.log(newSpecial);
-        res.render('users/index',{brandProducts,brands,newSpecial})
+        let banners = await adminHelpers.getBanner()
+        console.log(banners[0].header[0].title);
+        let brands = await userHelper.getBrands()
+        let newSpecial = await productHelper.getNewSpecial()
+        console.log(newSpecial);
+        res.render('users/index', { brandProducts, brands, newSpecial,banners })
     })
 
 }
@@ -31,41 +35,45 @@ exports.logInEmailView = (req, res) => {
 }
 
 exports.logInData = (req, res) => {
-    console.log(req.body,'.............');
-    try{
+    console.log(req.body, '.............');
+    try {
         if (req.body.email) {
 
-            authHelper.doLogIn(req.body).then(response => {
-                if (response.status) {
-                    req.session.user = response.userView
-                    req.session.userLoggedIn = true
-                    res.send({status:response.status})
-                } else {
-                    res.status(400).send({status:false,message:'not found'})
-                }
-            }).catch(error=>{
-                console.log(error);
-            })
+            authHelper.doLogIn(req.body)
+                .then(response => {
+                    console.log(response, 'dnfjkdf');
+                    if (response.status) {
+                        req.session.user = response.userView
+                        req.session.userLoggedIn = true
+                        res.send({ status: response.status })
+                    } else {
+                        res.status(400).send({ status: false, message: 'not found' })
+                    }
+                }).catch(error => {
+                    res.send({ status: false, message: error.message })
+                })
         } else {
             authHelper.doPhoneNumberLogin(req.body).then(response => {
-    
+
                 if (response.result === 0) {
                     let message = "don't have an account sign up"
-                    res.send({message,status:false})
+                    res.send({ message, status: false })
                 } else if (response.result === -1) {
                     let message = "this account is blocked"
-                    res.send({message,status:false})
+                    res.send({ message, status: false })
                 } else if (response.result === 1) {
-                    res.send({status:true})
+                    req.session.logNumber=req.body.phone_number
+                    console.log(req.session.logNumber);
+                    res.send({ status: true })
                 }
             })
         }
     }
-    catch(error){
-        console.log(error,'///////////');
-        res.status(400).send({message:error.message})
+    catch (error) {
+        console.log(error, '///////////');
+        res.status(400).send({ message: error.message })
     }
-   
+
 
 
 }
@@ -83,26 +91,26 @@ exports.sigUpView = (req, res) => {
 
 }
 exports.signUpData = (req, res) => {
-    req.session.phone = req.body.number
+    req.session.logNumber = req.body.phone_number
     authHelper.doPhoneNumberSignUp(req.body).then(responese => {
         if (responese) {
-            res.redirect('/verify?number=' + responese)
-        } else {
-            res.redirect('/signUp?message=An account is already registered')
-        }
+            res.json({status:true})
+        } 
+    }).catch(error=>{
+        res.json({status:false,message:error.message})
     })
 
 }
 
 exports.verifyView = (req, res) => {
-    let number = req.query.number
-
-    res.render("users/verify", { noShow: true, number, noLayout: true })
+    
+    res.render("users/verify", { noShow: true, noLayout: true })
 
 }
 exports.verifyData = (req, res) => {
-    let phone = req.session.phone
-    authHelper.doVerifyOtp(req.body).then(response => {
+    let phone = req.session.logNumber
+    console.log(req.body);
+    authHelper.doVerifyOtp(req.body,phone).then(response => {
 
         if (response.validOTP) {
 
@@ -131,7 +139,7 @@ exports.settingsView = async (req, res) => {
     let users = await user.findOne({ phone: phoneNumber })
     req.session.user = users
 
-    await cartHelper.getOrders().then(orders => {
+    await cartHelper.getOrders(users._id).then(orders => {
 
         res.render('users/settings', { noLayout: true, users, orders })
     })
@@ -180,7 +188,11 @@ exports.profileInfoData = (req, res) => {
     let phone = req.session.user.phone
 
     userHelper.doProfile(req.body, phone).then(response => {
-        req.session.user = response
+        if(response.status) {
+            res.status(200).json({status:true})
+        }
+    }).catch(error=>{
+        res.status(409).json({message:error.message,status:false},)
     })
 }
 exports.profileInfoAdrsData = (req, res) => {
@@ -274,14 +286,16 @@ exports.changePasswordData = (req, res) => {
 exports.cartCount = async (req, res, next) => {
     const user = req.session?.user;
 
-    if (user) {
+    if (user && req.session.userLoggedIn) {
         res.locals.person = req.session.userLoggedIn
         res.locals.cartCount = await cartHelper.getCartCount(user._id)
         res.locals.wishlistCount = await cartHelper.getwishListCount(user._id)
+        res.locals.userActive=true
         next()
     } else {
         res.locals.cartCount = 0
         res.locals.wishlistCount = 0
+        res.locals.userActive=false
         next()
     }
 
@@ -310,7 +324,7 @@ exports.contact = (req, res) => {
     res.render('users/contact')
 }
 exports.contactMessage = (req, res) => {
-    authHelper.doContactMessage(req.body).then(response=>{
+    authHelper.doContactMessage(req.body).then(response => {
 
         res.redirect('/contact')
     })

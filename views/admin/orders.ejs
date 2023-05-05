@@ -11,6 +11,7 @@
         <table id="example" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
+                    <th>Sl. No</th>
                     <th>Order ID</th>
                     <th>Product Name</th>
                     <th>User</th>
@@ -25,8 +26,12 @@
 
 
             <tbody>
-                <% (orders || []).forEach(order=> { %>
+                <% (orders || []).forEach((order,index)=> { %>
                     <tr>
+
+                        <td>
+                            <%= (index + 1).toString().padStart(2, '0' ) %>
+                        </td>
                         <td>
                             #<%= order._id %>
                         </td>
@@ -57,51 +62,59 @@
                         <td>
                             ₹ <%=order.totalAmount%>
                         </td>
-                        <% if (order.status=='pending') { %>
-                            <td><input type="button" class="btn btn btn-danger" id="statusChange<%= order._id %>" value="payment pending"
-                                disabled></input></td>
-                        <% }else{ %>
-                            <td><input type="button" class="btn btn btn-warning" id="statusChange<%= order._id %>" value="<%= order.shipping_status %>"
-                                disabled></input></td>
-                            <% } %>
-
-                            <% if (order.status=='pending') { %>
-                                <td>
-                                    <select  style="width: 200px;" class="form-select"
-                                        aria-label="Default select example">
-                                        <option value="Order Placed" >Order pending</option>
-                                    </select>
-        
-                                </td>
+                        <% if (order.status=='pending' ) { %>
+                            <td><input type="button" class="btn btn btn-danger" id="statusChange<%= order._id %>"
+                                    value="payment pending" disabled></input></td>
                             <% }else{ %>
-                                <td>
-                                    <select id="shipping-status<%= order._id %>" style="width: 200px;" class="form-select"
-                                        aria-label="Default select example">
-                                        <option value="Order Placed" <% if (order.shipping_status==='Order Placed' ) { %>
-                                            selected<% } %>>Order Placed</option>
-                                        <option value="Processing" <% if (order.shipping_status==='Processing' ) { %>selected<%
-                                                } %>>Processing</option>
-                                        <option value="Shipped" <% if (order.shipping_status==='Shipped' ) { %>selected<% } %>
-                                                >Shipped</option>
-                                        <option value="In Transit" <% if (order.shipping_status==='In Transit' ) { %>selected<%
-                                                } %>>In Transit</option>
-                                        <option value="Out for Delivery" <% if (order.shipping_status==='Out for Delivery' ) {
-                                            %>selected<% } %>>Out for Delivery</option>
-                                        <option value="Delivered" <% if (order.shipping_status==='Delivered' ) { %>selected<%
-                                                }%>>Delivered</option>
-                                        <option value="Failed Delivery Attempt" <% if
-                                            (order.shipping_status==='Failed Delivery Attempt' ) { %>selected<% } %>>Failed
-                                                Delivery Attempt</option>
-                                        <option value="Return to Sender" <% if (order.shipping_status==='Return to Sender' ) {
-                                            %>selected<% } %>>Return to Sender</option>
-                                        <option value="Cancelled" <% if (order.shipping_status==='Cancelled' ) { %>selected<% }
-                                                %>>Cancelled</option>
-                                    </select>
-        
-                                </td>
+                                <td><input type="button" class="btn btn btn-warning" id="statusChange<%= order._id %>"
+                                        value="<%= order.shipping_status %>" disabled></input></td>
                                 <% } %>
-                        
-                     
+
+                                    <% if (order.status=='pending' ) { %>
+                                        <td>
+                                            <select style="width: 200px;" class="form-select"
+                                                aria-label="Default select example">
+                                                <option value="Order Placed">Order pending</option>
+                                            </select>
+
+                                        </td>
+                                        <% }else{ %>
+                                            <td>
+                                                <select id="shipping-status<%= order._id %>" style="width: 200px;"
+                                                    class="form-select" aria-label="Default select example">
+                                                    <option value="Order Placed" <% if
+                                                        (order.shipping_status==='Order Placed' ) { %>
+                                                        selected<% } %>>Order Placed</option>
+                                                    <option value="Processing" <% if
+                                                        (order.shipping_status==='Processing' ) { %>selected<% } %>
+                                                            >Processing</option>
+                                                    <option value="Shipped" <% if (order.shipping_status==='Shipped' ) {
+                                                        %>selected<% } %>
+                                                            >Shipped</option>
+                                                    <option value="In Transit" <% if
+                                                        (order.shipping_status==='In Transit' ) { %>selected<% } %>>In
+                                                            Transit</option>
+                                                    <option value="Out for Delivery" <% if
+                                                        (order.shipping_status==='Out for Delivery' ) { %>selected<% }
+                                                            %>>Out for Delivery</option>
+                                                    <option value="Delivered" <% if (order.shipping_status==='Delivered'
+                                                        ) { %>selected<% }%>>Delivered</option>
+                                                    <option value="Failed Delivery Attempt" <% if
+                                                        (order.shipping_status==='Failed Delivery Attempt' ) { %>
+                                                        selected<% } %>>Failed
+                                                            Delivery Attempt</option>
+                                                    <option value="Return to Sender" <% if
+                                                        (order.shipping_status==='Return to Sender' ) { %>selected<% }
+                                                            %>>Return to Sender</option>
+                                                    <option value="Cancelled" <% if (order.shipping_status==='Cancelled'
+                                                        ) { %>selected<% } %>>Cancelled</option>
+                                                </select>
+
+                                            </td>
+
+                                           <% } %>
+
+
 
 
                     </tr>
@@ -116,7 +129,7 @@
                                     method: 'POST',
                                     data: { orderId: orderId, shippingStatus: selectedOption },
                                     success: function (updatedOrder) {
-                                       const toastLiveExample = document.getElementById('toasterMessage')
+                                        const toastLiveExample = document.getElementById('toasterMessage')
                                         document.getElementById('toastMessage').innerHTML = 'Shipping Status Changed'
                                         const toast = new bootstrap.Toast(toastLiveExample, {
                                             autohide: true,
@@ -124,8 +137,8 @@
                                         })
                                         toast.show()
                                         console.log('Shipping status updated successfully:', updatedOrder);
-                                        document.getElementById('statusChange'+orderId).value=selectedOption
-                                        
+                                        document.getElementById('statusChange' + orderId).value = selectedOption
+
                                     },
                                     error: function (err) {
                                         console.log('Error updating shipping status:', err);
@@ -134,6 +147,8 @@
                             });
                         });
                     </script>
+
+                    
 
                     <% }) %>
 

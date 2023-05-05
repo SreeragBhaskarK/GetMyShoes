@@ -133,12 +133,7 @@
 		}
 	</script>
 
-	<script>
-		let messageElement = document.getElementById('message')
-		setTimeout(function () {
-			messageElement.style.display = "none";
-		}, 5000);
-	</script>
+
 <!-- 	<script>
 		function toggleLogin() {
 			var phoneLogin = document.getElementById("phone-login");
@@ -181,6 +176,7 @@
 				return response.json()
 
 			}).then(data => {
+				console.log(data);
 				if (data.status === true) {
 					window.location.href = "/"
 				} else {
@@ -195,7 +191,7 @@
 
 			})
 			.catch(error=>{
-				console.log(error);
+				console.log(error,"nnnnnnnn");
 			})
 
 	})

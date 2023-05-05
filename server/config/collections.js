@@ -9,5 +9,6 @@ module.exports = {
     CART_COLLECTITON: 'carts',
     ORDER_COLLECTITON: 'orders',
     WISHLIST_COLLECTITON: 'wishlist',
-    COUPON_COLLECTITON: 'coupon'
+    COUPON_COLLECTITON: 'coupon',
+    BANNER_COLLECTITON: 'banners'
 }

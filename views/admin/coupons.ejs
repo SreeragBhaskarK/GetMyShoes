@@ -22,6 +22,7 @@
         <table id="example" class="table table-striped" style="width:100%">
             <thead>
                 <tr>
+                    <th>Sl. No</th>
                     <th>Coupon Code</th>
                     <th>Coupon Name</th>
                     <th>Expirey Date</th>
@@ -36,8 +37,11 @@
 
             <tbody>
 
-                <% (coupons || []).forEach(coupon=> { %>
+                <% (coupons || []).forEach((coupon,index)=> { %>
                     <tr>
+                        <td>
+                            <%= (index + 1).toString().padStart(2, '0' ) %>
+                        </td>
                         <td>
                             <%= coupon.code %>
                         </td>
@@ -158,29 +162,29 @@
                     <div class="mb-3">
 
                         <label for="message-text" class="col-form-label">Discount amount</label>
-                        <input type="number" class="form-control" min="0" name="discount" required>
+                        <input type="number" id="addDiscount" class="form-control" min="0" name="discount" required>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
                         <div class="invalid-feedback">
-                            Enter Coupon Discount Amount!
+                            Enter Coupon Discount Amount Below Minimum Purchase!
                         </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Expiry date</label>
                         <input type="text" id="date" name="expiryDate" class="form-control flatpickr"
                             placeholder="Select date.." required>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                            <div class="invalid-feedback">
-                                Enter Coupon Expiry date!
-                            </div>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Expiry date!
+                        </div>
                     </div>
                     <div class="mb-3">
 
                         <label for="message-text" class="col-form-label">Minimum purchase</label>
-                        <input type="number" class="form-control" min="0" name="minPurchase" required>
+                        <input type="number" id="addMinPurchase" class="form-control" min="0" name="minPurchase" required>
                         <div class="valid-feedback">
                             Looks good!
                         </div>
@@ -191,14 +195,14 @@
                     <div class="mb-3">
 
                         <label for="message-text" class="col-form-label">Offers Description</label><br>
-                        <textarea name="coupon_description" placeholder="type Description..." rows="5"
-                            cols="33" required></textarea>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                            <div class="invalid-feedback">
-                                Enter Coupon Offers Description!
-                            </div>
+                        <textarea name="coupon_description" placeholder="type Description..." rows="5" cols="33"
+                            required></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Offers Description!
+                        </div>
                     </div>
 
 
@@ -215,7 +219,7 @@
 <div class="modal fade" id="couponEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" action="/admin/coupon_update"  class="needs-validation" novalidate="" >
+            <form method="post" action="/admin/coupon_update" class="needs-validation" novalidate="">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Coupon Edit</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -238,22 +242,22 @@
                         <label for="message-text" class="col-form-label">Discount amount</label>
                         <input type="number" id="discount" min="0" class="form-control" name="discount" required>
                         <div class="valid-feedback">
-                        Looks good!
-                    </div>
-                    <div class="invalid-feedback">
-                        Enter Coupon Discount Amount!
-                    </div>
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Discount Amount Below Minimum Purchase!
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Expiry date</label>
                         <input type="text" id="date" name="expiryDate" required class="form-control expiry flatpickr"
                             placeholder="Select date..">
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                            <div class="invalid-feedback">
-                                Enter Coupon Expiry date!
-                            </div>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Expiry date!
+                        </div>
                     </div>
                     <div class="mb-3">
 
@@ -269,14 +273,14 @@
                     <div class="mb-3">
 
                         <label for="message-text" class="col-form-label">Offers Description</label><br>
-                        <textarea name="coupon_description" required id="offerDescription" placeholder="type Description..."
-                            rows="5" cols="33"></textarea>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                            <div class="invalid-feedback">
-                                Enter Coupon Offers Description!
-                            </div>
+                        <textarea name="coupon_description" required id="offerDescription"
+                            placeholder="type Description..." rows="5" cols="33"></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Enter Coupon Offers Description!
+                        </div>
                     </div>
 
                     <input type="text" hidden id="couponId" name="couponId">
@@ -319,21 +323,21 @@
                 document.getElementById('couponId').value = response._id
                 $('#couponEdit').modal('show');
 
-               
+
             }
         })
 
     }
 </script>
 <script>
-    function toasterMessage(message){
+    function toasterMessage(message) {
         const toastLiveExample = document.getElementById('toasterMessage')
-                document.getElementById('toastMessage').innerHTML = message
-                const toast = new bootstrap.Toast(toastLiveExample, {
-                    autohide: true,
-                    delay: 3000
-                })
-                toast.show()
+        document.getElementById('toastMessage').innerHTML = message
+        const toast = new bootstrap.Toast(toastLiveExample, {
+            autohide: true,
+            delay: 3000
+        })
+        toast.show()
     }
 </script>
 <script>
@@ -344,6 +348,12 @@
         Array.prototype.slice.call(forms)
             .forEach(function (form) {
                 form.addEventListener('submit', function (event) {
+                    const discountInput = document.getElementById('discount');
+                    const minPurchaseInput = document.getElementById('minPurchase');
+                    discountInput.setAttribute('max',minPurchaseInput.value)
+                    const addDiscountInput = document.getElementById('addDiscount');
+                    const addMinPurchaseInput = document.getElementById('addMinPurchase');
+                    addDiscountInput.setAttribute('max',addMinPurchaseInput.value)
                     if (!form.checkValidity()) {
                         event.preventDefault()
                         event.stopPropagation()

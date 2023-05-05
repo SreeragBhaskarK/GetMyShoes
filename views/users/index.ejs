@@ -9,17 +9,16 @@
             <div class="container">
 
                 <h2 class="h1 hero-title">
-                    New Summer <strong>Shoes Collection</strong>
+                    <%=locals.banners[0].header[0].title %> <strong>
+                            <%=locals.banners[0].header[0].title_strong %>
+                        </strong>
                 </h2>
 
                 <p class="hero-text">
-                    Competently expedite alternative benefits whereas leading-edge catalysts for change. Globally
-                    leverage
-                    existing an
-                    expanded array of leadership.
+                    <%=locals.banners[0].header[0].description %>
                 </p>
 
-                <a href="/shop"> <button class="btn btn-primary">
+                <a href="<%=locals.banners[0].header[0].shop_link %>"> <button class="btn btn-primary">
                         <span>Shop Now</span>
 
                         <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
@@ -89,511 +88,518 @@
         <!-- 
         - #PRODUCT
       -->
+        <% if (locals.brandProducts[0]) { %>
 
-        <section class="section product">
-            <div class="container">
 
-                <h2 class="h2 section-title">Bestbrand Products</h2>
+            <section class="section product">
+                <div class="container">
 
-                <ul class="filter-list">
+                    <h2 class="h2 section-title">Bestbrand Products</h2>
 
-                    <li>
-                        <button class="filter-btn" onclick="(allBrandProduct())" >All</button>
-                    </li>
-                    <% brands.forEach(i=> { %>
+                    <ul class="filter-list">
+
                         <li>
-                            <button class="filter-btn" onclick="(brandProduct('<%= i.category %>'))">
-                                <%= i.category %>
-                            </button>
+                            <button class="filter-btn" onclick="(allBrandProduct())">All</button>
                         </li>
+                        <% brands.forEach(i=> { %>
+                            <li>
+                                <button class="filter-btn" onclick="(brandProduct('<%= i.category %>'))">
+                                    <%= i.category %>
+                                </button>
+                            </li>
 
-                        <% }) %>
-
-
-                </ul>
-
-                <ul class="product-list" id="productBrand">
-                    <% (locals.brandProducts||[]).forEach(product=> { %>
-
-
-                        <li class="product-item">
-                            <div class="product-card" tabindex="0">
-
-                                <figure class="card-banner">
-                                    <a href="/product/<%=product.brandProducts._id%>"><img
-                                            src="/images/products_image/<%=product.brandProducts.product_image[0]%>"
-                                            width="312" height="350" loading="lazy" alt="Running Sneaker Shoes"
-                                            class="image-contain"></a>
-
-                                    <% if (product.brandProducts.product_badge) { %>
-
-                                        <div class="card-badge">
-                                            <%=product.brandProducts.product_badge%>
-                                        </div>
-                                        <% } %>
-                                            <ul class="card-action-list">
-
-                                                <li class="card-action-item">
-                                                    <button onclick="cartCount('<%=product.brandProducts._id%>')"
-                                                        class="card-action-btn" aria-labelledby="card-label-1">
-                                                        <ion-icon name="cart-outline"></ion-icon>
-                                                    </button>
-
-                                                    <div class="card-action-tooltip" id="card-label-1">Add to Cart
-                                                    </div>
-                                                </li>
-
-                                                <li class="card-action-item">
-                                                    <button class="card-action-btn"
-                                                        onclick="addToWishlist('<%=product.brandProducts._id%>')"
-                                                        aria-labelledby="card-label-2">
-                                                        <ion-icon name="heart-outline"></ion-icon>
-                                                    </button>
-
-                                                    <div class="card-action-tooltip" id="card-label-2">Add to
-                                                        Whishlist
-                                                    </div>
-                                                </li>
-
-                                                <li class="card-action-item">
-                                                    <button class="card-action-btn" aria-labelledby="card-label-3">
-                                                        <ion-icon name="eye-outline"></ion-icon>
-                                                    </button>
-
-                                                    <div class="card-action-tooltip" id="card-label-3">Quick View
-                                                    </div>
-                                                </li>
-
-                                                <li class="card-action-item">
-                                                    <button class="card-action-btn" aria-labelledby="card-label-4">
-                                                        <ion-icon name="repeat-outline"></ion-icon>
-                                                    </button>
-
-                                                    <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                                </li>
-
-                                            </ul>
-                                </figure>
-
-                                <div class="card-content">
-
-                                    <div class="card-cat">
-                                        <% (product.product_categoryName || []).forEach(i=> { %>
+                            <% }) %>
 
 
-                                            <a href="/<%= i.category %>" class="card-cat-link">
-                                                <%= i.category %>
+                    </ul>
 
-                                            </a>
-                                            <% }) %>
-                                                <!--   <a href="#" class="card-cat-link">Men</a> /
-                                    <a href="#" class="card-cat-link">Women</a> -->
-                                    </div>
-
-                                    <h3 class="h3 card-title">
-                                        <!--  <a href="#">Running Sneaker Shoes</a> -->
-                                        <a href="/product/<%=product.brandProducts._id%>">
-                                            <%= product.brandProducts.product_name %>
-                                        </a>
-                                    </h3>
-                                    <% if (product.brandProducts.product_stock>0) { %>
-
-                                        <data class="card-price" value="14799">₹<%=product.brandProducts.product_price %><del>
-                                                    <%=product.brandProducts.product_old_price %>
-                                                </del></data>
-                                        <% }else{ %>
-                                            <span class="text-danger">
-                                                Out Of Stock
-                                            </span>
-
-                                            <% } %>
-
-
-
-
-                                </div>
-
-                            </div>
-                        </li>
-
-                        <% }) %>
-                </ul>
-
-            </div>
-        </section>
-
-
-
-
-
-        <!-- 
-        - #CTA
-      -->
-
-        <section class="section cta">
-            <div class="container">
-
-                <ul class="cta-list">
-
-                    <li>
-                        <div class="cta-card" style="background-image: url('/users/images/cta-1.jpg')">
-                            <p class="card-subtitle">Adidas Shoes</p>
-
-                            <h3 class="h2 card-title">The Summer Sale Off 50%</h3>
-
-                            <a href="#" class="btn btn-link">
-                                <span>Shop Now</span>
-
-                                <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-                            </a>
-                        </div>
-                    </li>
-
-                    <li>
-                        <div class="cta-card" style="background-image: url('/users/images/cta-2.jpg')">
-                            <p class="card-subtitle">Nike Shoes</p>
-
-                            <h3 class="h2 card-title">Makes Yourself Keep Sporty</h3>
-
-                            <a href="#" class="btn btn-link">
-                                <span>Shop Now</span>
-
-                                <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-                            </a>
-                        </div>
-                    </li>
-
-                </ul>
-
-            </div>
-        </section>
-
-
-
-
-        <!-- 
-        - #SPECIAL
-      -->
-
-    
-
-<% if (newSpecial[0]) { %>
-     <section class="section special">
-            <div class="container">
-
-                <div class="special-banner" style="background-image: url('/users/images/special-banner.jpg')">
-                    <h2 class="h3 banner-title">New Trend Edition</h2>
-
-                    <a href="/shop" class="btn btn-link">
-                        <span>Explore All</span>
-
-                        <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-                    </a>
-                </div>
-
-                <div class="special-product">
-
-                    <h2 class="h2 section-title">
-                        <span class="text">New Special</span>
-
-                        <span class="line"></span>
-                    </h2>
-
-                    <ul class="has-scrollbar">
-                        
-                        <% (locals.newSpecial||[]).forEach(product=> { %>
+                    <ul class="product-list" id="productBrand">
+                        <% (locals.brandProducts||[]).forEach(product=> { %>
 
 
                             <li class="product-item">
                                 <div class="product-card" tabindex="0">
-    
+
                                     <figure class="card-banner">
-                                        <a href="/product/<%=product._id%>"><img
-                                                src="/images/products_image/<%=product.product_image[0]%>"
+                                        <a href="/product/<%=product.brandProducts._id%>"><img
+                                                src="/images/products_image/<%=product.brandProducts.product_image[0]%>"
                                                 width="312" height="350" loading="lazy" alt="Running Sneaker Shoes"
                                                 class="image-contain"></a>
-    
-                                        <% if (product.product_badge) { %>
-    
+
+                                        <% if (product.brandProducts.product_badge) { %>
+
                                             <div class="card-badge">
-                                                <%=product.product_badge%>
+                                                <%=product.brandProducts.product_badge%>
                                             </div>
                                             <% } %>
                                                 <ul class="card-action-list">
-    
+
                                                     <li class="card-action-item">
-                                                        <button onclick="cartCount('<%=product._id%>')"
-                                                            class="card-action-btn" aria-labelledby="card-label-1">
-                                                            <ion-icon name="cart-outline"></ion-icon>
+                                                        <button <% if (locals.userActive) { %>
+                                                            onclick="cartCount('<%=product.brandProducts._id%>')"
+                                                                <% }else{ %>
+                                                                    onclick="goToLoginPage()"
+                                                                    <% } %>
+                                                                        class="card-action-btn"
+                                                                        aria-labelledby="card-label-1">
+                                                                        <ion-icon name="cart-outline"></ion-icon>
                                                         </button>
-    
+
                                                         <div class="card-action-tooltip" id="card-label-1">Add to Cart
                                                         </div>
                                                     </li>
-    
+
                                                     <li class="card-action-item">
-                                                        <button class="card-action-btn"
-                                                            onclick="addToWishlist('<%=product._id%>')"
-                                                            aria-labelledby="card-label-2">
-                                                            <ion-icon name="heart-outline"></ion-icon>
+                                                        <button class="card-action-btn" <% if (locals.userActive) { %>
+                                                            onclick="addToWishlist('<%=product.brandProducts._id%>')"
+                                                                <% }else{ %>
+                                                                    onclick="goToLoginPage()"
+                                                                    <% } %>
+
+                                                                        aria-labelledby="card-label-2">
+                                                                        <ion-icon name="heart-outline"></ion-icon>
                                                         </button>
-    
+
                                                         <div class="card-action-tooltip" id="card-label-2">Add to
                                                             Whishlist
                                                         </div>
                                                     </li>
-    
-                                                    <li class="card-action-item">
-                                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                                            <ion-icon name="eye-outline"></ion-icon>
-                                                        </button>
-    
-                                                        <div class="card-action-tooltip" id="card-label-3">Quick View
-                                                        </div>
-                                                    </li>
-    
-                                                    <li class="card-action-item">
-                                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                                            <ion-icon name="repeat-outline"></ion-icon>
-                                                        </button>
-    
-                                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                                    </li>
-    
+
+
                                                 </ul>
                                     </figure>
-    
+
                                     <div class="card-content">
-    
+
                                         <div class="card-cat">
                                             <% (product.product_categoryName || []).forEach(i=> { %>
-    
-    
+
+
                                                 <a href="/<%= i.category %>" class="card-cat-link">
                                                     <%= i.category %>
-    
+
                                                 </a>
                                                 <% }) %>
                                                     <!--   <a href="#" class="card-cat-link">Men</a> /
-                                        <a href="#" class="card-cat-link">Women</a> -->
+                                    <a href="#" class="card-cat-link">Women</a> -->
                                         </div>
-    
+
                                         <h3 class="h3 card-title">
                                             <!--  <a href="#">Running Sneaker Shoes</a> -->
-                                            <a href="/product/<%=product._id%>">
-                                                <%= product.product_name %>
+                                            <a href="/product/<%=product.brandProducts._id%>">
+                                                <%= product.brandProducts.product_name %>
                                             </a>
                                         </h3>
-                                        <% if (product.product_stock>0) { %>
-    
-                                            <data class="card-price" value="14799">₹<%=product.product_price %><del>
-                                                        <%=product.product_old_price %>
-                                                    </del></data>
+                                        <% if (product.brandProducts.product_stock>0) { %>
+
+                                            <data class="card-price" value="14799">₹
+                                                <%=product.brandProducts.product_price %><del>
+                                                        <%=product.brandProducts.product_old_price %>
+                                                    </del>
+                                            </data>
                                             <% }else{ %>
                                                 <span class="text-danger">
                                                     Out Of Stock
                                                 </span>
-    
+
                                                 <% } %>
-    
-    
-    
-    
+
+
+
+
                                     </div>
-    
+
                                 </div>
                             </li>
-    
-                            <% }) %>
 
+                            <% }) %>
                     </ul>
 
                 </div>
+            </section>
 
-            </div>
-        </section>
-
-<% } %>
+            <% } %>
 
 
 
-        <!-- 
+                <!-- 
+        - #CTA
+      -->
+
+                <section class="section cta">
+                    <div class="container">
+
+                        <ul class="cta-list">
+
+                            <li>
+                                <div class="cta-card" style="background-image: url('/users/images/cta-1.jpg')">
+                                    <p class="card-subtitle">
+                                        <%=locals.banners[0].main[0].left_title %>
+                                    </p>
+
+                                    <h3 class="h2 card-title">
+                                        <%=locals.banners[0].main[0].left_description %>
+                                    </h3>
+
+                                    <a href="<%=locals.banners[0].main[0].shop_link_left %>" class="btn btn-link">
+                                        <span>Shop Now</span>
+
+                                        <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                                    </a>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div class="cta-card" style="background-image: url('/users/images/cta-2.jpg')">
+                                    <p class="card-subtitle">
+                                        <%=locals.banners[0].main[0].right_title %>
+                                    </p>
+
+                                    <h3 class="h2 card-title">
+                                        <%=locals.banners[0].main[0].right_description %>
+                                    </h3>
+
+                                    <a href="<%=locals.banners[0].main[0].shop_link_right %>" class="btn btn-link">
+                                        <span>Shop Now</span>
+
+                                        <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                                    </a>
+                                </div>
+                            </li>
+
+                        </ul>
+
+                    </div>
+                </section>
+
+
+
+
+                <!-- 
+        - #SPECIAL
+      -->
+
+
+
+                <% if (newSpecial[0]) { %>
+                    <section class="section special">
+                        <div class="container">
+
+                            <div class="special-banner"
+                                style="background-image: url('/users/images/special-banner.jpg')">
+                                <h2 class="h3 banner-title">
+                                    <%=locals.banners[0].special[0].title %>
+                                </h2>
+
+                                <a href="<%=locals.banners[0].special[0].shop_link %>" class="btn btn-link">
+                                    <span>Explore All</span>
+
+                                    <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                                </a>
+                            </div>
+
+                            <div class="special-product">
+
+                                <h2 class="h2 section-title">
+                                    <span class="text">New Special</span>
+
+                                    <span class="line"></span>
+                                </h2>
+
+                                <ul class="has-scrollbar">
+
+                                    <% (locals.newSpecial||[]).forEach(product=> { %>
+
+
+                                        <li class="product-item">
+                                            <div class="product-card" tabindex="0">
+
+                                                <figure class="card-banner">
+                                                    <a href="/product/<%=product._id%>"><img
+                                                            src="/images/products_image/<%=product.product_image[0]%>"
+                                                            width="312" height="350" loading="lazy"
+                                                            alt="Running Sneaker Shoes" class="image-contain"></a>
+
+                                                    <% if (product.product_badge) { %>
+
+                                                        <div class="card-badge">
+                                                            <%=product.product_badge%>
+                                                        </div>
+                                                        <% } %>
+                                                            <ul class="card-action-list">
+
+                                                                <li class="card-action-item">
+                                                                    <button <% if (locals.userActive) { %>
+                                                                        onclick="cartCount('<%=product._id%>')"
+                                                                            <% }else{ %>
+                                                                                onclick="goToLoginPage()"
+                                                                                <% } %>
+                                                                                    class="card-action-btn"
+                                                                                    aria-labelledby="card-label-1">
+                                                                                    <ion-icon name="cart-outline">
+                                                                                    </ion-icon>
+                                                                    </button>
+
+                                                                    <div class="card-action-tooltip" id="card-label-1">
+                                                                        Add to Cart
+                                                                    </div>
+                                                                </li>
+
+                                                                <li class="card-action-item">
+                                                                    <button class="card-action-btn" <% if
+                                                                        (locals.userActive) { %>
+                                                                        onclick="addToWishlist('<%=product._id%>')"
+                                                                            <% }else{ %>
+                                                                                onclick="goToLoginPage()"
+                                                                                <% } %>
+
+                                                                                    aria-labelledby="card-label-2">
+                                                                                    <ion-icon name="heart-outline">
+                                                                                    </ion-icon>
+                                                                    </button>
+
+                                                                    <div class="card-action-tooltip" id="card-label-2">
+                                                                        Add to
+                                                                        Whishlist
+                                                                    </div>
+                                                                </li>
+
+
+                                                            </ul>
+                                                </figure>
+
+                                                <div class="card-content">
+
+                                                    <div class="card-cat">
+                                                        <% (product.product_categoryName || []).forEach(i=> { %>
+
+
+                                                            <a href="/<%= i.category %>" class="card-cat-link">
+                                                                <%= i.category %>
+
+                                                            </a>
+                                                            <% }) %>
+                                                                <!--   <a href="#" class="card-cat-link">Men</a> /
+                                        <a href="#" class="card-cat-link">Women</a> -->
+                                                    </div>
+
+                                                    <h3 class="h3 card-title">
+                                                        <!--  <a href="#">Running Sneaker Shoes</a> -->
+                                                        <a href="/product/<%=product._id%>">
+                                                            <%= product.product_name %>
+                                                        </a>
+                                                    </h3>
+                                                    <% if (product.product_stock>0) { %>
+
+                                                        <data class="card-price" value="14799">₹<%=product.product_price
+                                                                %><del>
+                                                                    <%=product.product_old_price %>
+                                                                </del></data>
+                                                        <% }else{ %>
+                                                            <span class="text-danger">
+                                                                Out Of Stock
+                                                            </span>
+
+                                                            <% } %>
+
+
+
+
+                                                </div>
+
+                                            </div>
+                                        </li>
+
+                                        <% }) %>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <% } %>
+
+
+
+                        <!-- 
         - #SERVICE
       -->
 
-        <section class="section service">
-            <div class="container">
+                        <section class="section service">
+                            <div class="container">
 
-                <ul class="service-list">
+                                <ul class="service-list">
 
-                    <li class="service-item">
-                        <div class="service-card">
+                                    <li class="service-item">
+                                        <div class="service-card">
 
-                            <div class="card-icon">
-                                <img src="/users/images/service-1.png" width="53" height="28" loading="lazy"
-                                    alt="Service icon">
+                                            <div class="card-icon">
+                                                <img src="/users/images/service-1.png" width="53" height="28"
+                                                    loading="lazy" alt="Service icon">
+                                            </div>
+
+                                            <div>
+                                                <h3 class="h4 card-title">Free Shiping</h3>
+
+                                                <p class="card-text">
+                                                    All orders over <span>₹1,099</span>
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+                                    <li class="service-item">
+                                        <div class="service-card">
+
+                                            <div class="card-icon">
+                                                <img src="/users/images/service-2.png" width="43" height="35"
+                                                    loading="lazy" alt="Service icon">
+                                            </div>
+
+                                            <div>
+                                                <h3 class="h4 card-title">Quick Payment</h3>
+
+                                                <p class="card-text">
+                                                    100% secure payment
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+                                    <li class="service-item">
+                                        <div class="service-card">
+
+                                            <div class="card-icon">
+                                                <img src="/users/images/service-3.png" width="40" height="40"
+                                                    loading="lazy" alt="Service icon">
+                                            </div>
+
+                                            <div>
+                                                <h3 class="h4 card-title">Free Returns</h3>
+
+                                                <p class="card-text">
+                                                    Money back in 30 days
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+                                    <li class="service-item">
+                                        <div class="service-card">
+
+                                            <div class="card-icon">
+                                                <img src="/users/images/service-4.png" width="40" height="40"
+                                                    loading="lazy" alt="Service icon">
+                                            </div>
+
+                                            <div>
+                                                <h3 class="h4 card-title">24/7 Support</h3>
+
+                                                <p class="card-text">
+                                                    Get Quick Support
+                                                </p>
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+                                </ul>
+
                             </div>
-
-                            <div>
-                                <h3 class="h4 card-title">Free Shiping</h3>
-
-                                <p class="card-text">
-                                    All orders over <span>₹1,099</span>
-                                </p>
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="service-item">
-                        <div class="service-card">
-
-                            <div class="card-icon">
-                                <img src="/users/images/service-2.png" width="43" height="35" loading="lazy"
-                                    alt="Service icon">
-                            </div>
-
-                            <div>
-                                <h3 class="h4 card-title">Quick Payment</h3>
-
-                                <p class="card-text">
-                                    100% secure payment
-                                </p>
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="service-item">
-                        <div class="service-card">
-
-                            <div class="card-icon">
-                                <img src="/users/images/service-3.png" width="40" height="40" loading="lazy"
-                                    alt="Service icon">
-                            </div>
-
-                            <div>
-                                <h3 class="h4 card-title">Free Returns</h3>
-
-                                <p class="card-text">
-                                    Money back in 30 days
-                                </p>
-                            </div>
-
-                        </div>
-                    </li>
-
-                    <li class="service-item">
-                        <div class="service-card">
-
-                            <div class="card-icon">
-                                <img src="/users/images/service-4.png" width="40" height="40" loading="lazy"
-                                    alt="Service icon">
-                            </div>
-
-                            <div>
-                                <h3 class="h4 card-title">24/7 Support</h3>
-
-                                <p class="card-text">
-                                    Get Quick Support
-                                </p>
-                            </div>
-
-                        </div>
-                    </li>
-
-                </ul>
-
-            </div>
-        </section>
+                        </section>
 
 
 
 
 
-        <!-- 
+                        <!-- 
         - #INSTA POST
       -->
 
-        <section class="section insta-post">
+                        <section class="section insta-post">
 
-            <ul class="insta-post-list has-scrollbar">
+                            <ul class="insta-post-list has-scrollbar">
 
-                <li class="insta-post-item">
-                    <img src="/users/images/insta-1.jpg" width="100" height="100" loading="lazy" alt="Instagram post"
-                        class="insta-post-banner image-contain">
+                                <li class="insta-post-item">
+                                    <img src="/users/images/insta-1.jpg" width="100" height="100" loading="lazy"
+                                        alt="Instagram post" class="insta-post-banner image-contain">
 
-                    <a href="#" class="insta-post-link">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-                </li>
+                                    <a href="#" class="insta-post-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
 
-                <li class="insta-post-item">
-                    <img src="/users/images/insta-2.jpg" width="100" height="100" loading="lazy" alt="Instagram post"
-                        class="insta-post-banner image-contain">
+                                <li class="insta-post-item">
+                                    <img src="/users/images/insta-2.jpg" width="100" height="100" loading="lazy"
+                                        alt="Instagram post" class="insta-post-banner image-contain">
 
-                    <a href="#" class="insta-post-link">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-                </li>
+                                    <a href="#" class="insta-post-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
 
-                <li class="insta-post-item">
-                    <img src="/users/images/insta-3.jpg" width="100" height="100" loading="lazy" alt="Instagram post"
-                        class="insta-post-banner image-contain">
+                                <li class="insta-post-item">
+                                    <img src="/users/images/insta-3.jpg" width="100" height="100" loading="lazy"
+                                        alt="Instagram post" class="insta-post-banner image-contain">
 
-                    <a href="#" class="insta-post-link">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-                </li>
+                                    <a href="#" class="insta-post-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
 
-                <li class="insta-post-item">
-                    <img src="/users/images/insta-4.jpg" width="100" height="100" loading="lazy" alt="Instagram post"
-                        class="insta-post-banner image-contain">
+                                <li class="insta-post-item">
+                                    <img src="/users/images/insta-4.jpg" width="100" height="100" loading="lazy"
+                                        alt="Instagram post" class="insta-post-banner image-contain">
 
-                    <a href="#" class="insta-post-link">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-                </li>
+                                    <a href="#" class="insta-post-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
 
-                <li class="insta-post-item">
-                    <img src="/users/images/insta-5.jpg" width="100" height="100" loading="lazy" alt="Instagram post"
-                        class="insta-post-banner image-contain">
+                                <li class="insta-post-item">
+                                    <img src="/users/images/insta-5.jpg" width="100" height="100" loading="lazy"
+                                        alt="Instagram post" class="insta-post-banner image-contain">
 
-                    <a href="#" class="insta-post-link">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-                </li>
+                                    <a href="#" class="insta-post-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
 
-                <li class="insta-post-item">
-                    <img src="/users/images/insta-6.jpg" width="100" height="100" loading="lazy" alt="Instagram post"
-                        class="insta-post-banner image-contain">
+                                <li class="insta-post-item">
+                                    <img src="/users/images/insta-6.jpg" width="100" height="100" loading="lazy"
+                                        alt="Instagram post" class="insta-post-banner image-contain">
 
-                    <a href="#" class="insta-post-link">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-                </li>
+                                    <a href="#" class="insta-post-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
 
-                <li class="insta-post-item">
-                    <img src="/users/images/insta-7.jpg" width="100" height="100" loading="lazy" alt="Instagram post"
-                        class="insta-post-banner image-contain">
+                                <li class="insta-post-item">
+                                    <img src="/users/images/insta-7.jpg" width="100" height="100" loading="lazy"
+                                        alt="Instagram post" class="insta-post-banner image-contain">
 
-                    <a href="#" class="insta-post-link">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-                </li>
+                                    <a href="#" class="insta-post-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
 
-                <li class="insta-post-item">
-                    <img src="/users/images/insta-8.jpg" width="100" height="100" loading="lazy" alt="Instagram post"
-                        class="insta-post-banner image-contain">
+                                <li class="insta-post-item">
+                                    <img src="/users/images/insta-8.jpg" width="100" height="100" loading="lazy"
+                                        alt="Instagram post" class="insta-post-banner image-contain">
 
-                    <a href="#" class="insta-post-link">
-                        <ion-icon name="logo-instagram"></ion-icon>
-                    </a>
-                </li>
+                                    <a href="#" class="insta-post-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
 
-            </ul>
+                            </ul>
 
-        </section>
+                        </section>
 
     </article>
 </main>
@@ -607,7 +613,7 @@
             type: 'post',
             data: { brand: brand },
             success: (response) => {
-              
+
                 $('#productBrand').empty()
                 response.brandProducts.forEach(i => {
 
@@ -622,29 +628,26 @@
                     ${i.product_badge ? `<div class="card-badge">${i.product_badge}</div>` : ''}
                     <ul class="card-action-list">
                       <li class="card-action-item">
-                        <button onclick="cartCount('${i._id}')" class="card-action-btn" aria-labelledby="card-label-1">
+                        <button <% if (locals.userActive) { %>
+                            onclick="cartCount('${i._id}')"
+                                                        <% }else{ %>
+                                                            onclick="goToLoginPage()"
+                                                            <% } %>  class="card-action-btn" aria-labelledby="card-label-1">
                           <ion-icon name="cart-outline"></ion-icon>
                         </button>
                         <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
                       </li>
                       <li class="card-action-item">
-                        <button class="card-action-btn" onclick="addToWishlist('${i._id}')" aria-labelledby="card-label-2">
+                        <button class="card-action-btn" <% if (locals.userActive) { %>
+                            onclick="addToWishlist('${i._id}')"
+                                                        <% }else{ %>
+                                                            onclick="goToLoginPage()"
+                                                            <% } %>  aria-labelledby="card-label-2">
                           <ion-icon name="heart-outline"></ion-icon>
                         </button>
                         <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
                       </li>
-                      <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                          <ion-icon name="eye-outline"></ion-icon>
-                        </button>
-                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                      </li>
-                      <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                          <ion-icon name="repeat-outline"></ion-icon>
-                        </button>
-                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                      </li>
+                     
                     </ul>
                   </figure>
                   <div class="card-content">
@@ -679,8 +682,8 @@
             type: 'post',
             success: (response) => {
                 console.log(response);
-          
-                (response||[]).forEach(i => {
+
+                (response || []).forEach(i => {
                     let productsBrand = `
                     <li class="product-item">
                 <div class="product-card" tabindex="0">
@@ -691,29 +694,26 @@
                     ${i.brandProducts.product_badge ? `<div class="card-badge">${i.brandProducts.product_badge}</div>` : ''}
                     <ul class="card-action-list">
                       <li class="card-action-item">
-                        <button onclick="cartCount('${i.brandProducts._id}')" class="card-action-btn" aria-labelledby="card-label-1">
+                        <button  <% if (locals.userActive) { %>
+                            onclick="cartCount('${i.brandProducts._id}')"
+                                                        <% }else{ %>
+                                                            onclick="goToLoginPage()"
+                                                            <% } %> class="card-action-btn" aria-labelledby="card-label-1">
                           <ion-icon name="cart-outline"></ion-icon>
                         </button>
                         <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
                       </li>
                       <li class="card-action-item">
-                        <button class="card-action-btn" onclick="addToWishlist('${i.brandProducts._id}')" aria-labelledby="card-label-2">
+                        <button class="card-action-btn" <% if (locals.userActive) { %>
+                            onclick="addToWishlist('${i.brandProducts._id}')" 
+                                                        <% }else{ %>
+                                                            onclick="goToLoginPage()"
+                                                            <% } %> aria-labelledby="card-label-2">
                           <ion-icon name="heart-outline"></ion-icon>
                         </button>
                         <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
                       </li>
-                      <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                          <ion-icon name="eye-outline"></ion-icon>
-                        </button>
-                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                      </li>
-                      <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                          <ion-icon name="repeat-outline"></ion-icon>
-                        </button>
-                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                      </li>
+                      
                     </ul>
                   </figure>
                   <div class="card-content">
@@ -753,13 +753,13 @@
                     document.getElementById('wishlistCount').innerHTML = wishlistCount
                 }
                 const toastLiveExample = document.getElementById('toasterMessage')
-                       
-                       document.getElementById('toastMessage').innerHTML="Product has been added to your wishlist."
-                          const toast = new bootstrap.Toast(toastLiveExample, {
-                              autohide: true,
-                              delay: 3000
-                          })
-                          toast.show()
+
+                document.getElementById('toastMessage').innerHTML = "Product has been added to your wishlist."
+                const toast = new bootstrap.Toast(toastLiveExample, {
+                    autohide: true,
+                    delay: 3000
+                })
+                toast.show()
 
 
             }
@@ -779,15 +779,16 @@
                     document.getElementById('cartCount').innerHTML = cartCounts
                 }
                 const toastLiveExample = document.getElementById('toasterMessage')
-                       
-                       document.getElementById('toastMessage').innerHTML="Product has been added to your cart."
-                          const toast = new bootstrap.Toast(toastLiveExample, {
-                              autohide: true,
-                              delay: 3000
-                          })
-                          toast.show()
+
+                document.getElementById('toastMessage').innerHTML = "Product has been added to your cart."
+                const toast = new bootstrap.Toast(toastLiveExample, {
+                    autohide: true,
+                    delay: 3000
+                })
+                toast.show()
 
             }
         })
     }
 </script>
+

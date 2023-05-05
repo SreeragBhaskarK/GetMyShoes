@@ -6,18 +6,13 @@ const client = require('twilio')(accountSid, authToken);
 /* sends random number to users number (twilio) */
 module.exports = {
     sendSms(phone_number) {
-        /* client.messages
-        .create({ body: otp, from: '+', to: "+"+phone_number })
-        
-          */
-
-
+  
         client.verify.v2.services(process.env.TWILIO_SERVICES_SID)
             .verifications
-            .create({ to: "+" + phone_number, channel: 'sms' })
+            .create({ to: "+91" + phone_number, channel: 'sms' })
             .then(verification => console.log(verification.sid))
             .catch((error) => {
-                console.log(error);
+                throw error
             })
 
 
@@ -29,7 +24,7 @@ module.exports = {
 
         return client.verify.v2.services(process.env.TWILIO_SERVICES_SID)
             .verificationChecks
-            .create({ to: "+" + phone_number, code: otp })
+            .create({ to: "+91" + phone_number, code: otp })
             .then(verification_check => {
                 if (verification_check.status == "approved") {
                     console.log(verification_check.status, "true");
@@ -42,7 +37,7 @@ module.exports = {
                 }
             })
             .catch((error) => {
-                console.error(error);
+                throw error
 
             })
     }

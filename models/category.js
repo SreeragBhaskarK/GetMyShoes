@@ -4,7 +4,10 @@ const collection = require('../server/config/collections')
 /* products schema */
 const categorySchema = new Schema({
 
-   category:String,
+   category:{
+      type:String,
+      unique:true
+   },
    category_type:String
     
 })

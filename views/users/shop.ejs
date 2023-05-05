@@ -29,10 +29,12 @@
                                         <div class="card-body">
                                             <ul>
                                                 <% parentCateagory.forEach(i=> { %>
-                                                
-                                                    <li><a onclick="test('<%=i.category  %>')" > <%=i.category%></a></li>
+
+                                                    <li><a onclick="test('<%=i.category  %>')">
+                                                            <%=i.category%>
+                                                        </a></li>
                                                     <% }) %>
-                                               
+
                                             </ul>
                                         </div>
                                     </div>
@@ -128,9 +130,14 @@
                                                 <ul class="card-action-list">
 
                                                     <li class="card-action-item">
-                                                        <button onclick="cartCount('<%=product._id%>')"
-                                                            class="card-action-btn" aria-labelledby="card-label-1">
-                                                            <ion-icon name="cart-outline"></ion-icon>
+                                                        <button <% if (locals.userActive) { %>
+                                                            onclick="cartCount('<%=product._id%>')"
+                                                                <% }else{ %>
+                                                                    onclick="goToLoginPage()"
+                                                                    <% } %>
+                                                                        class="card-action-btn"
+                                                                        aria-labelledby="card-label-1">
+                                                                        <ion-icon name="cart-outline"></ion-icon>
                                                         </button>
 
                                                         <div class="card-action-tooltip" id="card-label-1">Add to Cart
@@ -138,10 +145,14 @@
                                                     </li>
 
                                                     <li class="card-action-item">
-                                                        <button class="card-action-btn"
+                                                        <button <% if (locals.userActive) { %>
                                                             onclick="addToWishlist('<%=product._id%>')"
-                                                            aria-labelledby="card-label-2">
-                                                            <ion-icon name="heart-outline"></ion-icon>
+                                                                <% }else{ %>
+                                                                    onclick="goToLoginPage()"
+                                                                    <% } %> class="card-action-btn"
+
+                                                                        aria-labelledby="card-label-2">
+                                                                        <ion-icon name="heart-outline"></ion-icon>
                                                         </button>
 
                                                         <div class="card-action-tooltip" id="card-label-2">Add to
@@ -149,22 +160,7 @@
                                                         </div>
                                                     </li>
 
-                                                    <li class="card-action-item">
-                                                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                                                            <ion-icon name="eye-outline"></ion-icon>
-                                                        </button>
 
-                                                        <div class="card-action-tooltip" id="card-label-3">Quick View
-                                                        </div>
-                                                    </li>
-
-                                                    <li class="card-action-item">
-                                                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                                                            <ion-icon name="repeat-outline"></ion-icon>
-                                                        </button>
-
-                                                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                                                    </li>
 
                                                 </ul>
                                     </figure>
@@ -234,26 +230,26 @@
 </section>
 <script>
     // Get the first page link and add the "active" class
-/*     const paginationContainer = document.getElementById('pagination-container');
-    const pageLinks = paginationContainer.querySelectorAll('.page-link');
-
-    pageLinks.forEach((pageLink) => {
-        pageLink.addEventListener('click', (event) => {
-            // Prevent the link from reloading the page
-            event.preventDefault();
-
-            // Remove the "active" class from the previously active page link
-            const previouslyActivePageLink = paginationContainer.querySelector('.page-link.active');
-            if (previouslyActivePageLink) {
-                previouslyActivePageLink.classList.remove('active');
-            }
-
-            // Add the "active" class to the clicked page link
-            pageLink.classList.add('active');
-
-            // TODO: Update the page content based on the clicked page number
-        });
-    }); */
+    /*     const paginationContainer = document.getElementById('pagination-container');
+        const pageLinks = paginationContainer.querySelectorAll('.page-link');
+    
+        pageLinks.forEach((pageLink) => {
+            pageLink.addEventListener('click', (event) => {
+                // Prevent the link from reloading the page
+                event.preventDefault();
+    
+                // Remove the "active" class from the previously active page link
+                const previouslyActivePageLink = paginationContainer.querySelector('.page-link.active');
+                if (previouslyActivePageLink) {
+                    previouslyActivePageLink.classList.remove('active');
+                }
+    
+                // Add the "active" class to the clicked page link
+                pageLink.classList.add('active');
+    
+                // TODO: Update the page content based on the clicked page number
+            });
+        }); */
 </script>
 <!-- Shop Section End -->
 <!-- Js Plugins -->
@@ -280,6 +276,7 @@
 
                 var productList = $('#product-list');
                 productList.empty();
+
                 (response.categoryProduct[0]?.products || []).forEach((product) => {
                     const productItem = `   <div class="col-lg-4 col-md-6">
               <li class="product-item">
@@ -291,29 +288,26 @@
                     ${product.product_badge ? `<div class="card-badge">${product.product_badge}</div>` : ''}
                     <ul class="card-action-list">
                       <li class="card-action-item">
-                        <button onclick="cartCount('${product._id}')" class="card-action-btn" aria-labelledby="card-label-1">
+                        <button <% if (locals.userActive) { %>
+                                                    onclick="cartCount('${product._id}')"
+                                                        <% }else{ %>
+                                                            onclick="goToLoginPage()"
+                                                            <% } %>  class="card-action-btn" aria-labelledby="card-label-1">
                           <ion-icon name="cart-outline"></ion-icon>
                         </button>
                         <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
                       </li>
                       <li class="card-action-item">
-                        <button class="card-action-btn" onclick="addToWishlist('${product._id}')" aria-labelledby="card-label-2">
+                        <button class="card-action-btn" <% if (locals.userActive) { %>
+                            onclick="addToWishlist('${product._id}')"
+                                                        <% }else{ %>
+                                                            onclick="goToLoginPage()"
+                                                            <% } %>   aria-labelledby="card-label-2">
                           <ion-icon name="heart-outline"></ion-icon>
                         </button>
                         <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
                       </li>
-                      <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                          <ion-icon name="eye-outline"></ion-icon>
-                        </button>
-                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                      </li>
-                      <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                          <ion-icon name="repeat-outline"></ion-icon>
-                        </button>
-                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                      </li>
+                     
                     </ul>
                   </figure>
                   <div class="card-content">
@@ -490,29 +484,26 @@
                     ${product.product_badge ? `<div class="card-badge">${product.product_badge}</div>` : ''}
                     <ul class="card-action-list">
                       <li class="card-action-item">
-                        <button onclick="cartCount('${product._id}')" class="card-action-btn" aria-labelledby="card-label-1">
+                        <button <% if (locals.userActive) { %>
+                            onclick="cartCount('${product._id}')"
+                                            <% }else{ %>
+                                                onclick="goToLoginPage()"
+                                                <% } %>  class="card-action-btn" aria-labelledby="card-label-1">
                           <ion-icon name="cart-outline"></ion-icon>
                         </button>
                         <div class="card-action-tooltip" id="card-label-1">Add to Cart</div>
                       </li>
                       <li class="card-action-item">
-                        <button class="card-action-btn" onclick="addToWishlist('${product._id}')" aria-labelledby="card-label-2">
+                        <button class="card-action-btn" <% if (locals.userActive) { %>
+                            onclick="addToWishlist('${product._id}')"
+                                            <% }else{ %>
+                                                onclick="goToLoginPage()"
+                                                <% } %>  aria-labelledby="card-label-2">
                           <ion-icon name="heart-outline"></ion-icon>
                         </button>
                         <div class="card-action-tooltip" id="card-label-2">Add to Whishlist</div>
                       </li>
-                      <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-3">
-                          <ion-icon name="eye-outline"></ion-icon>
-                        </button>
-                        <div class="card-action-tooltip" id="card-label-3">Quick View</div>
-                      </li>
-                      <li class="card-action-item">
-                        <button class="card-action-btn" aria-labelledby="card-label-4">
-                          <ion-icon name="repeat-outline"></ion-icon>
-                        </button>
-                        <div class="card-action-tooltip" id="card-label-4">Compare</div>
-                      </li>
+                     
                     </ul>
                   </figure>
                   <div class="card-content">
@@ -564,3 +555,4 @@
 
     })
 </script>
+

@@ -5,13 +5,6 @@ const pdf = require('html-pdf');
 var path = require('path');
 let ejs = require('ejs')
 
-exports.middleWare = (req, res, next) => {
-    if (req.session.userLoggedIn) {
-        next()
-    } else {
-        res.redirect('/login')
-    }
-}
 exports.orderDetails = (req, res) => {
 
 
@@ -32,8 +25,16 @@ exports.verifyPayment = (req, res) => {
         let razorpay_order_id = req.body['payment[razorpay_order_id]']
         let razorpay_signature = req.body['payment[razorpay_signature]']
         let paymentDetails = { razorpay_payment_id, razorpay_order_id, razorpay_signature }
-        orderHelper.changePaymentStatus(req.body['order[receipt]'], paymentDetails).then(() => {
+        orderHelper.changePaymentStatus(req.body['order[receipt]'], paymentDetails).then(async () => {
             console.log('Payment successfull');
+            let userId = req.session.user._id
+            let couponCode = req.session.appliedCoupon.code
+            let coupon_id = req.session.appliedCoupon.coupon[0]._id
+            console.log('///////////////////////////', couponCode);
+            await user.updateOne({ _id: new ObjectId(userId) }, {
+                $push: { used_coupon: [{ code: couponCode, id: coupon_id }] }
+            })
+            couponCode = null
             res.json({ status: true })
         })
     }).catch((err) => {
@@ -62,7 +63,7 @@ exports.orderCancel = (req, res) => {
     let orderId = req.params.id
     console.log(orderId);
     orderHelper.doOrderCancel(orderId).then(response => {
-        
+
         res.redirect('/settings')
     })
 }

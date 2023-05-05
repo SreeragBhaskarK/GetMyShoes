@@ -40,7 +40,8 @@
                     </div>
                     <div class="contact__form">
                         <h5>SEND MESSAGE</h5>
-                        <form action="/contact_message" class="needs-validation" novalidate="" onsubmit="submitForm()" method="post">
+                        <form action="/contact_message" class="needs-validation" novalidate=""
+                            onsubmit="submitForm(event)" method="post">
                             <input type="text" name="name" class="form-control" required placeholder="Name">
                             <div class="valid-feedback">
                                 Looks good!
@@ -55,15 +56,15 @@
                             <div class="invalid-feedback">
                                 Enter Your Email!
                             </div>
-                            <input type="url" name="website" class="form-control" placeholder="Website">
-                            <textarea name="message" class="form-control"  required placeholder="Message"></textarea>
+                            <input type="url" name="website" class="form-control"  placeholder="Website">
+                            <textarea name="message" class="form-control" required placeholder="Message"></textarea>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                             <div class="invalid-feedback">
                                 Enter Message!
                             </div>
-                            <button type="submit"  class="site-btn">Send Message</button>
+                            <button type="submit" class="site-btn">Send Message</button>
                         </form>
                     </div>
                 </div>
@@ -81,16 +82,36 @@
 </section>
 <!-- Contact Section End -->
 <script>
-    function submitForm(){
+    function submitForm(event) {
+        event.preventDefault(); // prevent the form from submitting
+        const form = event.target;
+        const nameInput = form.elements.name;
+        const emailInput = form.elements.email;
+        const messageInput = form.elements.message;
+        if (nameInput.value.trim() === '') {
+            nameInput.classList.add('is-invalid');
+            return;
+        }
+
+        if (emailInput.value.trim() === '') {
+            emailInput.classList.add('is-invalid');
+            return;
+        }
+
+        if (messageInput.value.trim() === '') {
+            messageInput.classList.add('is-invalid');
+            return;
+        }
 
         const toastLiveExample = document.getElementById('toasterMessage')
-    
+
         document.getElementById('toastMessage').innerHTML = "Message sent successfully!"
         const toast = new bootstrap.Toast(toastLiveExample, {
             autohide: true,
             delay: 3000
         })
         toast.show()
+        form.submit();
     }
 
 </script>

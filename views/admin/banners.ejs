@@ -1,0 +1,505 @@
+<style>
+    /*-----------------------------------*\
+     * #HERO
+    \*-----------------------------------*/
+
+    .hero {
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: left;
+        min-height: 400px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .hero-title {
+        margin-bottom: 10px;
+    }
+
+    .hero-title>strong {
+        display: block;
+    }
+
+    .hero-text {
+        color: var(--onyx);
+        font-family: var(--ff-roboto);
+        font-size: var(--fs-8);
+        line-height: 1.8;
+        max-width: 46ch;
+        margin-bottom: 25px;
+    }
+
+
+
+
+
+    /*-----------------------------------*\
+ * #CTA
+\*-----------------------------------*/
+
+    .cta-list {
+        display: grid;
+        gap: 40px;
+    }
+
+    .cta-card {
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+        padding: 50px 20px;
+    }
+
+    .cta-card .card-subtitle {
+        font-size: var(--fs-5);
+        margin-bottom: 15px;
+    }
+
+    .cta-card .card-title {
+        color: inherit;
+        line-height: 1.3;
+        margin-bottom: 20px;
+    }
+
+
+
+
+    /*-----------------------------------*\
+ * #SPECIAL
+\*-----------------------------------*/
+
+    .special-banner {
+        height: 500px;
+        background-color: var(--smoky-black);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        padding: 50px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .special-banner .banner-title {
+        color: white;
+        font-weight: var(--fw-600);
+    }
+
+    .special .section-title {
+        margin-block: 40px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .special .section-title .text {
+        min-width: max-content;
+    }
+
+    .special .section-title .line {
+        width: 100%;
+        height: 1px;
+        background: var(--gainsboro);
+    }
+</style>
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <h1 class="h3 mb-3">Banners</h1>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Header Banner</h5>
+                    </div>
+                    <div class="card-body ">
+                        <section class="section hero" style="background-image: url('/users/images/hero-banner.png')">
+                            <div class="container">
+
+                                <h2 class="h1 hero-title">
+                                    <%=locals.banners[0].header[0].title %> <strong><%=locals.banners[0].header[0].title %> <strong><%=locals.banners[0].header[0].title %> <strong><%=locals.banners[0].header[0].title_strong %></strong>
+                                </h2>
+
+                                <p class="hero-text">
+                                    <%=locals.banners[0].header[0].description %>
+                                </p>
+
+                                <a href="<%=locals.banners[0].header[0].shop_link %>"> <button class="btn btn-primary">
+                                        <span>Shop Now</span>
+
+                                        <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                                    </button></a>
+
+                            </div>
+                        </section>
+                        <div class="pencil" style="float:right;">
+                            <a onclick="headerBanner()"><img src="/admin/img/icons/pencil.svg" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Brand Offer Banner</h5>
+                    </div>
+                    <div class="card-body ">
+                        <section class="section cta">
+                            <div class="container">
+
+                                <ul class="cta-list">
+
+                                    <l>
+                                        <div class="cta-card" style="background-image: url('/users/images/cta-1.jpg')">
+                                            <p class="card-subtitle"><%=locals.banners[0].main[0].left_title %></p>
+
+                                            <h3 class="h2 card-title"><%=locals.banners[0].main[0].left_description %></h3>
+
+                                            <a style="text-decoration: none;" href="<%=locals.banners[0].main[0].shop_link_left %>" class="btn btn-link bg-white">
+                                                <span>Shop Now</span>
+
+                                                <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                                            </a>
+                                        </div>
+                                    </l>
+
+                                    <l>
+                                        <div class="cta-card" style="background-image: url('/users/images/cta-2.jpg')">
+                                            <p class="card-subtitle"><%=locals.banners[0].main[0].right_title %></p>
+
+                                            <h3 class="h2 card-title"><%=locals.banners[0].main[0].right_description %></h3>
+
+                                            <a style="text-decoration: none;" href="<%=locals.banners[0].main[0].shop_link_right %>" class="btn btn-link bg-white">
+                                                <span>Shop Now</span>
+
+                                                <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                                            </a>
+                                        </div>
+                                    </l>
+
+                                </ul>
+
+                            </div>
+                        </section>
+                        <div class="pencil" style="float:right;">
+                            <a onclick="mainBanner()"><img src="/admin/img/icons/pencil.svg" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0"><%=locals.banners[0].special[0].left_title %></h5>
+                    </div>
+                    <div class="card-body ">
+                        <div class="special-banner" style="background-image: url('/users/images/special-banner.jpg')">
+                            <h2 class="h3 banner-title "><%=locals.banners[0].special[0].title %></h2>
+
+                            <a style="text-decoration: none;" href="<%=locals.banners[0].special[0].shop_link %>" class="btn btn-link bg-white">
+                                <span>Explore All</span>
+
+                                <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+                            </a>
+                        </div>
+
+                        <div class="pencil" style="float:right;">
+                            <a onclick="specialBanner()"><img src="/admin/img/icons/pencil.svg" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+
+<!-- Modal Header -->
+<div class="modal fade" id="headerBanner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="header_banner" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Header Banner</h5>
+                    <a><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
+                </div>
+                <div class="modal-body">
+                    <label for="">header title</label><br>
+                    <input type="text" placeholder="title " class="form-control" name="header_title" id="headerTitle"
+                        value="" required="">
+
+                    <label for="">header title Strong</label><br>
+                    <input type="text" placeholder="title " class="form-control" name="header_title_strong"
+                        id="headerTitleStrong" value="" required="">
+                    <label for="">header title description</label><br>
+
+                    <textarea  id="headerDescription" cols="33" rows="5" name="header_description"
+                        required></textarea><br>
+                    <label for="">shop now link <span style="font-weight: 300;">eg. www.getmyshoe.live<span style="color: black; font-weight: 900;">/product/64303b8e3752f46aa6a008d3</span></span></label><br>
+                    <input type="text" placeholder="product link" name="header_link" class="form-control"
+                        id="headerLink" value="" required="">
+                    <label for="">banner image</label><br>
+                    <img id="bannerimgView" src="/users/images/hero-banner.png" class="pt-3 pb-3" alt=""
+                        style="width: 300px; height:auto;">
+                    <input type="file" class="form-control" name="header_image" onchange="previewImage(event)"><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal Main -->
+<div class="modal fade" id="mainBanner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="main_banner" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Main Banner</h5>
+                    <a><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
+                </div>
+                <div class="modal-body">
+                    <label for="">Main left title</label><br>
+                    <input type="text" placeholder="title" class="form-control" name="main_left_title" id="mainLeftTitle"
+                        value="" required="">
+                    <label for="">Main left title description</label><br>
+
+                    <textarea  id="mainLeftDescription" cols="33" rows="5" name="main_left_description"
+                        required></textarea><br>
+                    <label for="">shop now link <span style="font-weight: 300;">eg. www.getmyshoe.live<span style="color: black; font-weight: 900;">/product/64303b8e3752f46aa6a008d3</span></span></label><br>
+                    <input type="text" placeholder="product link" name="main_left_link" class="form-control"
+                        id="mainLeftLink" value="" required="">
+                    <label for="">banner image</label><br>
+                    <img id="bannerLeftImgView" src="/users/images/cta-1.jpg" class="pt-3 pb-3" alt=""
+                        style="width: 300px; height:auto;">
+                    <input type="file" class="form-control" name="main_left_image" onchange="previewLeftImage(event)"><br><br><br>
+
+                    <label for="">Main left title</label><br>
+                    <input type="text" placeholder="title" class="form-control" name="main_right_title" id="mainRightTitle"
+                        value="" required="">
+                    <label for="">Main left title description</label><br>
+
+                    <textarea  id="mainRightDescription" cols="33" rows="5" name="main_right_description"
+                        required></textarea><br>
+                    <label for="">shop now link <span style="font-weight: 300;">eg. www.getmyshoe.live<span style="color: black; font-weight: 900;">/product/64303b8e3752f46aa6a008d3</span></span></label><br>
+                    <input type="text" placeholder="product link" name="main_right_link" class="form-control"
+                        id="mainRightLink" value="" required="">
+                    <label for="">banner image</label><br>
+                    <img id="bannerRightImgView" src="/users/images/cta-2.jpg" class="pt-3 pb-3" alt=""
+                        style="width: 300px; height:auto;">
+                    <input type="file" class="form-control" name="main_right_image" onchange="previewRightImage(event)"><br><br><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal Special -->
+<div class="modal fade" id="specialBanner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="special_banner" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Special Banner</h5>
+                    <a><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
+                </div>
+                <div class="modal-body">
+                    <label for="">Special title</label><br>
+                    <input type="text" placeholder="title " class="form-control" name="special_title" id="specialTitle"
+                        value="" required="">
+                    <label for="">shop now link <span style="font-weight: 300;">eg. www.getmyshoe.live<span style="color: black; font-weight: 900;">/product/64303b8e3752f46aa6a008d3</span></span></label><br>
+                    <input type="text" placeholder="product link" name="special_link" class="form-control"
+                        id="specialLink" value="" required="">
+                    <label for="">banner image</label><br>
+                    <img id="bannerSpecialImgView" src="/users/images/special-banner.jpg" class="pt-3 pb-3" alt=""
+                        style="width: 300px; height:auto;">
+                    <input type="file" class="form-control" name="special_image" onchange="previewSpecialImage(event)"><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function headerBanner() {
+        fetch('/admin/banner', {
+            method: 'post',
+            headers: { "Content-Type": "application/json" }
+        }).then(response => {
+            console.log(response);
+            return response.json()
+        }).then(data => {
+            console.log(data[0].header[0].title);
+            document.getElementById('headerTitle').value = data[0].header[0].title
+            document.getElementById('headerTitleStrong').value = data[0].header[0].title_strong
+            document.getElementById('headerDescription').value = data[0].header[0].description
+            document.getElementById('headerLink').value = data[0].header[0].shop_link
+            $('#headerBanner').modal('show')
+        })
+    }
+</script>
+<script>
+    function mainBanner() {
+        fetch('/admin/banner', {
+            method: 'post',
+            headers: { "Content-Type": "application/json" }
+        }).then(response => {
+            console.log(response);
+            return response.json()
+        }).then(data => {
+            console.log(data[0].main[0].title);
+            document.getElementById('mainLeftTitle').value = data[0].main[0].left_title
+            document.getElementById('mainLeftDescription').value = data[0].main[0].left_description
+            document.getElementById('mainLeftLink').value = data[0].main[0].shop_link_left
+
+            document.getElementById('mainRightTitle').value = data[0].main[0].right_title
+            document.getElementById('mainRightDescription').value = data[0].main[0].right_description
+            document.getElementById('mainRightLink').value = data[0].main[0].shop_link_right
+            $('#mainBanner').modal('show')
+        })
+    }
+</script>
+<script>
+    function specialBanner() {
+        fetch('/admin/banner', {
+            method: 'post',
+            headers: { "Content-Type": "application/json" }
+        }).then(response => {
+            console.log(response);
+            return response.json()
+        }).then(data => {
+            console.log(data[0].special[0].title);
+            document.getElementById('specialTitle').value = data[0].special[0].title
+            document.getElementById('specialLink').value = data[0].special[0].shop_link
+            $('#specialBanner').modal('show')
+        })
+    }
+</script>
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imgView = document.getElementById('bannerimgView');
+                imgView.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function previewLeftImage(event) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imgView = document.getElementById('bannerLeftImgView');
+                imgView.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function previewRightImage(event) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imgView = document.getElementById('bannerRightImgView');
+                imgView.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    function previewSpecialImage(event) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imgView = document.getElementById('bannerSpecialImgView');
+                imgView.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+</script>
+
+<script>
+    const form = document.querySelector('#header_banner')
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(form)
+        const data = JSON.stringify(Object.fromEntries(formData.entries()));
+        fetch('/admin/update_banner_header', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        }).then(response => {
+            location.reload()
+            return response.json()
+        }).then(data => {
+            console.log(data);
+        }).catch(error => {
+            console.log(error.message);
+        })
+
+    })
+</script>
+<script>
+    const formMain = document.querySelector('#main_banner')
+    formMain.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(formMain)
+        const data = JSON.stringify(Object.fromEntries(formData.entries()));
+        fetch('/admin/update_banner_main', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        }).then(response => {
+            location.reload()
+            return response.json()
+        }).then(data => {
+            console.log(data);
+        }).catch(error => {
+            console.log(error.message);
+        })
+
+    })
+</script>
+<script>
+    const formSpecial = document.querySelector('#special_banner')
+    formSpecial.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(formSpecial)
+        const data = JSON.stringify(Object.fromEntries(formData.entries()));
+        fetch('/admin/update_banner_special', {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        }).then(response => {
+            location.reload()
+            return response.json()
+        }).then(data => {
+            console.log(data);
+        }).catch(error => {
+            console.log(error.message);
+        })
+
+    })
+</script>

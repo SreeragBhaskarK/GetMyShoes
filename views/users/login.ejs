@@ -225,6 +225,7 @@
 					return response.json()
 
 				}).then(data => {
+					console.log(data);
 					if (data.status === true) {
 						window.location.href = "/verify?number=" + phone_number
 					} else {
