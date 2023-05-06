@@ -645,8 +645,9 @@ module.exports = {
             resolve(bannerHeader)
         })
     },
-    updateBanner(headerData) {
+    updateBanner(headerData,image) {
         return new Promise(async (resolve, reject) => {
+            let headerImage = image.filename
             const { header_title, header_title_strong, header_description, header_link } = headerData
             let updateBannerHeader = await banner.updateOne({
                 header: [
@@ -654,7 +655,8 @@ module.exports = {
                         title: header_title,
                         title_strong: header_title_strong,
                         description: header_description,
-                        shop_link: header_link
+                        shop_link: header_link,
+                        
                     }
                 ]
 
@@ -665,7 +667,8 @@ module.exports = {
             throw error
         })
     },
-    updateBannerMain(mainData) {
+    updateBannerMain(mainData,images) {
+        let image = images.map(file => file.filename)
         return new Promise(async (resolve, reject) => {
             const { main_left_title, main_left_description, main_left_link, main_right_title, main_right_description, main_right_link } = mainData
             let updateBannerMain = await banner.updateOne({
@@ -674,7 +677,7 @@ module.exports = {
                         left_title: main_left_title,
                         left_description: main_left_description,
                         shop_link_left: main_left_link,
-
+                        main_image:image,
                         right_title: main_right_title,
                         right_description: main_right_description,
                         shop_link_right: main_right_link
@@ -688,14 +691,16 @@ module.exports = {
             throw error
         })
     },
-    updateBannerSpecial(specialData) {
+    updateBannerSpecial(specialData,image) {
         return new Promise(async (resolve, reject) => {
             const { special_title, special_link } = specialData
+            let specialImage = image.filename
             let updateBannerSpecial = await banner.updateOne({
                 special: [
                     {
                         title: special_title,
-                        shop_link: special_link
+                        shop_link: special_link,
+                        special_img:specialImage
                     }
                 ]
 

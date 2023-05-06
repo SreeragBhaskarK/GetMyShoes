@@ -117,7 +117,7 @@
                         <h5 class="card-title mb-0">Header Banner</h5>
                     </div>
                     <div class="card-body ">
-                        <section class="section hero" style="background-image: url('/users/images/hero-banner.png')">
+                        <section class="section hero" style="background-image: url('/images/products_image/<%=locals.banners[0].header[0].header_img %>')">
                             <div class="container">
 
                                 <h2 class="h1 hero-title">
@@ -152,7 +152,7 @@
                                 <ul class="cta-list">
 
                                     <l>
-                                        <div class="cta-card" style="background-image: url('/users/images/cta-1.jpg')">
+                                        <div class="cta-card" style="background-image: url('/images/products_image/<%=locals.banners[0].main[0].main_image[0] %>')">
                                             <p class="card-subtitle"><%=locals.banners[0].main[0].left_title %></p>
 
                                             <h3 class="h2 card-title"><%=locals.banners[0].main[0].left_description %></h3>
@@ -166,7 +166,7 @@
                                     </l>
 
                                     <l>
-                                        <div class="cta-card" style="background-image: url('/users/images/cta-2.jpg')">
+                                        <div class="cta-card" style="background-image: url('/images/products_image/<%=locals.banners[0].main[0].main_image[1] %>')">
                                             <p class="card-subtitle"><%=locals.banners[0].main[0].right_title %></p>
 
                                             <h3 class="h2 card-title"><%=locals.banners[0].main[0].right_description %></h3>
@@ -193,7 +193,7 @@
                         <h5 class="card-title mb-0"><%=locals.banners[0].special[0].left_title %></h5>
                     </div>
                     <div class="card-body ">
-                        <div class="special-banner" style="background-image: url('/users/images/special-banner.jpg')">
+                        <div class="special-banner" style="background-image: url('/images/products_image/<%=locals.banners[0].special[0].special_img %>')">
                             <h2 class="h3 banner-title "><%=locals.banners[0].special[0].title %></h2>
 
                             <a style="text-decoration: none;" href="<%=locals.banners[0].special[0].shop_link %>" class="btn btn-link bg-white">
@@ -219,7 +219,7 @@
 <div class="modal fade" id="headerBanner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="header_banner" enctype="multipart/form-data">
+            <form id="header_banner" action="/admin/update_banner_header" method="post" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Header Banner</h5>
                     <a><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
@@ -240,7 +240,7 @@
                     <input type="text" placeholder="product link" name="header_link" class="form-control"
                         id="headerLink" value="" required="">
                     <label for="">banner image</label><br>
-                    <img id="bannerimgView" src="/users/images/hero-banner.png" class="pt-3 pb-3" alt=""
+                    <img id="bannerimgView" src="/images/products_image/<%=locals.banners[0].header[0].header_img %>" class="pt-3 pb-3" alt=""
                         style="width: 300px; height:auto;">
                     <input type="file" class="form-control" name="header_image" onchange="previewImage(event)"><br>
                 </div>
@@ -256,7 +256,7 @@
 <div class="modal fade" id="mainBanner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="main_banner" enctype="multipart/form-data">
+            <form id="main_banner" enctype="multipart/form-data" method="post" action="/admin/update_banner_main">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Main Banner</h5>
                     <a><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
@@ -273,9 +273,9 @@
                     <input type="text" placeholder="product link" name="main_left_link" class="form-control"
                         id="mainLeftLink" value="" required="">
                     <label for="">banner image</label><br>
-                    <img id="bannerLeftImgView" src="/users/images/cta-1.jpg" class="pt-3 pb-3" alt=""
+                    <img id="bannerLeftImgView" src="/images/products_image/<%=locals.banners[0].main[0].main_image[0] %>" class="pt-3 pb-3" alt=""
                         style="width: 300px; height:auto;">
-                    <input type="file" class="form-control" name="main_left_image" onchange="previewLeftImage(event)"><br><br><br>
+                    <input type="file" class="form-control" name="main_image" onchange="previewLeftImage(event)"><br><br><br>
 
                     <label for="">Main left title</label><br>
                     <input type="text" placeholder="title" class="form-control" name="main_right_title" id="mainRightTitle"
@@ -288,9 +288,9 @@
                     <input type="text" placeholder="product link" name="main_right_link" class="form-control"
                         id="mainRightLink" value="" required="">
                     <label for="">banner image</label><br>
-                    <img id="bannerRightImgView" src="/users/images/cta-2.jpg" class="pt-3 pb-3" alt=""
+                    <img id="bannerRightImgView" src="/images/products_image/<%=locals.banners[0].main[0].main_image[1] %>" class="pt-3 pb-3" alt=""
                         style="width: 300px; height:auto;">
-                    <input type="file" class="form-control" name="main_right_image" onchange="previewRightImage(event)"><br><br><br>
+                    <input type="file" class="form-control" name="main_image" onchange="previewRightImage(event)"><br><br><br>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -304,7 +304,7 @@
 <div class="modal fade" id="specialBanner" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="special_banner" enctype="multipart/form-data">
+            <form id="special_banner" method="post" action="/admin/update_banner_special" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Special Banner</h5>
                     <a><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></a>
@@ -317,7 +317,7 @@
                     <input type="text" placeholder="product link" name="special_link" class="form-control"
                         id="specialLink" value="" required="">
                     <label for="">banner image</label><br>
-                    <img id="bannerSpecialImgView" src="/users/images/special-banner.jpg" class="pt-3 pb-3" alt=""
+                    <img id="bannerSpecialImgView" src="/images/products_image/<%=locals.banners[0].special[0].special_img %>" class="pt-3 pb-3" alt=""
                         style="width: 300px; height:auto;">
                     <input type="file" class="form-control" name="special_image" onchange="previewSpecialImage(event)"><br>
                 </div>
@@ -434,7 +434,7 @@
 
 </script>
 
-<script>
+<!-- <script>
     const form = document.querySelector('#header_banner')
     form.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -456,9 +456,10 @@
         })
 
     })
-</script>
-<script>
+</script> -->
+<!-- <script>
     const formMain = document.querySelector('#main_banner')
+    
     formMain.addEventListener('submit', (event) => {
         event.preventDefault();
         const formData = new FormData(formMain)
@@ -479,8 +480,8 @@
         })
 
     })
-</script>
-<script>
+</script> -->
+<!-- <script>
     const formSpecial = document.querySelector('#special_banner')
     formSpecial.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -502,4 +503,4 @@
         })
 
     })
-</script>
+</script> -->

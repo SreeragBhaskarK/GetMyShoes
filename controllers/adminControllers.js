@@ -70,6 +70,7 @@ exports.logoutView = (req, res) => {
 
 exports.bannersView =async (req, res) => {
     let banners = await adminHelper.getBanner()
+    console.log();
     res.render('admin/banners', { activeBanners: 'active' ,banners})
 
 }
@@ -381,17 +382,17 @@ exports.banner = (req,res)=>{
 }
 
 exports.updataBannerHeader = (req,res)=>{
-    console.log(req.body,req.file);
-    adminHelper.updateBanner(req.body).then(response=>{
+    console.log(req.body,req.file,"kkkkkkk");
+    adminHelper.updateBanner(req.body,req.file).then(response=>{
         console.log(response);
-        res.status(200).send(response)
+        res.redirect('/admin/banners')
     }).catch(error=>{
-        res.status(404).send(error.message)
+        res.redirect('/admin/banners')
     })
 }
 exports.updataBannerMain = (req,res)=>{
-    console.log(req.body,req.file);
-    adminHelper.updateBannerMain(req.body).then(response=>{
+    console.log(req.body,);
+    adminHelper.updateBannerMain(req.body,req.files).then(response=>{
         console.log(response);
         res.status(200).send(response)
     }).catch(error=>{
@@ -400,11 +401,11 @@ exports.updataBannerMain = (req,res)=>{
 }
 exports.updataBannerSpecial = (req,res)=>{
     console.log(req.body,req.file);
-    adminHelper.updateBannerSpecial(req.body).then(response=>{
+    adminHelper.updateBannerSpecial(req.body,req.file).then(response=>{
         console.log(response);
-        res.status(200).send(response)
+        res.redirect('/admin/banners')
     }).catch(error=>{
-        res.status(404).send(error.message)
+        res.redirect('/admin/banners')
     })
 }
 

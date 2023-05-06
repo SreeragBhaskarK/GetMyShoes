@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { verifyAdmin } = require("../server/middleware/session_user")
-const {upload,bannerHeaderImage} = require('../server/middleware/multer')
+const upload = require('../server/middleware/multer')
 const { adminView, loginView, loginData, userView, logoutView, bannersView,productsView,productsData,deleteProductView ,editProductView
 ,updataProductData,deleteUserView,userStatusView,userStatusUnblockView,categoryView,categoryData,deleteCateagoryView,updateCategoryView,
 editCategoryView,unListView,restoreProductView,unlistDeleteProductView,orders,admin,coupons,couponsGenerate,saleByStateMonth,totalRevenue,
@@ -70,9 +70,9 @@ router.get('/sales_report_export/:type',verifyAdmin,salesReportExport)
 router.post('/category_name_check',verifyAdmin,categoryNameCheck)
 
 router.post('/banner',verifyAdmin,banner)
-router.post('/update_banner_header',bannerHeaderImage.single('header_image'),verifyAdmin,updataBannerHeader)
-router.post('/update_banner_main',bannerHeaderImage.single('main_right_image'),verifyAdmin,updataBannerMain)
-router.post('/update_banner_special',bannerHeaderImage.single('special_image'),verifyAdmin,updataBannerSpecial)
+router.post('/update_banner_header',upload.single('header_image'),verifyAdmin,updataBannerHeader)
+router.post('/update_banner_main',upload.array('main_image',2),verifyAdmin,updataBannerMain)
+router.post('/update_banner_special',upload.single('special_image'),verifyAdmin,updataBannerSpecial)
 
 
     
