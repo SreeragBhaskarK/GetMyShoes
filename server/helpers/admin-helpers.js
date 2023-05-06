@@ -656,6 +656,7 @@ module.exports = {
                         title_strong: header_title_strong,
                         description: header_description,
                         shop_link: header_link,
+                        header_img:headerImage
                         
                     }
                 ]

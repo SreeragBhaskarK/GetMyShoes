@@ -394,9 +394,9 @@ exports.updataBannerMain = (req,res)=>{
     console.log(req.body,);
     adminHelper.updateBannerMain(req.body,req.files).then(response=>{
         console.log(response);
-        res.status(200).send(response)
+        res.redirect('/admin/banners')
     }).catch(error=>{
-        res.status(404).send(error.message)
+        res.redirect('/admin/banners')
     })
 }
 exports.updataBannerSpecial = (req,res)=>{
