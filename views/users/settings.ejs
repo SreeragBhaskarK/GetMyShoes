@@ -820,7 +820,7 @@
             const phone = formData.get('phone');
             const gender = formData.get('gender');
             const age = formData.get('age');
-console.log(firstName, lastName, email, phone, gender, age );
+
             if (firstName && lastName && email &&  gender && age) {
                 fetch('/profile_info', {
                     method: 'POST',
@@ -829,7 +829,7 @@ console.log(firstName, lastName, email, phone, gender, age );
                 }).then(response => {
                     return response.json()
                 }).then(data => {
-                    console.log(data, "data");
+                   
                     if (data.status) {
                         const toastLiveExample = document.getElementById('toasterMessage')
 
@@ -850,7 +850,7 @@ console.log(firstName, lastName, email, phone, gender, age );
                     }
                 })
                     .catch(error => {
-                        console.log(error);
+                       
                         $('#messageDisplay').html(error.message)
                         $('#message').attr('hidden', false)
 
@@ -891,10 +891,10 @@ console.log(firstName, lastName, email, phone, gender, age );
                 success: function (data) {
                     document.getElementById('perInfoAdrs').style.display = 'none'
                     document.getElementById('perInfoAdrs').reset();
-                    console.log('Success:', data);
+                
                 },
                 error: function (err) {
-                    console.log('Error:', err);
+                  
                 }
             });
         });
@@ -905,21 +905,21 @@ console.log(firstName, lastName, email, phone, gender, age );
             event.preventDefault();
 
             var formData = $(this).serialize()
-            console.log(formData);
+        
             $.ajax({
                 type: 'POST',
                 url: '/updateAddress',
                 data: formData,
                 success: (data) => {
-                    console.log(data);
+                  
                     location.reload()
                     document.getElementById('perInfoEditAdrs').style.display = 'none'
                     document.getElementById('perInfoEditAdrs').reset();
                     document.getElementById('adrsCard' + id).style.display = 'block'
-                    console.log('Success:', data);
+                
                 },
                 error: function (err) {
-                    console.log('Error:', err);
+                
                 }
             });
         });
@@ -928,7 +928,7 @@ console.log(firstName, lastName, email, phone, gender, age );
 
     <!--     <script>
         function orderDetails(orderId,proId){
-            console.log("noooooooooo");
+          
             $.ajax({
                 type:'post',
                 url:'/order-details',
@@ -962,7 +962,7 @@ console.log(firstName, lastName, email, phone, gender, age );
                     body: JSON.stringify({ addressLine1, addressLine2, city, state, zip }),
                 });
                 const data = await response.text();
-                console.log(data);
+        
                 // Display success message to user
             } catch (error) {
                 console.error(error);
@@ -1031,7 +1031,7 @@ console.log(firstName, lastName, email, phone, gender, age );
             type: 'post',
             data: $('#changePass').serialize(),
             success: (Response) => {
-                console.log(Response);
+            
                 if (Response) {
                     document.getElementById('mySpan').innerHTML = 'Successfully!';
                     document.getElementById('mySpan').style.color = 'green'

@@ -272,7 +272,7 @@
             url: "/shop_category",
             data: { category: category },
             success: function (response) {
-                console.log(response);
+             
 
                 var productList = $('#product-list');
                 productList.empty();
@@ -379,7 +379,7 @@
 
 <script>
     function cartCount(id) {
-        console.log(id);
+     
         $.ajax({
             type: 'post',
             url: '/add-toCart/' + id,
@@ -405,7 +405,7 @@
 
 <script>
     function addToWishlist(id) {
-        console.log(id);
+ 
         $.ajax({
             type: 'get',
             url: '/add-toWishlist/' + id,
@@ -462,7 +462,7 @@
                     // Output the category name to the console
                 }
             });
-            console.log(brandName);
+         
             $.ajax({
                 type: 'post',
                 url: '/price_filter',
