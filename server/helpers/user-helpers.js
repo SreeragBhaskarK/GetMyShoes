@@ -256,7 +256,6 @@ module.exports = {
     },
     doProductDetails(proId, userId) {
         return new Promise(async (resolve, reject) => {
-            console.log(typeof id, "nnnnnnnnnnn");
             try {
                 let productdata = await product.findOne({ _id: proId })
                 let productcartCheck = false
