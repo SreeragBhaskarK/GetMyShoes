@@ -265,7 +265,7 @@ module.exports = {
                     console.log(cartItem,proId);
                     proId= String(proId)
                     let proExist = cartItem.products.findIndex(product => product.item == proId )
-                    console.log(proExist);
+                   
                     if (proExist != -1) {
                         productcartCheck = true
                     }
