@@ -259,15 +259,17 @@ module.exports = {
             try {
                 let productdata = await product.findOne({ _id: proId })
                 let productcartCheck = false
-                console.log(userId);
+
                 if (userId !== 1) {
-                    let cartItem = await cart.findOne({ userId:new ObjectId(userId) })
-                    console.log(cartItem,proId);
-                    proId= String(proId)
-                    let proExist = cartItem.products.findIndex(product => product.item == proId )
-                   
-                    if (proExist != -1) {
-                        productcartCheck = true
+                    let cartItem = await cart.findOne({ userId: new ObjectId(userId) })
+                    if (cartItem) {
+
+                        proId = String(proId)
+                        let proExist = cartItem.products.findIndex(product => product.item == proId)
+
+                        if (proExist != -1) {
+                            productcartCheck = true
+                        }
                     }
                 }
 

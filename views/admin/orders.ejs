@@ -20,6 +20,7 @@
                     <th>Total Price</th>
                     <th>Status</th>
                     <th>Shipping Status</th>
+                    <th>Order View</th>
                 </tr>
             </thead>
 
@@ -78,6 +79,7 @@
                                             </select>
 
                                         </td>
+                                        <td></td>
                                         <% }else{ %>
                                             <td>
                                                 <select id="shipping-status<%= order._id %>" style="width: 200px;"
@@ -111,8 +113,11 @@
                                                 </select>
 
                                             </td>
+                                            <td> <button type="button" class="btn btn-info " data-bs-toggle="modal"
+                                                    data-bs-target="#orderView<%= order._id %>"> <i
+                                                        class="fas fa-info me-2"></i> View</button></td>
 
-                                           <% } %>
+                                            <% } %>
 
 
 
@@ -148,7 +153,169 @@
                         });
                     </script>
 
-                    
+                    <!-- Modal -->
+                    <div class="modal fade" id="orderView<%= order._id %>" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class=" modal-dialog modal-xl  ">
+                            <div class="modal-content bg-transparent">
+
+
+                                <section class="h-100 gradient-custom">
+                                    <div class="container   h-100">
+
+                                        <div class="row d-flex justify-content-center align-items-center h-100">
+                                            <div class="col-lg-10 col-xl-8">
+                                                <div class="card" style="border-radius: 10px;">
+                                                    <div class="card-header px-4 py-5">
+                                                        <button type="button" class="btn-close ml-auto float-end"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <h5 class="text-muted mb-0">Order #<%= (index +
+                                                                1).toString().padStart(2, '0' ) %>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="card-body p-4">
+                                                        <div
+                                                            class="d-flex justify-content-between align-items-center mb-4">
+                                                            <p class="lead fw-normal mb-0" style="color: #a8729a;">
+                                                                Products</p>
+                                                            <p class="small text-muted mb-0">Order Id :
+                                                                #<%= order._id %>
+                                                            </p>
+                                                        </div>
+                                                        <% order.productInfo.forEach(product=> { %>
+
+                                                            <div class="card shadow-0 border mb-4">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-2">
+                                                                            <img src="/images/products_image/<%=product.product_image[0] %>"
+                                                                                class="img-fluid" alt="Phone">
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                                            <p class="text-muted mb-0">
+                                                                                <%=product.product_name %>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                                            <p class="text-muted mb-0 small">
+                                                                                Size: <%=product.product_size %>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                                            <p class="text-muted mb-0 small">
+                                                                                Stock:
+                                                                                <%=product.product_stock %>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                                            <p class="text-muted mb-0 small">
+                                                                                Qty: 1</p>
+                                                                        </div>
+                                                                        <div
+                                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                                            <p class="text-muted mb-0 small">
+                                                                                $499</p>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                            <% }) %>
+
+                                                                <div class="d-flex justify-content-between pt-2">
+                                                                    <p class="fw-bold mb-0">Order Details</p>
+                                                                    <p class="text-muted mb-0"><span
+                                                                            class="fw-bold me-4">Total</span>
+                                                                        ₹ <%=order.totalAmount%>
+                                                                    </p>
+                                                                </div>
+
+                                                                <div class="d-flex justify-content-between pt-2">
+                                                                    <p class="text-muted mb-0">Invoice Number :
+                                                                        <%= order._id %>
+                                                                    </p>
+                                                                    <p class="text-muted mb-0"><span
+                                                                            class="fw-bold me-4">Discount</span>
+                                                                        $19.00</p>
+                                                                </div>
+
+                                                                <div class="d-flex justify-content-between">
+                                                                    <p class="text-muted mb-0">Invoice Date : <%=
+                                                                            `${date.getDate()}/${date.getMonth() +
+                                                                            1}/${date.getFullYear()}` %>
+                                                                    </p>
+                                                                    <p class="text-muted mb-0"><span
+                                                                            class="fw-bold me-4">GST
+                                                                            10%</span> 123</p>
+                                                                </div>
+
+                                                                <div class="d-flex justify-content-between mb-5">
+                                                                    <p class="text-muted mb-0">Recepits Voucher :
+                                                                        18KU-62IIK
+                                                                    </p>
+                                                                    <p class="text-muted mb-0"><span
+                                                                            class="fw-bold me-4">Delivery
+                                                                            Charges</span> Free
+                                                                    </p>
+                                                                </div>
+                                                                <div class="d-flex justify-content-between pt-2">
+                                                                    <p class="fw-bold mb-0">User Details</p>
+                                                                    <p class="fw-bold mb-0 ">
+                                                                        User Address</p>
+                                                                </div>
+
+                                                                <div class="d-flex justify-content-between pt-2">
+                                                                    <p class="text-muted mb-0">User Id :
+                                                                        <%= order.userId %>
+                                                                    </p>
+                                                                    <p class="text-muted mb-0">
+                                                                        <span
+                                                                            style=" display: block; max-width: 523px; ">
+                                                                            <%=order.deliveryAddress?.address%>,
+                                                                                <%=order.deliveryAddress?.locality%>,
+                                                                                    <%=order.deliveryAddress?.city%>,
+                                                                                        <%=order.deliveryAddress?.state%>
+                                                                                            - <span
+                                                                                                style=" font-weight: 500; ">
+                                                                                                <%=order.deliveryAddress?.pincode%>
+                                                                                            </span>
+                                                                        </span>
+                                                                    </p>
+
+                                                                </div>
+
+                                                                <div class="d-flex justify-content-between mb-5">
+                                                                    <p class="text-muted mb-0">User Name :
+                                                                        <%=order.deliveryAddress?.name%>
+                                                                    </p>
+                                                                    <p class="text-muted mb-0"> Phone :
+                                                                        <%=order.deliveryAddress?.phone%>
+                                                                    </p>
+                                                                </div>
+                                                    </div>
+                                                    <div class="card-footer border-0 px-4 py-5"
+                                                        style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                                        <h5
+                                                            class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
+                                                            Total
+                                                            paid: <span class="h2 mb-0 ms-2">$1040</span></h5>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </section>
+
+                            </div>
+
+                        </div>
+                    </div>
 
                     <% }) %>
 

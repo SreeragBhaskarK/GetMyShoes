@@ -438,7 +438,7 @@ module.exports = {
                     as: 'productInfo'
                 }
             }])
-            console.log(orderData, '///////////////////////////////');
+            console.log(orderData[0].productInfo,orderData[0], '///////////////////////////////');
             resolve(orderData)
         })
     },
