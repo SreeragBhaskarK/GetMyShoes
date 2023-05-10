@@ -34,7 +34,7 @@ exports.verifyPayment = (req, res) => {
             await user.updateOne({ _id: new ObjectId(userId) }, {
                 $push: { used_coupon: [{ code: couponCode, id: coupon_id }] }
             })
-            couponCode = null
+            req.session.appliedCoupon = null
             res.json({ status: true })
         })
     }).catch((err) => {

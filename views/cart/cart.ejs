@@ -44,7 +44,7 @@
 
             <div class="col-lg-12">
                 <div class="shop__cart__table">
-                    <table > 
+                    <table>
                         <thead>
                             <tr>
                                 <th>Product</th>
@@ -117,7 +117,7 @@
                 <div class="discount__content">
                     <h6>Discount codes</h6>
                     <form id="couponApply">
-                        <input type="text" placeholder="Enter your coupon code" id="appliedCoupon" required
+                        <input type="search" placeholder="Enter your coupon code" id="appliedCoupon" required
                             name="appliedCoupon" value="<%=locals.appliedCoupon%>">
                         <!-- <input hidden type="number" name="total" value="<%#totalPrice[0]?.total %>"> -->
                         <button type="submit" class="site-btn">Apply</button>
@@ -143,6 +143,27 @@
     </div>
 </section>
 <script>
+    var clearCoupon = document.getElementById('appliedCoupon');
+
+    clearCoupon.addEventListener('input', function () {
+        var inputValue = clearCoupon.value;
+
+        if (!inputValue) {
+            fetch('/clearCoupon', {
+                method: 'put',
+            }).then(response => {
+                return response.json()
+            }).then(data => {
+                console.log(data);
+                if (data.status) {
+                    document.getElementById('coupon_message').classList.replace('text-danger', 'text-success')
+                    document.getElementById('coupon_message').innerHTML = 'removed..'
+                }
+            })
+        }
+    });
+</script>
+<script>
     function deltPro(proId, cartId) {
         console.log(proId, cartId);
         $.ajax({
@@ -157,6 +178,11 @@
                 document.getElementById('discount').innerHTML = '₹ ' + response.discount
                 document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
                 document.getElementById('subtotal').innerHTML = '₹ ' + response.subTotal
+                var cartCountElement = document.getElementById("cartCount");
+                var value = cartCountElement.textContent
+                cartCountElement.textContent = value - 1;
+
+
                 $('#cardProduct' + proId).remove()
                 const toastLiveExample = document.getElementById('toasterMessage')
                 document.getElementById('toastMessage').innerHTML = "Product has been deleted in cart."
@@ -188,14 +214,15 @@
                 if (response.status) {
                     document.getElementById('discount').innerHTML = '₹ ' + response.discount
                     document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
+                    document.getElementById('coupon_message').classList.replace('text-danger', 'text-success')
                     document.getElementById('coupon_message').innerHTML = 'applied successfull'
-                    document.getElementById('coupon_message').style.color = "green"
 
                     document.getElementById('coupon_message').style.display = 'block'
                     setTimeout(() => {
                         document.getElementById('coupon_message').style.display = 'none'
                     }, 5000);
                 } else {
+                    document.getElementById('coupon_message').classList.replace('text-success', 'text-danger')
                     document.getElementById('coupon_message').innerHTML = response.message
 
                     document.getElementById('coupon_message').style.display = 'block'

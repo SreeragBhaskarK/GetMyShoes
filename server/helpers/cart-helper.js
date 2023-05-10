@@ -323,8 +323,10 @@ module.exports = {
                 }
             }, {
                 $addFields: {
-                    productsData: '$products.products'
-                }
+                        productsData: {
+                            $ifNull: ['$products.products', []]
+                        }
+                    }
             }, {
                 $lookup: {
                     from: 'products',
@@ -497,7 +499,7 @@ module.exports = {
             console.log(checkCoupon);
             let result = checkCoupon[0].used_coupon.findIndex(coupon => coupon.code == appliedCoupon)
             console.log(result);
-            if (result == -1) {
+            if (result != -1) {
                 reject(new Error('already using coupon'))
                 return
             }

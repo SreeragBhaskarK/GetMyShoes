@@ -1,7 +1,7 @@
 var express = require('express');
 const { verify } = require('../server/middleware/session_user');
 var router = express.Router();
-let {cartView,addToCartView, changeProductQuantity,deleteCartProduct ,checkOut ,placeOrder,wishlist,addToWishListView,deleteWishListProduct,couponCheck}=require('../controllers/cartController')
+let {cartView,addToCartView, changeProductQuantity,deleteCartProduct ,checkOut ,placeOrder,wishlist,addToWishListView,deleteWishListProduct,couponCheck,couponClear}=require('../controllers/cartController')
 
 router.get('/cart' ,verify, cartView)
 router.post('/add-toCart/:id',verify, addToCartView)
@@ -14,4 +14,5 @@ router.get('/wishlist',verify,wishlist)
 router.get('/add-toWishlist/:id',verify, addToWishListView)
 router.delete('/delete-wishlist-product',deleteWishListProduct)
 router.post('/coupon_check/:price', couponCheck)
+router.put('/clearCoupon', couponClear)
 module.exports=router

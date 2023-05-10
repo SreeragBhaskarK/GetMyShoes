@@ -236,13 +236,7 @@ exports.restoreProductView = (req, res) => {
         res.redirect('/admin/unlist')
     })
 }
-exports.unlistDeleteProductView = (req, res) => {
-    let id = req.params.id
-    adminHelper.doDeleteProduct(id).then(response => {
 
-        res.redirect('/admin/unlist')
-    })
-}
 exports.orders = (req, res) => {
     adminHelper.getOrder().then((response) => {
         let orders = response

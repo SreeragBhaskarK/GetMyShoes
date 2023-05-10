@@ -287,13 +287,7 @@ module.exports = {
         })
 
     },
-    doDeleteProduct(id) {
-        return new Promise(async (resolve, reject) => {
-            let unlistProduct = await product.deleteOne({ _id: new ObjectId(id) })
-            resolve()
-        })
 
-    },
     doDashboard() {
         return new Promise(async (resolve, reject) => {
 
@@ -420,7 +414,9 @@ module.exports = {
 
             let orderData = await order.aggregate([{
                 $addFields: {
-                    productsData: '$products.products'
+                    productsData: {
+                        $ifNull: ['$products.products', []]
+                    }
                 }
             }, {
                 $lookup: {
@@ -437,8 +433,10 @@ module.exports = {
                     ],
                     as: 'productInfo'
                 }
-            }])
-            console.log(orderData[0].productInfo,orderData[0], '///////////////////////////////');
+            }]).catch(error=>{
+                console.log(error.message);
+            })
+          
             resolve(orderData)
         })
     },

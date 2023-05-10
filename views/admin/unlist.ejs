@@ -55,34 +55,13 @@
                         <td>
                             <%= productData.product_rate %>
                         </td>
-                        <td style="display: flex;"><button type="button" class="btn btn-primary me-2"
+                        <td ><button type="button" class="btn btn-primary me-2"
                                 data-bs-toggle="modal"
                                 data-bs-target="#staticBackdropRes<%= productData._id%>">Restore</button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop<%= productData._id%>">Delete</button>
-                            <!--        <a href="/admin/unlistdelete-product/<%# productData._id%>"><button type="button"
-                                    class="btn btn-danger"
-                                    onclick="return confirm('Are you want to permanent delete <%= productData.product_name %> ?')">Delete</button></a> -->
+                            
                         </td>
                     </tr>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="staticBackdrop<%= productData._id%>" data-bs-backdrop="static"
-                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class=" modal-dialog modal-sm modal-dialog-centered">
-                            <div class="modal-content ">
-
-                                <div class="modal-body">
-                                    Are you want to permanent delete <%= productData.product_name %> ?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                    <a href="/admin/unlistdelete-product/<%= productData._id%>"><button type="button"
-                                            class="btn btn-danger">Delete</button></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
 
                     <!-- Modal -->

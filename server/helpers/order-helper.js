@@ -114,7 +114,9 @@ module.exports = {
                 }
             }, {
                 $addFields: {
-                    productsData: '$products.products'
+                    productsData: {
+                        $ifNull: ['$products.products', []]
+                    }
                 }
             }, {
                 $lookup: {

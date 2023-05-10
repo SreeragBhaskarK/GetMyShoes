@@ -157,7 +157,7 @@ module.exports = {
 
             try {
                 pageNum = pageNum ? pageNum : 1
-                const perPage = 12;
+                const perPage = 5;
                 const skipCount = (pageNum - 1) * perPage;
                 let productsView = await product.aggregate([{
                     $match: {
