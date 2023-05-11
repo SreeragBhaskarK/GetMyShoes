@@ -243,10 +243,17 @@ Created: Colorib
                 type: "POST",
                 async: true,
                 success: (response) => {
-
-                    console.log(response[0].total);
-                    let total = response[0].total
-                    document.getElementById('totalPrice').innerHTML = '₹ ' + total
+                    console.log(response);
+             
+                    if (response.discount == 0) {
+                        fetch('/clearCoupon', {
+                            method: 'put',
+                        }).then(response => {
+                            document.getElementById('appliedCoupon').value = '';
+                        })
+                    }
+                    document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
+                    document.getElementById('discount').innerHTML = '₹ ' + response.discount
                     
                 }
             })

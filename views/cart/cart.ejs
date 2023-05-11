@@ -156,6 +156,7 @@
             }).then(data => {
                 console.log(data);
                 if (data.status) {
+                    document.getElementById('discount').innerHTML = '₹ ' + 0
                     document.getElementById('coupon_message').classList.replace('text-danger', 'text-success')
                     document.getElementById('coupon_message').innerHTML = 'removed..'
                 }
@@ -174,7 +175,13 @@
                 cartId: cartId
             },
             success: (response => {
-                console.log(response);
+                if (response.discount == 0) {
+                    fetch('/clearCoupon', {
+                        method: 'put',
+                    }).then(response => {
+                        document.getElementById('appliedCoupon').value = '';
+                    })
+                }
                 document.getElementById('discount').innerHTML = '₹ ' + response.discount
                 document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
                 document.getElementById('subtotal').innerHTML = '₹ ' + response.subTotal

@@ -62,12 +62,18 @@ exports.changeProductQuantity = (req, res) => {
     cartHelper.changeProductQuantity(req.body).then(async () => {
 
 
-        let appliedDiscount = req.session.appliedCoupon?.discount
+        let appliedDiscount = req.session.appliedCoupon?.discount ?? 0
         let discount = appliedDiscount ? appliedDiscount : 0
         let appliedminPurchase = req.session.appliedCoupon?.minPurchase
         let minPurchase = appliedminPurchase ? appliedminPurchase : 0
         let totalPrice = await cartHelper.getTotalAmount(userId, discount, minPurchase)
-        res.send(totalPrice)
+        let total = totalPrice[0]?.total ?? 0
+        if (minPurchase <= totalPrice[0]?.total) {
+            res.json({ total, discount: appliedDiscount })
+        } else {
+            res.json({ total, discount: 0 })
+
+        }
     })
 
 }
@@ -84,7 +90,13 @@ exports.deleteCartProduct = (req, res) => {
             let total = totalPrice[0]?.total ?? 0
             let subTotal = await cartHelper.getSubTotal(userId)
             subTotal = subTotal[0]?.subTotal ?? 0
-            res.json({ discount: appliedDiscount, subTotal, total, status: true })
+            if (minPurchase <= totalPrice[0]?.total) {
+                res.json({ discount: appliedDiscount, subTotal, total, status: true })
+            } else {
+
+                res.json({ discount: 0, subTotal, total, status: true })
+            }
+
 
         }
     })
