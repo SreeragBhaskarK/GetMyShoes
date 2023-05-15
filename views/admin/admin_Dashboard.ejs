@@ -63,9 +63,9 @@
 						<h1 class="mt-1 mb-3">
 							<%=locals.orderCount %>
 						</h1>
+					
 						<div class="mb-0">
-
-							<% if (locals.percentageChange===Infinity || locals.percentageChange===0 ||
+							<% if (locals.percentageChange==Infinity || locals.percentageChange===0 ||
 							locals.percentageChange ==='NaN') { %>
 								<span class="badge badge-warning-light"> <i class="mdi mdi-arrow-bottom-right"></i>0%
 									<% }else{ %>
