@@ -16,7 +16,7 @@
 
                             <li class="card-action-item">
                                 <button <% if (locals.userActive) { %>
-                                    onclick="cartCount('<%=product._id%>')"
+                                    onclick="cartCount('<%=product._id%>', '<%=product.product_stock%>')"
                                         <% }else{ %>
                                             onclick="goToLoginPage()"
                                             <% } %> class="card-action-btn"
@@ -116,11 +116,12 @@
         </script>
 
         <script>
-            function addToWishlist(id) {
+            function addToWishlist(id,stock) {
                 console.log(id);
                 $.ajax({
                     type: 'get',
                     url: '/add-toWishlist/' + id,
+                    data: ({ stock: stock }),
                     success: (wishlistCount) => {
                         if (wishlistCount) {
                             document.getElementById('wishlistCount').innerHTML = wishlistCount

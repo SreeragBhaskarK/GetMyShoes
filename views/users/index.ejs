@@ -136,7 +136,7 @@
 
                                                     <li class="card-action-item">
                                                         <button <% if (locals.userActive) { %>
-                                                            onclick="cartCount('<%=product.brandProducts._id%>')"
+                                                            onclick="cartCount('<%=product.brandProducts._id%>','<%=product.product_stock%>')"
                                                                 <% }else{ %>
                                                                     onclick="goToLoginPage()"
                                                                     <% } %>
@@ -330,7 +330,7 @@
 
                                                                 <li class="card-action-item">
                                                                     <button <% if (locals.userActive) { %>
-                                                                        onclick="cartCount('<%=product._id%>')"
+                                                                        onclick="cartCount('<%=product._id%>','<%=product.product_stock%>')"
                                                                             <% }else{ %>
                                                                                 onclick="goToLoginPage()"
                                                                                 <% } %>
@@ -629,7 +629,7 @@
                     <ul class="card-action-list">
                       <li class="card-action-item">
                         <button <% if (locals.userActive) { %>
-                            onclick="cartCount('${i._id}')"
+                            onclick="cartCount('${i._id}','${i.product_stock}')"
                                                         <% }else{ %>
                                                             onclick="goToLoginPage()"
                                                             <% } %>  class="card-action-btn" aria-labelledby="card-label-1">
@@ -695,7 +695,7 @@
                     <ul class="card-action-list">
                       <li class="card-action-item">
                         <button  <% if (locals.userActive) { %>
-                            onclick="cartCount('${i.brandProducts._id}')"
+                            onclick="cartCount('${i.brandProducts._id}',${i.product_stock})"
                                                         <% }else{ %>
                                                             onclick="goToLoginPage()"
                                                             <% } %> class="card-action-btn" aria-labelledby="card-label-1">
@@ -769,11 +769,12 @@
 
 
 <script>
-    function cartCount(id) {
+    function cartCount(id,stock) {
         console.log(id);
         $.ajax({
             type: 'post',
             url: '/add-toCart/' + id,
+            data: ({ stock: stock }),
             success: (cartCounts) => {
                 if (cartCounts) {
                     document.getElementById('cartCount').innerHTML = cartCounts

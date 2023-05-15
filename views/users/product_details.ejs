@@ -83,7 +83,7 @@
                             <% }else{ %>
                                 <div id="addToCartChange">
                                     <a <% if (locals.userActive) { %>
-                                        onclick="cartCount('<%=products._id%>')"
+                                        onclick="cartCount('<%=products._id%>','<%=products.product_stock%>')"
                                             <% }else{ %>
                                                 onclick="goToLoginPage()"
                                                 <% } %> class="cart-btn"><span style="margin: auto;
@@ -257,12 +257,12 @@
 
     });
     console.log(quantity);
-    function cartCount(id) {
+    function cartCount(id,stock) {
         console.log(id);
         $.ajax({
             type: 'post',
             url: '/add-toCart/' + id,
-            data: ({ quantity: quantity }),
+            data: ({ quantity: quantity,stock:stock }),
             success: (cartCount) => {
                 if (cartCount) {
                     document.getElementById('cartCount').innerHTML = cartCount
@@ -296,6 +296,7 @@
         $.ajax({
             type: 'get',
             url: '/add-toWishlist/' + id,
+          
             success: (wishlistCount) => {
                 if (wishlistCount) {
                     document.getElementById('wishlistCount').innerHTML = wishlistCount

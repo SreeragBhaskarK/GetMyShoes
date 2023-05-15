@@ -289,7 +289,7 @@
                     <ul class="card-action-list">
                       <li class="card-action-item">
                         <button <% if (locals.userActive) { %>
-                                                    onclick="cartCount('${product._id}')"
+                                                    onclick="cartCount('${product._id}','${product.product_stock}')"
                                                         <% }else{ %>
                                                             onclick="goToLoginPage()"
                                                             <% } %>  class="card-action-btn" aria-labelledby="card-label-1">
@@ -486,7 +486,7 @@
                     <ul class="card-action-list">
                       <li class="card-action-item">
                         <button <% if (locals.userActive) { %>
-                            onclick="cartCount('${product._id}')"
+                            onclick="cartCount('${product._id}','${product.product_stock}')"
                                             <% }else{ %>
                                                 onclick="goToLoginPage()"
                                                 <% } %>  class="card-action-btn" aria-labelledby="card-label-1">

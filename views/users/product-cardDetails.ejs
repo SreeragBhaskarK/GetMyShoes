@@ -33,7 +33,7 @@
 
                                 <li class="card-action-item">
                                     <button <% if (locals.userActive) { %>
-                                        onclick="addToWishlist('<%=product._id%>')"
+                                        onclick="addToWishlist('<%=product._id%>','<%=product.product_stock%>')"
                                             <% }else{ %>
                                                 onclick="goToLoginPage()"
                                                 <% } %> class="card-action-btn"  aria-labelledby="card-label-2">
@@ -93,11 +93,12 @@
     <% }) %>
 
         <script>
-            function cartCount(id) {
+            function cartCount(id,stock) {
                 console.log(id);
                 $.ajax({
                     type: 'post',
                     url: '/add-toCart/' + id,
+                    data: ({ stock: stock }),
                     success: (cartCount) => {
                         console.log(cartCount);
                         if (cartCount) {
@@ -124,6 +125,7 @@
                 $.ajax({
                     type: 'get',
                     url: '/add-toWishlist/' + id,
+                   
                     success: (wishlistCount) => {
                         if (wishlistCount) {
                             document.getElementById('wishlistCount').innerHTML = wishlistCount
