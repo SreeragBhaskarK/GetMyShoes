@@ -28,9 +28,16 @@ exports.verifyPayment = (req, res) => {
         orderHelper.changePaymentStatus(req.body['order[receipt]'], paymentDetails).then(async () => {
             console.log('Payment successfull');
             let userId = req.session.user._id
+            let cartProducts = await cart.findOne({ userId: userId })
             let couponCode = req.session.appliedCoupon.code
             let coupon_id = req.session.appliedCoupon.coupon[0]._id
             console.log('///////////////////////////', couponCode);
+            cartProducts.products.forEach(async(i) => {
+                console.log(i);
+                let quantity = i.quantity
+                  let result= await product.updateOne({_id:new ObjectId(i.item)},{$inc:{product_stock:-quantity}})
+                  console.log(result,'dfkjdkfjhjdfhj');
+                });
             await user.updateOne({ _id: new ObjectId(userId) }, {
                 $push: { used_coupon: [{ code: couponCode, id: coupon_id }] }
             })
@@ -63,6 +70,14 @@ exports.orderCancel = (req, res) => {
     let orderId = req.params.id
     console.log(orderId);
     orderHelper.doOrderCancel(orderId).then(response => {
+
+        res.redirect('/settings')
+    })
+}
+exports.orderReturn = (req, res) => {
+    let orderId = req.params.id
+    console.log(orderId);
+    orderHelper.doOrderReturn(orderId).then(response => {
 
         res.redirect('/settings')
     })

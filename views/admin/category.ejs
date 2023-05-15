@@ -216,7 +216,7 @@
     timeoutedit = setTimeout(() => {
       const categoryValue = categoryNameEdit.val();
       const checkName = $('#categoryNameCheck').val()
-      if (checkName != categoryValue) {
+      if (checkName != categoryValue.toLowerCase()) {
         if (categoryValue.trim() === "") {
           $('#categoryVaildEdit').attr('hidden', true)
           categoryNameEdit.removeClass('is-valid').addClass('is-invalid');

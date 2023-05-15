@@ -131,7 +131,7 @@
 
                                                     <li class="card-action-item">
                                                         <button <% if (locals.userActive) { %>
-                                                            onclick="cartCount('<%=product._id%>')"
+                                                            onclick="cartCount('<%=product._id%>','<%=product.product_stock%>')"
                                                                 <% }else{ %>
                                                                     onclick="goToLoginPage()"
                                                                     <% } %>
@@ -378,11 +378,12 @@
 </script>
 
 <script>
-    function cartCount(id) {
+    function cartCount(id,stock) {
      
         $.ajax({
             type: 'post',
             url: '/add-toCart/' + id,
+            data: ({ stock: stock }),
             success: (cartCounts) => {
                 if (cartCounts) {
                     document.getElementById('cartCount').innerHTML = cartCounts

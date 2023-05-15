@@ -30,7 +30,7 @@ module.exports = {
                             foreignField: "_id",
                             as: 'category_name'
                         }
-                    }])
+                    }, { "$sort": { "createdAt": -1 } }])
 
 
                 if (!products) throw Error("Empty products")

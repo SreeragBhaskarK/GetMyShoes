@@ -13,7 +13,7 @@ var instance = new Razorpay({
 });
 
 module.exports = {
-    addToCart(userId, proId, quantity) {
+    addToCart(userId, proId, quantity, stock) {
         return new Promise(async (resolve, reject) => {
             let cartItem = await cart.findOne({ userId: userId })
             if (cartItem) {
@@ -38,7 +38,8 @@ module.exports = {
                             products: [
                                 {
                                     item: proId,
-                                    quantity: quantity
+                                    quantity: quantity,
+                                    stock: stock
                                 }
                             ]
                         }
@@ -157,7 +158,8 @@ module.exports = {
             }, {
                 $group: {
                     _id: null,
-                    total: { $sum: { $multiply: ['$quantity', '$products.product_price'] } }
+                    total: { $sum: { $multiply: ['$quantity', '$products.product_price'] } },
+
                 }
             }, {
                 $project: {
@@ -173,7 +175,9 @@ module.exports = {
                                 }
                             }
                         ]
-                    }
+                    },
+
+
                 }
             }])
             console.log(totalPrice, "///////////////total");
@@ -323,10 +327,10 @@ module.exports = {
                 }
             }, {
                 $addFields: {
-                        productsData: {
-                            $ifNull: ['$products.products', []]
-                        }
+                    productsData: {
+                        $ifNull: ['$products.products', []]
                     }
+                }
             }, {
                 $lookup: {
                     from: 'products',
@@ -369,7 +373,7 @@ module.exports = {
                         }
                     }
                 }
-            }
+            }, { "$sort": { "createdAt": -1 } }
             ]).catch(error => {
                 console.log(error.message);
             })
@@ -529,4 +533,36 @@ module.exports = {
             resolve(coupons)
         })
     },
+    checkOutChecking(userId) {
+        return new Promise(async (resolve, reject) => {
+            let checkResult = await cart.aggregate([{
+                $match: {
+                    userId: new ObjectId(userId)
+                }
+            }, {
+                $unwind: '$products'
+
+            }, {
+                $project: {
+                    item: '$products.item',
+                    quantity: '$products.quantity',
+                    stock: '$products.stock',
+
+                }
+            }])
+            console.log(checkResult,';;;;;;;;');
+            let result = true
+            checkResult.forEach(i => {
+                let stock = i.stock
+                let quantity = i.quantity
+                if (quantity > stock) {
+                    result = false
+                    console.log(result);
+                    return
+                }
+            })
+            console.log(result);
+            resolve(result)
+        })
+    }
 }

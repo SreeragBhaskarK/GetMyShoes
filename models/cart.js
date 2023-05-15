@@ -10,6 +10,7 @@ const cartSchema = new Schema({
       {
          item:ObjectId,
          quantity:Number,
+         stock : Number
       }
    ]
     

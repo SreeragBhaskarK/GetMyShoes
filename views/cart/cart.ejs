@@ -77,6 +77,7 @@
                                             </div>
                                         </div>
                                     </td>
+
                                     <td class="cart__price">₹ <%=product.products.product_price %>
                                     </td>
                                     <td class="cart__quantity">
@@ -85,13 +86,18 @@
                                             <input type="text" value="<%=product.quantity%>">
                                         </div>
                                     </td>
+                                
 
-                                    <td class="cart__total" id="cart__total_<%=product.products._id%>">₹
-                                        <%=product.total%>
-                                    </td>
-                                    <td class="cart__close"><span
-                                            onclick="deltPro('<%=product.products._id%>','<%=product._id%>')"
-                                            class="icon_close"></span></td>
+                                        <td class="cart__total" id="cart__total_<%=product.products._id%>">₹
+                                            <%=product.total%>
+                                           
+                                                <% if (product.quantity>product.products.product_stock) { %>
+                                                    <span class="stockCheck">Out of Stock</span>
+                                                    <% } %>
+                                        </td>
+                                        <td class="cart__close"><span
+                                                onclick="deltPro('<%=product.products._id%>','<%=product._id%>')"
+                                                class="icon_close"></span></td>
                                 </tr>
                                 <% }) %>
 
@@ -114,16 +120,24 @@
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <div class="discount__content">
+                <div class="discount__content d-flex">
                     <h6>Discount codes</h6>
-                    <form id="couponApply">
+                    <form id="couponApply" class="needs-validation" novalidate="">
                         <input type="search" placeholder="Enter your coupon code" id="appliedCoupon" required
                             name="appliedCoupon" value="<%=locals.appliedCoupon%>">
+
                         <!-- <input hidden type="number" name="total" value="<%#totalPrice[0]?.total %>"> -->
                         <button type="submit" class="site-btn">Apply</button>
-                    </form>
-                    <span class="text-danger mt-2" style="display: none; width: fit-content;
+
+                        <span style="float: left; width: fit-content;" id="enterCoupon" class="invalid-feedback">
+                            Enter Coupon!
+                        </span>
+                        <span class="text-danger mt-2" style="display: none; width: fit-content;float: right;
                     margin-left: auto;" id="coupon_message"></span>
+
+                    </form>
+
+
 
                 </div>
             </div>
@@ -136,12 +150,40 @@
                         <li>Shipping <span id="discount">Free Delivery</span></li>
                         <li>Total <span id="totalPrice" aria-placeholder="">₹ <%=totalPrice[0]?.total %></span></li>
                     </ul>
-                    <a href="/checkout" class="primary-btn">Proceed to checkout</a>
+                    <a onclick="checkingStock()" class="primary-btn">Proceed to checkout</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<script>
+    function checkingStock() {
+        let stock = true
+        let stockElements = document.querySelectorAll('.stockCheck')
+        stockElements.forEach(element => {
+            let stockValue = element.textContent
+            if (stockValue == 'Out of Stock') {
+
+                stock = false
+            }
+
+        });
+        if (stock) {
+            window.location.href = "/checkout"
+        } else {
+            const toastLiveExample = document.getElementById('toasterMessage')
+            document.getElementById('toastMessage').innerHTML = "Product has been out of stock."
+            const toast = new bootstrap.Toast(toastLiveExample, {
+                autohide: true,
+                delay: 3000
+            })
+            toast.show()
+
+        }
+
+    }
+
+</script>
 <script>
     var clearCoupon = document.getElementById('appliedCoupon');
 
@@ -159,6 +201,7 @@
                     document.getElementById('discount').innerHTML = '₹ ' + 0
                     document.getElementById('coupon_message').classList.replace('text-danger', 'text-success')
                     document.getElementById('coupon_message').innerHTML = 'removed..'
+                    document.getElementById('enterCoupon').style.display = 'none'
                 }
             })
         }
@@ -211,36 +254,64 @@
         let oldPrice = totalPrices
         console.log(totalPrice);
         const priceWithoutSymbol = totalPrices.replace("₹ ", "");
+        let couponVal = document.getElementById('appliedCoupon').value
+        document.getElementById('enterCoupon').style.display = 'none'
+        console.log(couponVal);
+        if (couponVal.length) {
+            $.ajax({
+                url: '/coupon_check/' + priceWithoutSymbol,
+                type: 'post',
+                data: $('#couponApply').serialize(),
+                success: (response) => {
 
-        $.ajax({
-            url: '/coupon_check/' + priceWithoutSymbol,
-            type: 'post',
-            data: $('#couponApply').serialize(),
-            success: (response) => {
+                    if (response.status) {
+                        document.getElementById('discount').innerHTML = '₹ ' + response.discount
+                        document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
+                        document.getElementById('coupon_message').classList.replace('text-danger', 'text-success')
+                        document.getElementById('coupon_message').innerHTML = 'applied successfull'
 
-                if (response.status) {
-                    document.getElementById('discount').innerHTML = '₹ ' + response.discount
-                    document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
-                    document.getElementById('coupon_message').classList.replace('text-danger', 'text-success')
-                    document.getElementById('coupon_message').innerHTML = 'applied successfull'
+                        document.getElementById('coupon_message').style.display = 'block'
+                        setTimeout(() => {
+                            document.getElementById('coupon_message').style.display = 'none'
+                        }, 5000);
+                    } else {
+                        document.getElementById('coupon_message').classList.replace('text-success', 'text-danger')
+                        document.getElementById('coupon_message').innerHTML = response.message
 
-                    document.getElementById('coupon_message').style.display = 'block'
-                    setTimeout(() => {
-                        document.getElementById('coupon_message').style.display = 'none'
-                    }, 5000);
-                } else {
-                    document.getElementById('coupon_message').classList.replace('text-success', 'text-danger')
-                    document.getElementById('coupon_message').innerHTML = response.message
-
-                    document.getElementById('coupon_message').style.display = 'block'
-                    setTimeout(() => {
-                        document.getElementById('coupon_message').style.display = 'none'
-                    }, 5000);
-                    document.getElementById('appliedCoupon').value = ''
-                    document.getElementById('discount').innerHTML = '₹ ' + 0
-                    document.getElementById('totalPrice').innerHTML = totalPrices
+                        document.getElementById('coupon_message').style.display = 'block'
+                        setTimeout(() => {
+                            document.getElementById('coupon_message').style.display = 'none'
+                        }, 5000);
+                        document.getElementById('appliedCoupon').value = ''
+                        document.getElementById('discount').innerHTML = '₹ ' + 0
+                        document.getElementById('totalPrice').innerHTML = totalPrices
+                        document.getElementById('enterCoupon').style.display = 'none'
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            document.getElementById('enterCoupon').style.display = 'block'
+        }
+
     })
+</script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    });
 </script>

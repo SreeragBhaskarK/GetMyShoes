@@ -229,9 +229,9 @@ Created: Colorib
         let totalprice = newVal * productprice
         var cartId = $button.parent().data('cart-id');
         var productId = $button.parent().data('product-id');
-        document.getElementById('cart__total_'+productId).innerHTML = '₹ ' + totalprice
-       
-       
+        document.getElementById('cart__total_' + productId).innerHTML = '₹ ' + totalprice
+
+
         timeoutId = setTimeout(function () {
             $.ajax({
                 url: '/change-product-quantity',
@@ -244,7 +244,7 @@ Created: Colorib
                 async: true,
                 success: (response) => {
                     console.log(response);
-             
+
                     if (response.discount == 0) {
                         fetch('/clearCoupon', {
                             method: 'put',
@@ -252,9 +252,16 @@ Created: Colorib
                             document.getElementById('appliedCoupon').value = '';
                         })
                     }
-                    document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
+                    console.log(productId);
+                   
+                    if (response.stockStatus) {
+                        let stockCheck =`<span  id="stockCheck${productId}" class="stockCheck">Out of Stock</span>`
+                        $('#cart__total_'+productId).append(stockCheck)
+                    } else {
+
+                        document.getElementById('totalPrice').innerHTML = '₹ ' + response.total
+                    }
                     document.getElementById('discount').innerHTML = '₹ ' + response.discount
-                    
                 }
             })
 

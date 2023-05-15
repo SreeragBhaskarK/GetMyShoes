@@ -40,7 +40,7 @@ module.exports = {
 
             try {
 
-                let UserView = await users.find()
+                let UserView = await users.find().sort({"createdAt": -1})
                 resolve(UserView)
             }
             catch (error) {
@@ -140,7 +140,7 @@ module.exports = {
     doViewCategory() {
         return new Promise(async (resolve, reject) => {
             try {
-                let categorys = await category.find()
+                let categorys = await category.find().sort({"createdAt": -1})
                 if (!categorys) throw Error("Empty category")
 
                 resolve({ port: 200, categorys })
@@ -270,7 +270,7 @@ module.exports = {
                     }],
                     as: 'category_name'
                 }
-            }])
+            }, { "$sort": { "createdAt": -1 } }])
 
             resolve(unlistProduct)
         })
@@ -433,10 +433,39 @@ module.exports = {
                     ],
                     as: 'productInfo'
                 }
-            }]).catch(error=>{
+            }, {
+                $addFields: {
+                    productInfo: {
+                        $map: {
+                            input: "$productInfo",
+                            as: "product",
+                            in: {
+                                $mergeObjects: [
+                                    "$$product",
+                                    {
+                                        quantity: {
+                                            $arrayElemAt: [
+                                                "$productsData.quantity",
+                                                {
+                                                    $indexOfArray: [
+                                                        "$productsData.item",
+                                                        "$$product._id"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }, { "$sort": { "createdAt": -1 } }
+            ]).catch(error => {
                 console.log(error.message);
             })
-          
+            console.log(orderData[0], "nnnnnnnnnnnn");
+
             resolve(orderData)
         })
     },
@@ -461,7 +490,7 @@ module.exports = {
     },
     getCopons() {
         return new Promise(async (resolve, reject) => {
-            let getCoupons = await coupon.find({})
+            let getCoupons = await coupon.find({}).sort({"createdAt": -1})
             resolve(getCoupons)
 
         })
@@ -598,7 +627,7 @@ module.exports = {
                         ]
                     }
                 }
-            }])
+            }, { "$sort": { "createdAt": -1 } }])
 
 
             resolve(salesReport)
@@ -623,7 +652,7 @@ module.exports = {
     checkCategory(categoryNameData) {
         return new Promise(async (resolve, reject) => {
             let categoryName = categoryNameData.category
-            let categoryData = await category.find({ category: categoryName })
+            let categoryData = await category.find({ category: categoryName.toLowerCase() })
             console.log(categoryData.length);
             if (categoryData.length == 1) {
                 console.log("nfgfgkfkgj");
@@ -643,7 +672,7 @@ module.exports = {
             resolve(bannerHeader)
         })
     },
-    updateBanner(headerData,image) {
+    updateBanner(headerData, image) {
         return new Promise(async (resolve, reject) => {
             let headerImage = image.filename
             const { header_title, header_title_strong, header_description, header_link } = headerData
@@ -654,8 +683,8 @@ module.exports = {
                         title_strong: header_title_strong,
                         description: header_description,
                         shop_link: header_link,
-                        header_img:headerImage
-                        
+                        header_img: headerImage
+
                     }
                 ]
 
@@ -666,7 +695,7 @@ module.exports = {
             throw error
         })
     },
-    updateBannerMain(mainData,images) {
+    updateBannerMain(mainData, images) {
         let image = images.map(file => file.filename)
         return new Promise(async (resolve, reject) => {
             const { main_left_title, main_left_description, main_left_link, main_right_title, main_right_description, main_right_link } = mainData
@@ -676,7 +705,7 @@ module.exports = {
                         left_title: main_left_title,
                         left_description: main_left_description,
                         shop_link_left: main_left_link,
-                        main_image:image,
+                        main_image: image,
                         right_title: main_right_title,
                         right_description: main_right_description,
                         shop_link_right: main_right_link
@@ -690,7 +719,7 @@ module.exports = {
             throw error
         })
     },
-    updateBannerSpecial(specialData,image) {
+    updateBannerSpecial(specialData, image) {
         return new Promise(async (resolve, reject) => {
             const { special_title, special_link } = specialData
             let specialImage = image.filename
@@ -699,7 +728,7 @@ module.exports = {
                     {
                         title: special_title,
                         shop_link: special_link,
-                        special_img:specialImage
+                        special_img: specialImage
                     }
                 ]
 

@@ -620,12 +620,20 @@
                                         <div>
 
                                             <span> Order Id : #<%=order._id %></span>
-                                            <% if (order.status==='placed' && order.shipping_status==='Order Placed' ||
-                                                order.shipping_status==='Shipped' ) { %>
+                                            <% if (order.status==='placed' && order.shipping_status!=='Delivered' &&
+                                               order.shipping_status!=='Failed Delivery Attempt' &&  order.shipping_status!=='Return to Sender' &&  order.shipping_status!=='Cancelled' ) { %>
                                                 <span class="text-danger ms-3" style="float: right; "><a
                                                         style="text-decoration: none; color: red;"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#staticBackdrop<%=order._id%>">Cancel</a>
+                                                </span>
+                                                <% } %>
+
+                                                <% if (order.status==='placed' && order.shipping_status =='Delivered' ) { %>
+                                                <span class="text-danger ms-3" style="float: right; "><a
+                                                        style="text-decoration: none; color: red;"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#return<%=order._id%>">Return</a>
                                                 </span>
                                                 <% } %>
                                                     <% if (order.status==='placed' ) { %>
@@ -733,6 +741,25 @@
                                                             data-bs-dismiss="modal">Close</button>
                                                         <a href="/order_cancel/<%=order._id%>"><button type="button"
                                                                 class="btn btn-danger">Order Cancel</button></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal Retrun -->
+                                        <div class="modal fade" id="return<%= order._id%>"
+                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class=" modal-dialog modal-sm modal-dialog-centered">
+                                                <div class="modal-content ">
+
+                                                    <div class="modal-body">
+                                                        Are you want to replacement this order ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <a href="/order_return/<%=order._id%>"><button type="button"
+                                                                class="btn btn-danger">Order Retrun</button></a>
                                                     </div>
                                                 </div>
                                             </div>

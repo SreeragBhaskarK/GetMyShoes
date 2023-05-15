@@ -199,4 +199,16 @@ module.exports = {
             resolve()
         })
     }
+    ,
+    doOrderReturn(orderId){
+        return new Promise(async(resolve,reject)=>{
+            await order.updateOne({_id:new ObjectId(orderId)},{
+                $set:{
+                    shipping_status:'Return to Sender'
+                }
+            })
+
+            resolve()
+        })
+    }
 }
