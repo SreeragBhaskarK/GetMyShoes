@@ -891,7 +891,7 @@ async function weekRevenue() {
 
     const RevenueChange = ((currentRevenue - previousRevenue) / previousRevenue) * 100;
     const RevenueChangeFormatted = RevenueChange.toFixed(2);
-    console.log(weekRevenue, RevenueChangeFormatted);
+  
     return ({ weekRevenue, RevenueChangeFormatted })
 
 
@@ -950,7 +950,7 @@ async function totalWeekUsers() {
     // Calculate the percentage change in users count
     const usersChange = ((weekUsers[0]?.userCount ?? 0 - previousWeekUsers[0]?.userCount ?? 0) / previousWeekUsers[0]?.userCount ?? 0) * 100;
     const usersChangeFormatted = usersChange.toFixed(2);
-    console.log(usersChange, usersChangeFormatted);
+
     let weekUsersCount = weekUsers[0]?.userCount ?? 0
     return ({ weekUsersCount, usersChangeFormatted })
 
