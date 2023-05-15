@@ -256,9 +256,9 @@
         quantity = newVal
 
     });
-    console.log(quantity);
+ 
     function cartCount(id,stock) {
-        console.log(id);
+
         $.ajax({
             type: 'post',
             url: '/add-toCart/' + id,
@@ -292,7 +292,7 @@
 
 
     function addToWishlist(id) {
-        console.log(id);
+
         $.ajax({
             type: 'get',
             url: '/add-toWishlist/' + id,
@@ -338,7 +338,7 @@
 
 
             // Log the href value of the clicked anchor tag
-            console.log(event.currentTarget.href);
+         
         });
     });
 

@@ -196,7 +196,7 @@
             }).then(response => {
                 return response.json()
             }).then(data => {
-                console.log(data);
+         
                 if (data.status) {
                     document.getElementById('discount').innerHTML = '₹ ' + 0
                     document.getElementById('coupon_message').classList.replace('text-danger', 'text-success')
@@ -209,7 +209,7 @@
 </script>
 <script>
     function deltPro(proId, cartId) {
-        console.log(proId, cartId);
+   
         $.ajax({
             url: '/delete-cart-product',
             type: 'delete',
@@ -252,11 +252,11 @@
         const totalPriceElem = document.getElementById('totalPrice');
         const totalPrices = totalPriceElem.innerText;
         let oldPrice = totalPrices
-        console.log(totalPrice);
+ 
         const priceWithoutSymbol = totalPrices.replace("₹ ", "");
         let couponVal = document.getElementById('appliedCoupon').value
         document.getElementById('enterCoupon').style.display = 'none'
-        console.log(couponVal);
+      
         if (couponVal.length) {
             $.ajax({
                 url: '/coupon_check/' + priceWithoutSymbol,

@@ -10,7 +10,7 @@
                     <h1 class="h3 d-inline align-middle">Products</h1>
                 </div>
 
-                <table id="example" class="table table-striped" style="width:100%">
+                <table id="example" class="table table-striped dt-responsive nowrap" style="width:100%">
                     <thead>
                         <tr>
                             <th>Sl. No</th>
@@ -108,7 +108,7 @@
             type: 'get',
             url: '/admin/edit-product/' + productId,
             success: (response) => {
-                console.log(response);
+ 
                 document.getElementById('product_name').value = response.product_name
                 document.getElementById('product_description').value = response.product_description
                 document.getElementById('imgView4').src = '/images/products_image/' + response.product_image[0]
@@ -120,7 +120,7 @@
                 document.getElementById('product_badge').value = response.product_badge
                 document.getElementById('product_id').value = response._id
                 document.getElementById('product_stock').value = response.product_stock
-                console.log(response.product_size);
+             
                 (response.product_size || []).forEach(i => {
                     if (i == '7') {
                         document.getElementById("size7").setAttribute("checked", "checked");
@@ -147,7 +147,7 @@
                         }
 
                     });
-                    console.log(selected);
+            
                     let categoryList = `<option ${selected} value="${i._id}" >${i.category}</option>`;
                     $('#demo-multiple-edit-select').append(categoryList);
                 });

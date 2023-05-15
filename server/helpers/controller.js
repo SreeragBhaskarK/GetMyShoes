@@ -48,10 +48,10 @@ const verifyUserEmail = async ({ email, otp }) => {
             message: "Verify your email with the code below.",
             duration: 5
         }
-        console.log("testing");
+  
         const tokenData = { userId: existingUser._id, email }
         const token = await createToken(tokenData)
-        console.log(token);
+     
         await sendOTP(otpDetails)
         return token
     }
@@ -74,7 +74,7 @@ const { AUTH_EMAIL } = process.env
         const matchedOTPRecord = await OTP.findOne({
             email
         })
-        console.log(matchedOTPRecord);
+
         if (!matchedOTPRecord) {
             throw Error("No otp records found.")
         }
@@ -114,7 +114,7 @@ const { AUTH_EMAIL } = process.env
         // generate pin
         const generatedOTP = await generateOTP()
         //send email
-        console.log("dkfjkdjfkdjf", email)
+  
         const mailOptions = {
 
             from: AUTH_EMAIL,
@@ -267,7 +267,7 @@ const statusUserUnblock = async (proId) => {
     try {
 
         const existingUser = await user.findOne({ email })
-        console.log(existingUser, "dlkfkj");
+   
         if (!existingUser) {
             throw Error("There's no account for the provided email.")
         }
@@ -311,7 +311,7 @@ const resetUserPassword = async ({ email, otp, newPassword }) => {
 }
 
 /* const addCategory = async (categorys) => {
-    console.log(categorys, "kdfk");
+  
     try {
         let category = categorys
         const addCategory = new categoryAdd({

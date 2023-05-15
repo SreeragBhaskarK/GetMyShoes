@@ -119,24 +119,24 @@
                                                 <input type="text" value="<%=locals.users?.last_name%>" required
                                                     class="form-control" name="lastName" id="inputLastName"
                                                     placeholder="Last name">
-                                                    <div class="valid-feedback">
-                                                        Looks good!
-                                                    </div>
-                                                    <div class="invalid-feedback">
-                                                        Enter Last Name!
-                                                    </div>
+                                                <div class="valid-feedback">
+                                                    Looks good!
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Enter Last Name!
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="inputEmail4">Email</label>
                                             <input type="email" value="<%=locals.users?.email%>" name="email"
                                                 class="form-control" id="inputEmail4" placeholder="Email" required>
-                                                <div class="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                                <div class="invalid-feedback">
-                                                    Enter Email!
-                                                </div>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Enter Email!
+                                            </div>
                                             <% if (locals.users?.email) { %>
 
 
@@ -178,12 +178,12 @@
                                             <label for="age">Age:</label>
                                             <input type="number" id="age" value="<%=locals.users?.age%>" name="age"
                                                 min="0" max="150" required>
-                                                <div class="valid-feedback">
-                                                    Looks good!
-                                                </div>
-                                                <div class="invalid-feedback">
-                                                    Enter Age!
-                                                </div>
+                                            <div class="valid-feedback">
+                                                Looks good!
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Enter Age!
+                                            </div>
                                         </div>
                                         <!-- <div class="mb-3">
                                             <label class="form-label" for="inputAddress">Address</label>
@@ -621,7 +621,9 @@
 
                                             <span> Order Id : #<%=order._id %></span>
                                             <% if (order.status==='placed' && order.shipping_status!=='Delivered' &&
-                                               order.shipping_status!=='Failed Delivery Attempt' &&  order.shipping_status!=='Return to Sender' &&  order.shipping_status!=='Cancelled' ) { %>
+                                                order.shipping_status!=='Failed Delivery Attempt' &&
+                                                order.shipping_status!=='Return to Sender' &&
+                                                order.shipping_status!=='Cancelled' ) { %>
                                                 <span class="text-danger ms-3" style="float: right; "><a
                                                         style="text-decoration: none; color: red;"
                                                         data-bs-toggle="modal"
@@ -629,31 +631,43 @@
                                                 </span>
                                                 <% } %>
 
-                                                <% if (order.status==='placed' && order.shipping_status =='Delivered' ) { %>
-                                                <span class="text-danger ms-3" style="float: right; "><a
-                                                        style="text-decoration: none; color: red;"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#return<%=order._id%>">Return</a>
-                                                </span>
-                                                <% } %>
-                                                    <% if (order.status==='placed' ) { %>
-                                                        <span style="float: right;"><a style="text-decoration: none;"
-                                                                href="/invoice/<%=order._id %>">Invoice</a> </span>
-                                                        <% } %>
-                                                            <% (order.productInfo || []).forEach(orderPro=> { %>
-                                                                <a style="text-decoration: none; color: black;"
-                                                                    href="/order-details/<%= order._id%>/<%= orderPro._id%>">
-                                                                    <div class="row"
-                                                                        style="border: solid 0.5px; padding: 5px;    margin: 5px;">
-                                                                        <div class="col-2">
-                                                                            <div class="CXW8mj"
-                                                                                style="height: 75px;width: 75px; margin: auto;">
-                                                                                <img style=" height: 100%;" alt=""
-                                                                                    src="/images/products_image/<%= orderPro.product_image[0]%>">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-4">
-                                                                            <span style="box-shadow: none;
+                                                    <% if (order.status==='placed' &&
+                                                        order.shipping_status==='Delivered' ) { const currentDate=new
+                                                        Date(); const createdAtDate=new Date(order.createdAt); const
+                                                        timeDifference=currentDate.getTime() - createdAtDate.getTime();
+                                                        const diffInDays=Math.floor(timeDifference / (1000 * 60 * 60 *
+                                                        24));
+                                              
+                                                         if (diffInDays <=10) { %>
+                                                           
+                                                        <span class="text-danger ms-3" style="float: right;">
+                                                            <a style="text-decoration: none; color: red;"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#return<%=order._id%>">Return</a>
+                                                        </span>
+                                                        <% } } %>
+
+                                                            <% if (order.status==='placed' ) { %>
+                                                                <span style="float: right;"><a
+                                                                        style="text-decoration: none;"
+                                                                        href="/invoice/<%=order._id %>">Invoice</a>
+                                                                </span>
+                                                                <% } %>
+                                                                    <% (order.productInfo || []).forEach(orderPro=> { %>
+                                                                        <a style="text-decoration: none; color: black;"
+                                                                            href="/order-details/<%= order._id%>/<%= orderPro._id%>">
+                                                                            <div class="row"
+                                                                                style="border: solid 0.5px; padding: 5px;    margin: 5px;">
+                                                                                <div class="col-2">
+                                                                                    <div class="CXW8mj"
+                                                                                        style="height: 75px;width: 75px; margin: auto;">
+                                                                                        <img style=" height: 100%;"
+                                                                                            alt=""
+                                                                                            src="/images/products_image/<%= orderPro.product_image[0]%>">
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-4">
+                                                                                    <span style="box-shadow: none;
                                             padding: 0;
                                             border: none;
                                             font-size: 14px;
@@ -661,69 +675,74 @@
                                             color: #212121;
                                             margin-bottom: 10px;
                                             font-weight: 400;">
-                                                                                <%= orderPro.product_name %>
-                                                                            </span>
-                                                                            <div><span style="color: #878787;
+                                                                                        <%= orderPro.product_name %>
+                                                                                    </span>
+                                                                                    <div><span style="color: #878787;
                                                 font-size: 12px;
                                                 margin-bottom: 5px;"><span>Size:
-                                                                                    </span><span class="-igymY">7 8 9
-                                                                                        10</span></span><span
-                                                                                    class="_3dOR_a"></span></div>
-                                                                        </div>
-                                                                        <div style="color: #212121;
+                                                                                            </span><span
+                                                                                                class="-igymY">7 8 9
+                                                                                                10</span></span><span
+                                                                                            class="_3dOR_a"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div style="color: #212121;
                                         text-transform: uppercase;" class="col-2">
-                                                                            <% let price=orderPro.product_price *
-                                                                                orderPro.quantity %>
-                                                                                ₹<%= price %>
-                                                                        </div>
-                                                                        <div class="col-4">
-                                                                            <div>
-                                                                                <% if
-                                                                                    (order.shipping_status==='Order Placed'
-                                                                                    || order.shipping_status==='Shipped'
-                                                                                    ||
-                                                                                    order.shipping_status==='Delivered'
-                                                                                    ) { %>
-                                                                                    <div class="me-2 mt-1" style="float: left;
+                                                                                    <% let price=orderPro.product_price
+                                                                                        * orderPro.quantity %>
+                                                                                        ₹<%= price %>
+                                                                                </div>
+                                                                                <div class="col-4">
+                                                                                    <div>
+                                                                                        <% if
+                                                                                            (order.shipping_status==='Order Placed'
+                                                                                            ||
+                                                                                            order.shipping_status==='Shipped'
+                                                                                            ||
+                                                                                            order.shipping_status==='Delivered'
+                                                                                            ) { %>
+                                                                                            <div class="me-2 mt-1"
+                                                                                                style="float: left;
                                                                 background-color: #6aec87;
                                                                 border: 7px solid #56e251;
                                                                 border-radius: 10px;"></div>
-                                                                                    <% }else if
-                                                                                        (order.shipping_status==='Processing'
-                                                                                        ){ %>
-                                                                                        <div class="me-2 mt-1" style="float: left;
+                                                                                            <% }else if
+                                                                                                (order.shipping_status==='Processing'
+                                                                                                ){ %>
+                                                                                                <div class="me-2 mt-1"
+                                                                                                    style="float: left;
                                                             background-color: #ff6161;
                                                             border: 7px solid #ff6161;
                                                             border-radius: 10px;"></div>
-                                                                                        <% } else if
-                                                                                            (order.shipping_status==='In Transit'
-                                                                                            ||order.shipping_status==='Out for Delivery'
-                                                                                            ){ %>
+                                                                                                <% } else if
+                                                                                                    (order.shipping_status==='In Transit'
+                                                                                                    ||order.shipping_status==='Out for Delivery'
+                                                                                                    ){ %>
 
-                                                                                            <div class="me-2 mt-1"
-                                                                                                style="float: left;
+                                                                                                    <div class="me-2 mt-1"
+                                                                                                        style="float: left;
                                                                 background-color: #beec6a;
                                                                 border: 7px solid #beec6a;
                                                                 border-radius: 10px;"></div>
-                                                                                            <% } else { %>
-                                                                                                <div class="me-2 mt-1"
-                                                                                                    style="float: left;
+                                                                                                    <% } else { %>
+                                                                                                        <div class="me-2 mt-1"
+                                                                                                            style="float: left;
                                                                 background-color: #e71818;
                                                                 border: 7px solid #e71818;
                                                                 border-radius: 10px;"></div>
-                                                                                                <% }%>
-                                                                                                    <span style="font-size: 14px;
+                                                                                                        <% }%>
+                                                                                                            <span style="font-size: 14px;
                                                 font-weight: 500;">
-                                                                                                        <%=
-                                                                                                            order.shipping_status%>
-                                                                                                    </span>
-                                                                                                    <div style="    font-size: 12px;
+                                                                                                                <%=
+                                                                                                                    order.shipping_status%>
+                                                                                                            </span>
+                                                                                                            <div style="    font-size: 12px;
                                                 margin-top: 8px;">Your item has been <%= order.shipping_status%>.</div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                                <% }) %>
+                                                                        </a>
+                                                                        <% }) %>
                                         </div>
 
                                         <!-- Modal -->
@@ -746,9 +765,9 @@
                                             </div>
                                         </div>
                                         <!-- Modal Retrun -->
-                                        <div class="modal fade" id="return<%= order._id%>"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal fade" id="return<%= order._id%>" data-bs-backdrop="static"
+                                            data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                            aria-hidden="true">
                                             <div class=" modal-dialog modal-sm modal-dialog-centered">
                                                 <div class="modal-content ">
 
@@ -848,7 +867,7 @@
             const gender = formData.get('gender');
             const age = formData.get('age');
 
-            if (firstName && lastName && email &&  gender && age) {
+            if (firstName && lastName && email && gender && age) {
                 fetch('/profile_info', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -856,7 +875,7 @@
                 }).then(response => {
                     return response.json()
                 }).then(data => {
-                   
+
                     if (data.status) {
                         const toastLiveExample = document.getElementById('toasterMessage')
 
@@ -877,7 +896,7 @@
                     }
                 })
                     .catch(error => {
-                       
+
                         $('#messageDisplay').html(error.message)
                         $('#message').attr('hidden', false)
 
@@ -918,10 +937,10 @@
                 success: function (data) {
                     document.getElementById('perInfoAdrs').style.display = 'none'
                     document.getElementById('perInfoAdrs').reset();
-                
+
                 },
                 error: function (err) {
-                  
+
                 }
             });
         });
@@ -932,21 +951,21 @@
             event.preventDefault();
 
             var formData = $(this).serialize()
-        
+
             $.ajax({
                 type: 'POST',
                 url: '/updateAddress',
                 data: formData,
                 success: (data) => {
-                  
+
                     location.reload()
                     document.getElementById('perInfoEditAdrs').style.display = 'none'
                     document.getElementById('perInfoEditAdrs').reset();
                     document.getElementById('adrsCard' + id).style.display = 'block'
-                
+
                 },
                 error: function (err) {
-                
+
                 }
             });
         });
@@ -1058,7 +1077,7 @@
             type: 'post',
             data: $('#changePass').serialize(),
             success: (Response) => {
-            
+
                 if (Response) {
                     document.getElementById('mySpan').innerHTML = 'Successfully!';
                     document.getElementById('mySpan').style.color = 'green'

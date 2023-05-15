@@ -681,7 +681,7 @@
             url: '/all_brand_product',
             type: 'post',
             success: (response) => {
-                console.log(response);
+      
 
                 (response || []).forEach(i => {
                     let productsBrand = `
@@ -744,7 +744,7 @@
 
 <script>
     function addToWishlist(id) {
-        console.log(id);
+
         $.ajax({
             type: 'get',
             url: '/add-toWishlist/' + id,
@@ -770,7 +770,7 @@
 
 <script>
     function cartCount(id,stock) {
-        console.log(id);
+
         $.ajax({
             type: 'post',
             url: '/add-toCart/' + id,

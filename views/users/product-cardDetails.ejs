@@ -94,13 +94,13 @@
 
         <script>
             function cartCount(id,stock) {
-                console.log(id);
+        
                 $.ajax({
                     type: 'post',
                     url: '/add-toCart/' + id,
                     data: ({ stock: stock }),
                     success: (cartCount) => {
-                        console.log(cartCount);
+                   
                         if (cartCount) {
                             document.getElementById('cartCount').innerHTML = cartCount
                         }
@@ -121,7 +121,7 @@
 
         <script>
             function addToWishlist(id) {
-                console.log(id);
+              
                 $.ajax({
                     type: 'get',
                     url: '/add-toWishlist/' + id,

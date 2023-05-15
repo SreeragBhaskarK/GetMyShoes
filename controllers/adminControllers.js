@@ -16,7 +16,7 @@ exports.adminView = (req, res) => {
         let States = response.States
         let orderCount = response.orderCount
         let percentageChange = response.percentageChange
-        console.log(typeof percentageChange, percentageChange);
+   
         let revenueWeek = response.revenueWeek?.toLocaleString('en-IN');
         let revenuepercentage = response.revenuepercentage
         let totalAmountByMonth = response.totalAmountByMonth
@@ -25,7 +25,7 @@ exports.adminView = (req, res) => {
         let totalMonthOrder = response.totalMonthOrder
         let totalIncomeByMonth = response.totalIncomeByMonth
         let totalUsersByWeek = response.weekUsers
-        console.log(totalUsersByWeek);
+
         res.render('admin/admin_Dashboard', { activeDashboard: 'active', States, orderCount, percentageChange, revenueWeek, revenuepercentage, totalAmountByMonth, incomeWeek, incomepercentage, totalMonthOrder, totalIncomeByMonth, totalUsersByWeek })
     })
 
@@ -70,7 +70,7 @@ exports.logoutView = (req, res) => {
 
 exports.bannersView =async (req, res) => {
     let banners = await adminHelper.getBanner()
-    console.log();
+
     res.render('admin/banners', { activeBanners: 'active' ,banners})
 
 }
@@ -91,7 +91,7 @@ exports.productsView = (req, res) => {
 }
 exports.productsData = (req, res) => {
 
-    console.log(req.files);
+
     productHelper.doAddProduct(req.body, req.files).then(response => {
 
         if (response.port === 200) {
@@ -211,7 +211,7 @@ exports.editCategoryView = (req, res) => {
     let categoryId = req.params.id
     adminHelper.doCategoryEdit(categoryId).then(response => {
         let categoryData = response[0]
-        console.log(categoryData);
+
         res.send(categoryData)
     })
 }
@@ -254,7 +254,7 @@ exports.orders = (req, res) => {
 
     }
 exports.couponsGenerate = (req, res) => {
-    console.log(req.body);
+
     adminHelper.generateCoupon(req.body).then(() => {
 
         res.redirect('/admin/coupons')
@@ -296,7 +296,7 @@ exports.couponUpdate = (req, res) => {
     })
 }
 exports.updateShippingStatus = (req, res) => {
-    console.log(req.body);
+
     adminHelper.updateShippingStatus(req.body).then(response => {
         res.send()
         /* res.redirect('/admin/coupons') */
@@ -318,12 +318,12 @@ exports.salesReportExport = (req, res) => {
             adminHelper.getSalesReportPDF().then(response => {
                 let { ejsData, options } = response
                 pdf.create(ejsData, options).toFile('sales_report.pdf', (err, response) => {
-                    if (err) console.log(err);
+                  
                     let filePath = path.resolve(__dirname, '../sales_report.pdf')
 
                     fs.readFile(filePath, (err, file) => {
                         if (err) {
-                            console.log(err);
+                
                             return res.status(500).send('Could not download file')
                         }
                         console.log('file generated');
@@ -351,12 +351,12 @@ exports.salesReportExport = (req, res) => {
 
     }
     catch (e) {
-        console.log(e);
+       
     }
 }
 
 exports.categoryNameCheck = (req, res) => {
-    console.log(req.body);
+  
     adminHelper.checkCategory(req.body).then(response => {
         res.status(200).json({status:response.status})
     })
@@ -366,9 +366,9 @@ exports.categoryNameCheck = (req, res) => {
 }
 
 exports.banner = (req,res)=>{
-    console.log(req.body);
+   
     adminHelper.getBanner().then(response=>{
-        console.log(response);
+
         res.status(200).send(response)
     }).catch(error=>{
         res.status(404).send(error.message)
@@ -376,27 +376,27 @@ exports.banner = (req,res)=>{
 }
 
 exports.updataBannerHeader = (req,res)=>{
-    console.log(req.body,req.file,"kkkkkkk");
+
     adminHelper.updateBanner(req.body,req.file).then(response=>{
-        console.log(response);
+
         res.redirect('/admin/banners')
     }).catch(error=>{
         res.redirect('/admin/banners')
     })
 }
 exports.updataBannerMain = (req,res)=>{
-    console.log(req.body,);
+
     adminHelper.updateBannerMain(req.body,req.files).then(response=>{
-        console.log(response);
+
         res.redirect('/admin/banners')
     }).catch(error=>{
         res.redirect('/admin/banners')
     })
 }
 exports.updataBannerSpecial = (req,res)=>{
-    console.log(req.body,req.file);
+
     adminHelper.updateBannerSpecial(req.body,req.file).then(response=>{
-        console.log(response);
+  
         res.redirect('/admin/banners')
     }).catch(error=>{
         res.redirect('/admin/banners')

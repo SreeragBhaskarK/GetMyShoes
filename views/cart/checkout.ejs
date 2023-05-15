@@ -418,7 +418,7 @@
             url: '/profile_info_adrs',
             data: formData,
             success: function (data) {
-                console.log(data);
+              
 
                 if (data.status) {
 
@@ -496,11 +496,11 @@
 
                 }
 
-                console.log('Success:', data);
+            
 
             },
             error: function (err) {
-                console.log('Error:', err);
+             
             }
         });
     });
@@ -511,21 +511,21 @@
         event.preventDefault();
 
         var formData = $(this).serialize()
-        console.log(formData);
+      
         $.ajax({
             type: 'POST',
             url: '/updateAddress',
             data: formData,
             success: (data) => {
-                console.log(data);
+         
                 location.reload()
                 document.getElementById('perInfoEditAdrs').style.display = 'none'
                 document.getElementById('perInfoEditAdrs').reset();
                 document.getElementById('adrsCard' + id).style.display = 'block'
-                console.log('Success:', data);
+              
             },
             error: function (err) {
-                console.log('Error:', err);
+                
             }
         });
     });
@@ -570,7 +570,7 @@
         e.preventDefault()
 
         let addressSelectCheck = { delevery_address: $('input[name=delevery_address]').val() }
-        console.log(addressSelectCheck);
+        
         if (addressSelectCheck.delevery_address) {
             let result = radioButtonValidation()
             if (result) {
@@ -671,6 +671,7 @@
             data: {
                 payment, order
             }, success: (response) => {
+             
                 if (response.status) {
                     window.location.href = '/order-successfull'
                 } else {

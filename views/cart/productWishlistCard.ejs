@@ -70,7 +70,7 @@
 
         <script>
             function cartCount(id) {
-                console.log(id);
+         
                 $.ajax({
                     type: 'post',
                     url: '/add-toCart/' + id,
@@ -95,7 +95,7 @@
 
         <script>
             function deltPro(wishlistId, proId) {
-                console.log(proId, wishlistId);
+           
                 $.ajax({
                     url: '/delete-wishlist-product',
                     type: 'delete',
@@ -104,7 +104,7 @@
                         wishlistId: wishlistId
                     },
                     success: (count => {
-                        console.log(count);
+                   
                         document.getElementById('wishlistCount').innerHTML = count
                         const toastLiveExample = document.getElementById('toasterMessage')
                         $('#cardIdWishlist' + proId).remove()

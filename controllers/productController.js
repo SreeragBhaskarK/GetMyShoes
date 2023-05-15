@@ -25,7 +25,7 @@ exports.productDetail = (req, res) => {
     }
     userHelper.doProductDetails(id,userId).then(({ productdata, allProduct, productcartCheck }) => {
         let products = productdata
-        console.log(productcartCheck);
+
         if (productcartCheck) {
             res.render("users/product_details", { products, allProduct ,productcartCheck})
         } else {
@@ -33,7 +33,7 @@ exports.productDetail = (req, res) => {
             res.render("users/product_details", { products, allProduct })
         }
     }).catch((error) => {
-        console.log(error), '////////////';
+   
     })
 
 }
@@ -47,7 +47,7 @@ exports.shopView = async (req, res) => {
         let parentCateagory = await userHelper.GetParentCategory()
         let brandCateagory = await userHelper.GetBrandCategory()
         let subCateagory = await userHelper.GetSubCategory()
-        console.log(productData, '222222222222222222222222');
+    
         res.render('users/shop', { productData, totalPages, parentCateagory, brandCateagory, subCateagory })
     })
 
@@ -58,7 +58,7 @@ exports.shopView = async (req, res) => {
 exports.shopCategory = (req, res) => {
 
     let categorys = req.body.category
-    console.log(categorys);
+
     let pageNum
     userHelper.getCategoryProduct(pageNum, categorys).then(response => {
         res.send(response)
@@ -77,7 +77,7 @@ exports.shopPriceFilter = (req, res) => {
 
     }
     catch (e) {
-        console.log(e);
+   
     }
 
 }
@@ -90,7 +90,7 @@ exports.brandProducts = (req, res) => {
 
         })
     } catch (e) {
-        console.log(e);
+
     }
 }
 exports.allBrandProducts = (req, res) => {
@@ -101,6 +101,6 @@ exports.allBrandProducts = (req, res) => {
 
         })
     } catch (e) {
-        console.log(e);
+
     }
 }

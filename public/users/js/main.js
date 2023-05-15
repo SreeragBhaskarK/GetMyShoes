@@ -225,7 +225,7 @@ Created: Colorib
         }
         $button.parent().find('input').val(newVal);
         var productprice = $button.parent().data('product-price');
-        console.log(productprice);
+      
         let totalprice = newVal * productprice
         var cartId = $button.parent().data('cart-id');
         var productId = $button.parent().data('product-id');
@@ -243,7 +243,7 @@ Created: Colorib
                 type: "POST",
                 async: true,
                 success: (response) => {
-                    console.log(response);
+               
 
                     if (response.discount == 0) {
                         fetch('/clearCoupon', {
@@ -252,7 +252,7 @@ Created: Colorib
                             document.getElementById('appliedCoupon').value = '';
                         })
                     }
-                    console.log(productId);
+                 
                    
                     if (response.stockStatus) {
                         let stockCheck =`<span  id="stockCheck${productId}" class="stockCheck">Out of Stock</span>`

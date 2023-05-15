@@ -91,7 +91,7 @@
 
         <script>
             function cartCount(id,stock) {
-                console.log(id);
+              
                 $.ajax({
                     type: 'post',
                     url: '/add-toCart/' + id,
@@ -118,7 +118,7 @@
 
         <script>
             function addToWishlist(id) {
-                console.log(id);
+              
                 $.ajax({
                     type: 'get',
                     url: '/add-toWishlist/' + id,

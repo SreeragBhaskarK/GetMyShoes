@@ -27,7 +27,7 @@ module.exports = {
                 resolve({ result })
             }
             catch (error) {
-                console.log(error);
+        
             }
         })
     },
@@ -42,7 +42,7 @@ module.exports = {
                 await module.exports.sendOtpPhone(phone_number)
                 resolve(true)
             }).catch(error => {
-                console.log(error.message);
+              
                 reject(error)
                 return
             })
@@ -56,14 +56,14 @@ module.exports = {
 
     doVerifyOtp(OtpData, phoneNumber) {
 
-        console.log(OtpData, "/////////////////////otp");
+      
         return new Promise(async (resolve, reject) => {
             try {
 
                 let { otp } = OtpData
                 const otpNumber = String(otp.join(''));
                 phone_number = Number(phoneNumber)
-                console.log(phone_number, "nnnd");
+            
                 let userCheck = user.findOne({ phone: phone_number })
                 let validOTP
                 if (userCheck.status === 'active') {
@@ -81,7 +81,7 @@ module.exports = {
                 resolve({ phone, validOTP })
             }
             catch (error) {
-                console.log(error);
+      
             }
         })
     },
@@ -113,9 +113,7 @@ module.exports = {
 
         try {
 
-            /* generate randow otp */
-            /*  const generatedOTP = await generateOTP() */
-            /*  console.log('//////////', generatedOTP, '/////////'); */
+       
             let result = await module.exports.sendOtpPhone(phone_number)
             return phone_number
 
@@ -126,7 +124,7 @@ module.exports = {
 
     },
     sendOtpPhone: async (phone_number) => {
-        console.log(phone_number, "//////////////////11nooooooooooo1111111111111");
+  
         try {
             /* let hashedOTP = await hashData(otp) */
             let userCheck = await user.findOne({ phone: phone_number })
@@ -149,11 +147,11 @@ module.exports = {
             /* saves random number to database then renders verify page */
 
             async function saveUser() {
-                console.log("uuuuuuuuuuuuuuu");
+              
                 let phoneNumber = phone_number
 
                 if (userCheck == null) {
-                    console.log(userCheck, "zzzzzzzzzyyyyyyyyyyyyy");
+                
                     const newUser = new user({
                         status:"process",
                         phone:phoneNumber
@@ -169,7 +167,7 @@ module.exports = {
 
         }
         catch (error) {
-            console.log("error singnjdkfjdk");
+
                 throw error
 
 
@@ -177,14 +175,14 @@ module.exports = {
     },
     checkphoneNumber: async (phone_number) => {
         try {
-            console.log(phone_number, "nokkkkkkkkkkkkkkkkkkk");
+      
             let result = await user.findOne({ phone: phone_number })
-            console.log(result?.status);
+  
             if (result?.status !== 'process' && result ) {
-                console.log('1');
+              
                 throw new Error('An account is already registered')
             } else {
-                console.log('2');
+              
                 return { result: true }
             }
         }
@@ -195,15 +193,15 @@ module.exports = {
 
     verifyPhoneOTP: async (otp, phone_number) => {
 
-        console.log(phone_number, otp, "noooooooooooooooooooooo");
+    
         try {
             /*  let otpData = await phoneOTP.findOne({ phone_number: phone_number })
              let userData = await user.findOne({ phone: phone_number })
-  *//* 
+
                                                                                                                                                                                                                                                                                                                          if (!otpData) {
                                                                                                                                                                                                                                                                                                                              throw Error("Invalid otp.")
                                                                                                                                                                                                                                                                                                                          } */
-            /* console.log(userData?.phone, "nooooo") */
+         
             let validOTP = await sendSmsChecking(otp, phone_number)
             if (validOTP) {
 
@@ -221,7 +219,7 @@ module.exports = {
 
         }
         catch (error) {
-            console.log(error);
+    
         }
 
     },
@@ -250,7 +248,7 @@ module.exports = {
                 reject(error)
                 return
             })
-            console.log(authenticateUsers);
+        
             let userView = authenticateUsers
             if (userView) {
                 resolve({ status: true, userView })
@@ -259,7 +257,7 @@ module.exports = {
             }
 
         }).catch(error => {
-            console.log("nnnnnnnnnnnnnn", error.message);
+         
             throw error
         })
     },
@@ -312,7 +310,7 @@ module.exports = {
 
 
         } catch (error) {
-            console.log(error.message, 'nnnnnnnnn');
+      
             throw error
         }
     },
@@ -320,7 +318,7 @@ module.exports = {
         try {
             return new Promise(async (resolve, reject) => {
                 let userData = await user.findOne({ _id: new ObjectId(userId) })
-                console.log(userData, userId, email);
+     
                 if (userData?.email_status === 'notVerified') {
                     await module.exports.sendVerificationOTPEmail(email)
                     resolve(true)
@@ -340,7 +338,7 @@ module.exports = {
                 message: "Verify your email with the code below.",
                 duration: 5
             }
-            console.log("testing");
+          
 
             await module.exports.sendOTP(otpDetails)
             return true
@@ -362,7 +360,7 @@ module.exports = {
             // generate pin
             const generatedOTP = await generateOTP()
             //send email
-            console.log("dkfjkdjfkdjf", generatedOTP)
+  
             const mailOptions = {
 
                 from: AUTH_EMAIL,
@@ -413,7 +411,7 @@ module.exports = {
                 if (result) {
                     const tokenData = { otp, email }
                     const token = await createToken(tokenData)
-                    console.log(token, "////////////////result");
+               
                     resolve({ result, email, token })
                 } else {
 
@@ -428,7 +426,7 @@ module.exports = {
     async verifyOTP(email, otp) {
 
         try {
-            console.log(email, otp);
+        
             if (!(email && otp)) {
                 throw Error("Provide values for email,otp")
             }
@@ -437,7 +435,7 @@ module.exports = {
             const matchedOTPRecord = await OTP.findOne({
                 email
             })
-            console.log(matchedOTPRecord);
+          
             if (!matchedOTPRecord) {
                 throw Error("No otp records found.")
             }
@@ -472,9 +470,9 @@ module.exports = {
                     throw Error("An email is required.")
 
                 }
-                console.log(email, "dkfkdjf");
+           
                 let emailCheck = await user.findOne({ email: email })
-                console.log(emailCheck, "dkfkdjf");
+             
 
                 if (!emailCheck) {
                     resolve(false)
@@ -501,18 +499,18 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let { current_password, new_password, confirm_password } = pass
             const passwordMatch = await verifyHashedData(current_password, oldPass)
-            console.log(passwordMatch, "ppppppassssssssssss");
+     
             if (!passwordMatch) {
                 resolve({ result: false })
             } else {
                 if (new_password === confirm_password) {
                     let hashedPass = await hashData(new_password)
-                    console.log(hashedPass, 'hassssssssssss');
+         
                     await user.updateOne({ _id: new ObjectId(userId) }, {
                         $set: { password: hashedPass }
                     })
                     let userView = await user.findOne({ _id: new ObjectId(userId) })
-                    console.log(userView, 'checkkkkkkkkkkk');
+
                     resolve({ result: true, users: userView })
                 } else {
                     resolve({ result: true })
@@ -523,7 +521,7 @@ module.exports = {
     }
     ,
     doContactMessage(data) {
-        console.log(data);
+
         return new Promise(async (resolve, reject) => {
             const mailOptions = {
 

@@ -1,15 +1,4 @@
 
-/* mongoose.connect('mongodb+srv://sreerag:oro3Hf2RVUFqo7qq@cluster0.bja4i5x.mongodb.net/?retryWrites=true&w=majority',{useNewUrlParser:true,useUnifiedTopology:true}, () => {
-    console.log("Connected successfully to server");
-},
-    e => console.error(e)
-) */
-
-/* mongoose.connect('mongodb+srv://sreerag:oro3Hf2RVUFqo7qq@cluster0.bja4i5x.mongodb.net/?retryWrites=true&w=majority',{
-    dbName:'GetMyShoes'
-}).then(()=>{
-    console.log("Connected successfully to server");
-}).catch((err)=> console.log(err)) */
 
 require("dotenv").config()
 const mongoose = require("mongoose")
@@ -23,6 +12,8 @@ const connect = async ()=>{
             useNewUrlParser:true,
             useUnifiedTopology:true
 
+        }).catch(error=>{
+            console.log(error.message);
         })
         console.log("Connected successfully to server");
     }catch(error){

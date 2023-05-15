@@ -68,7 +68,7 @@ module.exports = {
                 if (!(email && password)) {
                     throw Error("Empty credentials supplied!")
                 }
-                console.log('//');
+      
                 const authenticateUsers = await authenticateUser({ email, password })
 
                 resolve({ result: authenticateUsers, port: 200 })
@@ -114,7 +114,7 @@ module.exports = {
     },
     doEmailVerification(userData) {
 
-        console.log(userData, "oooooooooo");
+
         return new Promise(async (resolve, reject) => {
             try {
 
@@ -123,7 +123,7 @@ module.exports = {
                 if (!email) throw Error("An email is required")
 
                 const createdEmailVerificationOTP = await sendVerificationOTPEmail(email)
-                console.log(createdEmailVerificationOTP);
+            
 
                 /*  resolve({ result: createdEmailVerificationOTP, port: 200 }) 
             } catch (error) {
@@ -135,13 +135,13 @@ module.exports = {
         })
     },
     doVerifyEmail(userData) {
-        console.log(userData);
+
         return new Promise(async (resolve, reject) => {
             try {
                 let { otp, email } = userData
 
                 if (!(email && otp)) throw Error("Empty otp details are not allowed")
-                console.log(email, otp);
+            
                 await verifyUserEmail({ email, otp })
                 let token = await sendVerificationOTPEmail(email)
                 resolve({ result: { email, verified: true }, port: 200, token })
@@ -182,7 +182,7 @@ module.exports = {
 
                 let totalProducts = await product.countDocuments({ delete_status: { $ne: true } });
                 let totalPages = Math.ceil(totalProducts / perPage);
-                console.log(totalPages);
+        
                 resolve({ productsView, totalPages })
             }
             catch (error) {
@@ -292,7 +292,7 @@ module.exports = {
                 resolve({ productdata, allProduct, productcartCheck })
             }
             catch (error) {
-                console.log(error, "error");
+   
 
                 reject(error)
 
@@ -310,7 +310,7 @@ module.exports = {
                     /* send otp in phone number 
                     phone_number =  Number('91'+phone_number)
                     let checkNumber = await checkphoneNumber(phone_number)
-                    console.log(checkNumber, "//////////////////111111111111111");
+   
                     if(checkNumber){
                         
                         resolve(false)
@@ -322,10 +322,10 @@ module.exports = {
                     
                 }catch(error){
                     if(error.status===400){
-                        console.log("hello")
+             
                     }else{
     
-                        console.log(error);
+                        
                     }
                 }
                 
@@ -348,7 +348,7 @@ module.exports = {
                     resolve({phone_number,validOTP})
                 }
                 catch(error){
-                    console.log(error);
+             
                 }
             })
         },
@@ -366,7 +366,7 @@ module.exports = {
                     resolve({result,phone_number})
                 }
                 catch(error){
-                    console.log(error);
+              
                 }
             })
         } */
@@ -375,11 +375,11 @@ module.exports = {
 
         return new Promise(async (resolve, reject) => {
             try {
-                console.log(userData);
+                
                 let { firstName, lastName, email, gender, age } = userData
                 let name = firstName + " " + lastName
                 let users = await user.find({ email: email, phone: { $ne: phoneNumber } })
-                console.log(users);
+    
                 if (users.length > 0) {
                     reject(Error('already using email!'))
                     return
@@ -399,7 +399,7 @@ module.exports = {
 
                 }
             } catch (error) {
-                console.log(error.message);
+        
                 throw error
             }
         })
@@ -437,9 +437,9 @@ module.exports = {
 
                         }
                     }, { new: true })
-                    console.log(newAddress);
+               
                     const Address = newAddress.address[newAddress.address.length - 1];
-                    console.log(Address);
+           
                     resolve({ status: true, Address })
                 } else {
 
@@ -507,7 +507,7 @@ module.exports = {
 
                 let totalPages = Math.ceil(menProduct[0].men_products_count / perPage);
 
-                console.log(menProduct, "noooooooooooooo");
+       
                 resolve({ menProduct, totalPages })
             })
         } catch (error) {
@@ -568,7 +568,7 @@ module.exports = {
 
                 let totalPages = Math.ceil(womenProduct[0].women_products_count / perPage);
 
-                console.log(womenProduct, "noooooooooooooo");
+  
                 resolve({ womenProduct, totalPages })
             })
         } catch (error) {
@@ -627,7 +627,7 @@ module.exports = {
                 ])
                 let totalPages = Math.ceil(sportsProduct[0].sports_products_count / perPage);
 
-                console.log(sportsProduct, "noooooooooooooo");
+
                 resolve({ sportsProduct, totalPages })
             })
         } catch (error) {
@@ -737,7 +737,7 @@ module.exports = {
 
                 let totalPages = Math.ceil(categoryProduct[0]?.category_products_count / perPage);
 
-                console.log(categoryProduct, "noooooooooooooo");
+
                 resolve({ categoryProduct, totalPages })
             })
         } catch (error) {

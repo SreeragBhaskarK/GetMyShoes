@@ -106,7 +106,7 @@ module.exports = {
 
 
 
-            /*   console.log(cartCount.productId.length,"leeeeeeeeeeeeeee"); */
+       
             resolve(cartItems)
         })
     },
@@ -127,7 +127,7 @@ module.exports = {
     }
     ,
     getTotalAmount(userId, discount, minPurchase) {
-        console.log(userId, discount, minPurchase);
+
         return new Promise(async (resolve, reject) => {
 
             let totalPrice = await cart.aggregate([{
@@ -180,7 +180,7 @@ module.exports = {
 
                 }
             }])
-            console.log(totalPrice, "///////////////total");
+
 
             resolve(totalPrice)
         })
@@ -279,7 +279,7 @@ module.exports = {
     },
 
     placeOrder(orders, products, total, discount, address) {
-        console.log(orders, products, total, 'mmmmm');
+
         return new Promise(async (resolve, reject) => {
             let status = orders.payment_method === 'COD' ? 'placed' : 'pending'
             let ShippingStatus = orders.payment_method === 'COD' ? 'Order Placed' : 'Processing'
@@ -312,7 +312,7 @@ module.exports = {
                 shipping_status: ShippingStatus
             })
             orderData.save()
-            console.log(orderData, 'checkingorder');
+
             await cart.deleteOne({ userId: new objectId(userId) })
             resolve(orderData)
 
@@ -375,13 +375,13 @@ module.exports = {
                 }
             }, { "$sort": { "createdAt": -1 } }
             ]).catch(error => {
-                console.log(error.message);
+          
             })
 
             resolve(orders)
 
         }).catch(error => {
-            console.log(error.message);
+          
         })
     },
     generateRazorpay(orders) {
@@ -392,7 +392,7 @@ module.exports = {
                 receipt: String(orders._id)
             };
             instance.orders.create(options, function (err, order) {
-                console.log(order);
+              
                 resolve(order)
             });
         })
@@ -417,7 +417,7 @@ module.exports = {
                     as: 'products'
                 }
             }])
-            console.log(wishlistData, '/////////');
+   
             resolve(wishlistData)
         })
     },
@@ -492,7 +492,7 @@ module.exports = {
 
 
             let wishlistCount = deleteStatus.products.length - 1
-            console.log(wishlistCount);
+   
             resolve(wishlistCount)
         })
     },
@@ -500,17 +500,17 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let { appliedCoupon } = Coupon
             let checkCoupon = await user.find({ _id: new ObjectId(userId) })
-            console.log(checkCoupon);
+       
             let result = checkCoupon[0].used_coupon.findIndex(coupon => coupon.code == appliedCoupon)
-            console.log(result);
+   
             if (result != -1) {
                 reject(new Error('already using coupon'))
                 return
             }
             let couponCheck = await coupon.find({ code: appliedCoupon, status: 'active' })
-            console.log(couponCheck);
+        
             if (couponCheck.length === 1) {
-                console.log(total);
+            
                 if (couponCheck[0].minPurchase <= total) {
                     resolve({ status: true, code: appliedCoupon, discount: couponCheck[0].discount, minPurchase: couponCheck[0].minPurchase, coupon: couponCheck })
                 } else {
@@ -550,18 +550,18 @@ module.exports = {
 
                 }
             }])
-            console.log(checkResult,';;;;;;;;');
+   
             let result = true
             checkResult.forEach(i => {
                 let stock = i.stock
                 let quantity = i.quantity
                 if (quantity > stock) {
                     result = false
-                    console.log(result);
+      
                     return
                 }
             })
-            console.log(result);
+  
             resolve(result)
         })
     }

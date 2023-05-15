@@ -336,10 +336,10 @@
             method: 'post',
             headers: { "Content-Type": "application/json" }
         }).then(response => {
-            console.log(response);
+       
             return response.json()
         }).then(data => {
-            console.log(data[0].header[0].title);
+
             document.getElementById('headerTitle').value = data[0].header[0].title
             document.getElementById('headerTitleStrong').value = data[0].header[0].title_strong
             document.getElementById('headerDescription').value = data[0].header[0].description
@@ -354,10 +354,10 @@
             method: 'post',
             headers: { "Content-Type": "application/json" }
         }).then(response => {
-            console.log(response);
+
             return response.json()
         }).then(data => {
-            console.log(data[0].main[0].title);
+   
             document.getElementById('mainLeftTitle').value = data[0].main[0].left_title
             document.getElementById('mainLeftDescription').value = data[0].main[0].left_description
             document.getElementById('mainLeftLink').value = data[0].main[0].shop_link_left
@@ -375,10 +375,10 @@
             method: 'post',
             headers: { "Content-Type": "application/json" }
         }).then(response => {
-            console.log(response);
+    
             return response.json()
         }).then(data => {
-            console.log(data[0].special[0].title);
+         
             document.getElementById('specialTitle').value = data[0].special[0].title
             document.getElementById('specialLink').value = data[0].special[0].shop_link
             $('#specialBanner').modal('show')
@@ -450,9 +450,9 @@
             location.reload()
             return response.json()
         }).then(data => {
-            console.log(data);
+      
         }).catch(error => {
-            console.log(error.message);
+           
         })
 
     })
@@ -474,9 +474,9 @@
             location.reload()
             return response.json()
         }).then(data => {
-            console.log(data);
+          
         }).catch(error => {
-            console.log(error.message);
+          
         })
 
     })
@@ -497,9 +497,9 @@
             location.reload()
             return response.json()
         }).then(data => {
-            console.log(data);
+     
         }).catch(error => {
-            console.log(error.message);
+         
         })
 
     })

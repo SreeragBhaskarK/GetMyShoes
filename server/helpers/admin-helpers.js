@@ -113,7 +113,7 @@ module.exports = {
             })
         }, */
     doCategory(categoryData) {
-        console.log(categoryData);
+    
         return new Promise(async (resolve, reject) => {
             try {
                 let { category_type } = categoryData
@@ -160,7 +160,7 @@ module.exports = {
 
                 if (!productId) throw Error("Empty products")
 
-                console.log(productId, "jnnnnnnnnnnnnn");
+            
                 if (productId[0].category_type != 'parent') {
                     await category.deleteOne({ _id: new ObjectId(categoryId) })
                 }
@@ -196,7 +196,7 @@ module.exports = {
                 let categoryData = await category.find({ _id: new ObjectId(categoryId) })
 
                 if (!categoryData) throw Error("Empty user")
-                console.log(categoryData);
+          
                 let status = await category.updateOne({ _id: new ObjectId(categoryId) },
                     {
                         $set: {
@@ -349,7 +349,7 @@ module.exports = {
             {
                 $count: 'orderCount'
             }])
-            console.log(weekOrders);
+   
 
             // Get the start and end dates for the previous week
             const startOfLastWeek = new Date(startOfWeek);
@@ -381,7 +381,7 @@ module.exports = {
             percentageChange = percentageChange.toFixed(2)
             /* weekRevenue */
             let weekRevenueData = await weekRevenue()
-            console.log(weekRevenueData, 'return');
+          
             let revenueWeek = weekRevenueData.weekRevenue[0]?.totalAmount ?? 0
             let revenuepercentage = weekRevenueData.RevenueChangeFormatted
 
@@ -390,7 +390,7 @@ module.exports = {
 
             /* weekIncome */
             let weekIncome = await weekIncomes()
-            console.log(weekIncome);
+  
             let incomeWeek = weekIncome.weekIncome[0]?.totalAmount ?? 0
             let incomepercentage = weekIncome.incomeChangeFormatted
 
@@ -462,9 +462,9 @@ module.exports = {
                 }
             }, { "$sort": { "createdAt": -1 } }
             ]).catch(error => {
-                console.log(error.message);
+                
             })
-            console.log(orderData[0], "nnnnnnnnnnnn");
+   
 
             resolve(orderData)
         })
@@ -473,7 +473,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let { couponName, discount, expiryDate, minPurchase, coupon_description } = couponData
             let couponCode = await generateCouponCode(expiryDate + couponName)
-            console.log(couponCode);
+
             let couponAdd = new coupon({
                 couponName: couponName,
                 discount: discount,
@@ -532,7 +532,7 @@ module.exports = {
                     order: '$count'
                 }
             }])
-            console.log(States);
+     
             resolve(States)
         })
     },
@@ -582,7 +582,7 @@ module.exports = {
                 }
 
             })
-            console.log(couponData);
+      
             resolve()
         })
     },
@@ -597,7 +597,7 @@ module.exports = {
                     }
 
                 })
-            console.log(result);
+   
             resolve()
         })
     }
@@ -653,22 +653,22 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let categoryName = categoryNameData.category
             let categoryData = await category.find({ category: categoryName.toLowerCase() })
-            console.log(categoryData.length);
+          
             if (categoryData.length == 1) {
-                console.log("nfgfgkfkgj");
+   
                 reject(new Error('already declare category!'));
                 return
             }
             resolve({ status: true })
         }).catch(error => {
-            console.log(error);
+         
             throw error
         })
     },
     getBanner() {
         return new Promise(async (resolve, reject) => {
             let bannerHeader = await banner.find()
-            console.log(bannerHeader);
+      
             resolve(bannerHeader)
         })
     },
@@ -689,7 +689,7 @@ module.exports = {
                 ]
 
             })
-            console.log(updateBannerHeader);
+    
             resolve({ status: true })
         }).catch(error => {
             throw error
@@ -713,7 +713,7 @@ module.exports = {
                 ]
 
             })
-            console.log(updateBannerMain);
+   
             resolve({ status: true })
         }).catch(error => {
             throw error
@@ -733,7 +733,7 @@ module.exports = {
                 ]
 
             })
-            console.log(updateBannerSpecial);
+       
             resolve({ status: true })
         }).catch(error => {
             throw error
@@ -801,7 +801,7 @@ function salesReportExcel(salesReport) {
             shipping_status
         }))
     );
-    console.log(salesReport[0].products);
+
     // Add table header
     const header = ['Date of Order', 'Order Item Id', 'Quantity', 'Amount', 'Tax', 'Mode of Payment', 'Payment Status', 'Order Status'];
     xlsx.utils.sheet_add_aoa(salesSheet, [header], { origin: 'A1' });
@@ -1014,7 +1014,7 @@ async function totalRevenueYear() {
             _id: null
         }
     ];
-    console.log(totalYearAmount);
+
     return totalYearAmount
 
 }
@@ -1048,7 +1048,7 @@ async function totalRevenueWeek() {
             }
         }
     ]);
-    console.log(totalAmountByWeek);
+
     return totalAmountByWeek
 
 }
@@ -1108,7 +1108,7 @@ async function weekIncomes() {
 
     const incomeChange = ((currentIncome - previousIncome) / previousIncome) * 100;
     const incomeChangeFormatted = incomeChange.toFixed(2);
-    console.log(weekIncome, incomeChangeFormatted);
+  
     return ({ weekIncome, incomeChangeFormatted })
 
 
@@ -1156,7 +1156,7 @@ async function monthTotalOrder() {
     ]);
 
 
-    console.log(monthOrder);
+
     return monthOrder
 
 
@@ -1192,5 +1192,5 @@ async function totalcategorySalesMonth() {
         }
     }])
 
-    console.log(totalCateagorySales);
+
 }

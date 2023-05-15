@@ -300,7 +300,7 @@
 				url: '/admin/totalcategorysales',
 				data: $('#categorySales').serialize(),
 				success: function (response) {
-					console.log(response);
+				
 					/* totalRevenue(response) */
 				},
 				error: function (xhr, status, error) {
@@ -324,7 +324,7 @@
 				url: '/admin/totalrevenue',
 				data: $('#totalRevenueFilter').serialize(),
 				success: function (response) {
-					console.log(response);
+			
 					$('#chartjs-dashboard-line').remove()
 					let appendGraph = `<canvas id="chartjs-dashboard-line"></canvas>`
 					$('#graphAppend').append(appendGraph)
@@ -340,7 +340,7 @@
 
 	function totalRevenue(revenue) {
 		let totalrevenue = revenue.totalRevenue[0]
-		console.log(totalrevenue, 'jjjjjjjjjj');
+
 		var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
 		var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
 		gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");
@@ -354,7 +354,7 @@
 
 		// Line chart
 		if (revenue.name == 'month') {
-			console.log('👽👽👽');
+	
 			new Chart(document.getElementById("chartjs-dashboard-line"), {
 				type: "line",
 				data: {
@@ -406,7 +406,7 @@
 
 			});
 		} else if (revenue.name == 'year') {
-			console.log('❤️‍🔥❤️‍🔥❤️‍🔥');
+
 			new Chart(document.getElementById("chartjs-dashboard-line"), {
 				type: "line",
 				data: {
@@ -457,7 +457,7 @@
 				}
 			});
 		} else if (revenue.name == 'week') {
-			console.log('❤️‍🔥❤️‍🔥❤️‍🔥');
+	
 			new Chart(document.getElementById("chartjs-dashboard-line"), {
 				type: "line",
 				data: {
@@ -525,7 +525,7 @@
 				url: '/admin/salesbystate',
 				data: $('#month-form').serialize(),
 				success: function (response) {
-					console.log(response);
+		
 
 					stateSaleinMonth(response)
 				},
@@ -539,12 +539,12 @@
 
 	async function stateSaleinMonth(states) {
 
-		console.log(states, 'nnnnnnnnnn')
+
 		var markers = states.map(i => ({
 			coords: i.coords,
 			name: i.state + ": " + i.order
 		}));
-		console.log(markers);
+
 		var mapContainer = $('#ind_map');
 		var mapInstance = mapContainer.empty()
 		/* mapContainer.append() */
@@ -590,14 +590,14 @@
 		// output: "Hello, world!"
 		const data = `<%- JSON.stringify(States) %>`;
 		const parsedData = JSON.parse(data);
-		console.log(parsedData[9])
+	
 		var markers = parsedData.map(i => ({
 
 			coords: i.coords,
 			name: i.state + ": " + i.order
 		}));
 
-		console.log(markers);
+	
 
 		var map = new jsVectorMap({
 			map: "in_mill_en",
@@ -764,7 +764,7 @@
 	document.addEventListener("DOMContentLoaded", function () {
 		const data = `<%- JSON.stringify(totalAmountByMonth) %>`;
 		const parsedData = JSON.parse(data);
-		console.log(parsedData)
+
 		var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
 		var gradientLight = ctx.createLinearGradient(0, 0, 0, 225);
 		gradientLight.addColorStop(0, "rgba(215, 227, 244, 1)");

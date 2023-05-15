@@ -27,11 +27,11 @@ module.exports = {
             .create({ to: "+91" + phone_number, code: otp })
             .then(verification_check => {
                 if (verification_check.status == "approved") {
-                    console.log(verification_check.status, "true");
+             
                     let result = true
                     return result
                 } else {
-                    console.log(verification_check.status, "false");
+                 
                     let result = false
                     return result
                 }

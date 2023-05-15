@@ -15,10 +15,10 @@ exports.userView = (req, res) => {
     userHelper.getBrandProducts().then(async (response) => {
         let brandProducts = response
         let banners = await adminHelpers.getBanner()
-        console.log(banners[0].header[0].title);
+
         let brands = await userHelper.getBrands()
         let newSpecial = await productHelper.getNewSpecial()
-        console.log(newSpecial);
+
         res.render('users/index', { brandProducts, brands, newSpecial,banners })
     })
 
@@ -35,13 +35,13 @@ exports.logInEmailView = (req, res) => {
 }
 
 exports.logInData = (req, res) => {
-    console.log(req.body, '.............');
+
     try {
         if (req.body.email) {
 
             authHelper.doLogIn(req.body)
                 .then(response => {
-                    console.log(response, 'dnfjkdf');
+           
                     if (response.status) {
                         req.session.user = response.userView
                         req.session.userLoggedIn = true
@@ -63,14 +63,14 @@ exports.logInData = (req, res) => {
                     res.send({ message, status: false })
                 } else if (response.result === 1) {
                     req.session.logNumber=req.body.phone_number
-                    console.log(req.session.logNumber);
+                 
                     res.send({ status: true })
                 }
             })
         }
     }
     catch (error) {
-        console.log(error, '///////////');
+
         res.status(400).send({ message: error.message })
     }
 
@@ -109,7 +109,7 @@ exports.verifyView = (req, res) => {
 }
 exports.verifyData = (req, res) => {
     let phone = req.session.logNumber
-    console.log(req.body);
+
     authHelper.doVerifyOtp(req.body,phone).then(response => {
 
         if (response.validOTP) {
@@ -303,7 +303,7 @@ exports.cartCount = async (req, res, next) => {
 exports.updateAddress = async (req, res) => {
 
     const userId = req.session?.user._id;
-    console.log(req.body, userId);
+
     userHelper.doAddressUpdate(req.body, userId).then((response) => {
         res.send(response)
     })

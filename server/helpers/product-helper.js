@@ -35,13 +35,13 @@ module.exports = {
 
                 if (!products) throw Error("Empty products")
                 let categorys = await category.find()
-                /*   console.log(category, "//////////////////");
+                /*  
                   let categoryName 
                   let category_name ="/"
-                  console.log(productsView[0].product_category, "nooooooooooooo");
+                
                   let i =0
                   while (productsView[0].product_category[i]) {
-                      console.log(category, "//////////////////");
+                    
                       categoryName = await categoryView.find({_id:productsView[0].product_category[i]})
                       categoryName.forEach(j => {
                           category_name+=j.category
@@ -123,7 +123,7 @@ module.exports = {
                         as: 'categories_full'
                     }
                 }])
-                console.log(viewProducts, "nnnnnnnnnnnn");
+     
                 resolve(viewProducts)
             }
             catch (error) {
@@ -202,7 +202,7 @@ module.exports = {
 
     },
     async updateProduct(proId, productData, images) {
-        console.log(images.length,'nnnnnnnnnnnnnnnnnnn');
+      
 
         try {
             if(images.length>0){
@@ -248,9 +248,9 @@ module.exports = {
 
 
         /*  await upload.single(images[0]).then(response=>{
-             console.log(response,req.file);
+            
          }) */
-        /*      console.log(result); */
+
         /* const file = req.file */
         try {
             /* if (images[0]) {
@@ -281,7 +281,7 @@ module.exports = {
     ,
     priceFilter(priceMinMax, pageNum) {
         return new Promise(async (resolve, reject) => {
-            console.log(priceMinMax);
+    
             let { minPrice, maxPrice } = priceMinMax
             minPrice = Number(minPrice)
             maxPrice = Number(maxPrice)
@@ -339,7 +339,7 @@ module.exports = {
     },
     brandProducts(brandData) {
         return new Promise(async (resolve, reject) => {
-            console.log(brandData);
+          
             let brandProducts = await category.aggregate([{
                 $match: {
                     $and: [
@@ -365,7 +365,7 @@ module.exports = {
                     brandProducts: { $slice: ['$brandProducts', 8] }
                 }
             }])
-            console.log(brandProducts);
+   
             resolve(brandProducts)
         })
     },
@@ -404,7 +404,7 @@ module.exports = {
             {
                 $limit: 8
             }])
-            console.log(brandProducts);
+     
             resolve(brandProducts)
         })
     },

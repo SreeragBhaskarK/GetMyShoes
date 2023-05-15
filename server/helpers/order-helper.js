@@ -74,11 +74,11 @@ module.exports = {
                     }
                 }]);
 
-                console.log(ordersData, "ordddddddser");
+      
                 resolve(ordersData)
             }
             catch (e) {
-                console.log(e);
+            
             }
 
         })
@@ -181,7 +181,7 @@ module.exports = {
                     }
                 }
             }])
-            console.log(orders[0].productsData, "orrrrrrrrrrdseeeeeeeeeeerrrrrr", orders[0]);
+      
             resolve(orders)
 
         })

@@ -171,13 +171,13 @@
 
 <script>
   const categoryName = $('#categoryAdded');
-  console.log(categoryName.val());
+
   let timeout = null;
   categoryName.on('input', () => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       const categoryValue = categoryName.val();
-      console.log(categoryValue, 'dd');
+      
       if (categoryValue.trim() === "") {
         categoryName.removeClass('is-valid').addClass('is-invalid');
         $('#invalidCategory').html("Enter Category Name!")
@@ -189,7 +189,7 @@
         }).then(response => {
           return response.json()
         }).then(data => {
-          console.log(data);
+  
           if (data.status) {
             $('#categoryVaild').attr('hidden', false)
             categoryName.removeClass('is-invalid').addClass('is-valid');
@@ -209,7 +209,7 @@
 </script>
 <script>
   const categoryNameEdit = $('#categoryName');
-  console.log(categoryNameEdit.val());
+
   let timeoutedit = null;
   categoryNameEdit.on('input', () => {
     clearTimeout(timeoutedit);
@@ -231,7 +231,7 @@
           }).then(response => {
             return response.json()
           }).then(data => {
-            console.log(data);
+         
             if (data.status) {
               $('#categoryVaildEdit').attr('hidden', false)
               categoryNameEdit.removeClass('is-invalid').addClass('is-valid');
@@ -263,7 +263,7 @@
       type: 'get',
       url: '/admin/edit-category/' + categoryId,
       success: (response) => {
-        console.log(response);
+      
         document.getElementById('categoryName').value = response.category
         document.getElementById('categoryNameCheck').value = response.category
         if (response.category_type == 'parent') {

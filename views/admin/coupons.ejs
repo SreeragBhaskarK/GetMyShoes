@@ -312,7 +312,7 @@
             type: 'get',
             url: '/admin/edit-coupon/' + couponId,
             success: (response) => {
-                console.log(response);
+
                 document.getElementById('couponName').value = response.couponName
                 document.getElementById('discount').value = response.discount
                 const expiryDate = flatpickr.parseDate(response.expiryDate, "Y-m-d");

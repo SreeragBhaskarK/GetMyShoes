@@ -14,18 +14,18 @@ exports.cartView = async (req, res) => {
     let discount = appliedDiscount ? appliedDiscount : 0
     let appliedminPurchase = req.session.appliedCoupon?.minPurchase
     let minPurchase = appliedminPurchase ? appliedminPurchase : 0
-    console.log(discount, "nnnnnnnnnnnnn");
+  
     let totalPrice = await cartHelper.getTotalAmount(userId, discount, minPurchase)
     cartHelper.getCartProduct(userId).then(async (response) => {
 
         let subTotal = await cartHelper.getSubTotal(userId)
         let coupons = await cartHelper.getCoupons()
-        console.log(coupons);
+
         subTotal = subTotal[0]?.subTotal
         let products = response
-        console.log(products, "cartlllllllllllllllllll");
+
         req.session.userCart = response
-        console.log(discount, minPurchase, totalPrice);
+
         if (minPurchase <= totalPrice[0]?.total) {
 
             res.render('cart/cart', { products, totalPrice, subTotal, appliedCoupon, discount, coupons })
@@ -43,11 +43,11 @@ exports.addToCartView = (req, res, next) => {
     userId = req.session.user?._id
     stock = req.body.stock
     proId = req.params.id
-    console.log(proId, req.body, "nnnnnnnnnnnnnoooooo");
+
     let quantity = req.body?.quantity
     quantity = quantity ? quantity : 1
     stock = stock ?? 0
-    console.log(quantity);
+
     if (userId) {
         cartHelper.addToCart(userId, proId, quantity, stock).then((cartCount) => {
 
@@ -70,10 +70,10 @@ exports.changeProductQuantity = (req, res) => {
         let appliedminPurchase = req.session.appliedCoupon?.minPurchase
         let minPurchase = appliedminPurchase ? appliedminPurchase : 0
         let totalPrice = await cartHelper.getTotalAmount(userId, discount, minPurchase)
-        console.log(totalPrice, "nnnnnnnnnn");
+
         let total = totalPrice[0]?.total ?? 0
         const stock = await product.findOne({ _id: req.body.proId })
-        console.log(stock);
+     
         if (minPurchase <= totalPrice[0]?.total) {
             if (stock.product_stock < req.body.count) {
                 res.json({ total, stockStatus: true, discount: appliedDiscount })
@@ -125,6 +125,7 @@ exports.deleteCartProduct = (req, res) => {
 exports.checkOut = async (req, res) => {
     userId = req.session.user?._id
     let checking = await cartHelper.checkOutChecking(userId)
+
     if (checking) {
         let subTotal = await cartHelper.getSubTotal(userId)
         subTotal = subTotal[0]?.subTotal
@@ -155,7 +156,7 @@ exports.checkOut = async (req, res) => {
 exports.placeOrder = async (req, res) => {
     let userId = req.session.user?._id
     let cartProducts = await cart.findOne({ userId: userId })
-    console.log(cartProducts, req.body, "nnnnnnnnnnnnnnnnnn");
+
     let appliedDiscount = req.session.appliedCoupon?.discount
     let discount = appliedDiscount ? appliedDiscount : 0
     let appliedminPurchase = req.session.appliedCoupon?.minPurchase
@@ -164,19 +165,17 @@ exports.placeOrder = async (req, res) => {
     totalPrice = totalPrice[0]?.total
 
     cartHelper.placeOrder(req.body, cartProducts, totalPrice, discount, req.params.adrsid).then(async (response) => {
+
+        cartProducts.products.forEach(async (i) => {
+            let quantity = i.quantity
+
+            let result = await product.updateOne({ _id: new ObjectId(i.item) }, { $inc: { product_stock: -quantity } })
+        });
         if (req.body.payment_method === 'COD') {
             let userId = req.session.user._id
             let couponCode = req.session.appliedCoupon?.code
             let coupon_id = req.session.appliedCoupon?.coupon[0]._id
-            console.log('///////////////////////////', cartProducts);
 
-           cartProducts.products.forEach(async(i) => {
-            console.log(i);
-            let quantity = i.quantity
-           
-              let result= await product.updateOne({_id:new ObjectId(i.item)},{$inc:{product_stock:-quantity}})
-              console.log(result,'dfkjdkfjhjdfhj');
-            });
             await user.updateOne({ _id: new ObjectId(userId) }, {
                 $push: { used_coupon: [{ code: couponCode, id: coupon_id }] }
             })
@@ -206,7 +205,7 @@ exports.addToWishListView = async (req, res) => {
 
     if (userId) {
         cartHelper.addToWishList(userId, proId).then((wishlistCount) => {
-            console.log(wishlistCount, 'nnnnnnnnnn');
+
             res.json(wishlistCount)
         })
 
@@ -225,10 +224,10 @@ exports.deleteWishListProduct = (req, res) => {
 exports.couponCheck = (req, res) => {
     let total = Number(req.params.price)
     let userId = req.session.user._id
-    console.log(req.body, '//////////////');
+
     cartHelper.couponCheck(req.body, total, userId).then(async (response) => {
         req.session.appliedCoupon = response
-        console.log(response.status);
+
         if (response.status) {
             let appliedDiscount = req.session.appliedCoupon?.discount
             let discount = appliedDiscount ? appliedDiscount : 0

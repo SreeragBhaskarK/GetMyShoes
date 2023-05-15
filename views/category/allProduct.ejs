@@ -90,13 +90,14 @@
     <% }) %>
 
         <script>
-            function cartCount(id) {
-                console.log(id);
+            function cartCount(id,stock) {
+
                 $.ajax({
                     type: 'post',
                     url: '/add-toCart/' + id,
+                    data: ({ stock: stock }),
                     success: (cartCount) => {
-                        console.log(cartCount, 'mmmmmmmmmmmmm');
+   
                         if (cartCount) {
                             document.getElementById('cartCount').innerHTML = cartCount
                         }
@@ -116,12 +117,12 @@
         </script>
 
         <script>
-            function addToWishlist(id,stock) {
-                console.log(id);
+            function addToWishlist(id) {
+
                 $.ajax({
                     type: 'get',
                     url: '/add-toWishlist/' + id,
-                    data: ({ stock: stock }),
+                    
                     success: (wishlistCount) => {
                         if (wishlistCount) {
                             document.getElementById('wishlistCount').innerHTML = wishlistCount
