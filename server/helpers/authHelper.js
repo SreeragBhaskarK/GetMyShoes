@@ -229,7 +229,7 @@ module.exports = {
             await phoneOTP.deleteOne({ phone_number: phoneNumber })
         } catch (error) {
             throw error
-        }
+        }   
 
     },
     doLogIn(userData, res) {

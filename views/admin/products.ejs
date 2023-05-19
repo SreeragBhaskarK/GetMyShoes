@@ -100,15 +100,16 @@
 
     </div>
 </main>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
 <script>
     function productEdit(productId) {
 
         $.ajax({
-            type: 'get',
             url: '/admin/edit-product/' + productId,
+            type: 'get',
             success: (response) => {
- 
+                
                 document.getElementById('product_name').value = response.product_name
                 document.getElementById('product_description').value = response.product_description
                 document.getElementById('imgView4').src = '/images/products_image/' + response.product_image[0]
@@ -119,7 +120,7 @@
                 document.getElementById('product_old_price').value = response.product_old_price
                 document.getElementById('product_badge').value = response.product_badge
                 document.getElementById('product_id').value = response._id
-                document.getElementById('product_stock').value = response.product_stock
+                document.getElementById('product_stock').value = response.product_stock;
              
                 (response.product_size || []).forEach(i => {
                     if (i == '7') {
@@ -164,6 +165,7 @@
                 $('#productEdit').modal('show');
             }
         })
+        
 
     }
 </script>
