@@ -110,6 +110,7 @@
             type: 'get',
             success: (response) => {
                 
+                
                 document.getElementById('product_name').value = response.product_name
                 document.getElementById('product_description').value = response.product_description
                 document.getElementById('imgView4').src = '/images/products_image/' + response.product_image[0]
